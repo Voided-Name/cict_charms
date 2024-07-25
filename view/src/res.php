@@ -1410,6 +1410,20 @@ class res
 		return $list;
 	}
 
+	function selectall_join3_offset_limit($table1, $table2, $table3, $ref1, $ref2, $ref3, $ref4, $offset, $limit)
+	{
+		global $con;
+		$list = array();
+		$sql = "SELECT * FROM {$table1} LEFT JOIN {$table2} ON {$table1}.{$ref1} = {$table2}.{$ref2} LEFT JOIN {$table3} ON {$table2}.{$ref3} = {$table3}.{$ref4} LIMIT {$limit} OFFSET {$offset}";
+
+
+		$qry = $con->query($sql);
+		while ($row = mysqli_fetch_assoc($qry)) {
+			$list[] = $row;
+		}
+		return $list;
+	}
+
 
 
 	// select * not in logic

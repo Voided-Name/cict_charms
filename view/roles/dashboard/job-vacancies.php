@@ -14,7 +14,7 @@ if (isset($_POST['editBtnVal'])) {
 if (isset($_POST['deleteVacancyBtn'])) {
     $delete = true;
 
-    $deleteVacancySql = $func->delete('employer_job_posts', array('id', '=', $_POST['deleteVacancyBtn']));
+    $deleteVacancySql = $func->delete('employer_job_posts', array('post_id', '=', $_POST['deleteVacancyBtn']));
 }
 
 if (isset($_POST['editSaveBtn'])) {
@@ -132,7 +132,7 @@ if (isset($_POST['editSaveBtn'])) {
     );
 
 
-    $saveEditSql = $func->update('employer_job_posts', 'id', $_POST['editSaveBtn'], $input);
+    $saveEditSql = $func->update('employer_job_posts', 'post_id', $_POST['editSaveBtn'], $input);
 
     /* sample update procedure
 			$userUpdate = $func->update('users','userid',3, array(

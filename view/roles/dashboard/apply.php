@@ -1,9 +1,13 @@
 <?php
 session_start();
+include '../../src/init.php';
 include "vacanciesDemoDataSet.php";
 if (isset($_POST['applyButton'])) {
   $applyId = $_POST['applyButton'];
 }
+
+$dataInstance = $func->selectall_where('employer_job_posts', array('post_id', '=', $applyId));
+
 for ($x = 0; $x < sizeof($demoData); $x++) {
   if ($applyId == "apply" . $demoData[$x][5]) {
     $applyPosition = $demoData[$x][0];
@@ -94,6 +98,7 @@ for ($x = 0; $x < sizeof($demoData); $x++) {
             <div class="card">
               <div class="card-body px-0 m-0">
                 <div class="container w-100">
+                  <?php var_dump($dataInstance) ?>
                   <h1><?php echo  $applyPosition ?></h1>
                   <h4><?php echo  $applyCompany ?></h4>
                   <p><?php echo $applySlot ?> </p>

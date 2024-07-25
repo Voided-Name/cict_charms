@@ -1,22 +1,10 @@
 <?php
 
-
 if ($_SESSION['paginationNum'] == 0) {
   $prevState = false;
 } else {
   $prevState = true;
 }
-
-$a = ($_SESSION['paginationNum'] * 3) + 1;
-$b = $a + 1;
-$c = $a + 2;
-
-$bState = (sizeof($demoData) > $a * 5) ? true : false;
-$cState = (sizeof($demoData) > $b * 5) ? true : false;
-
-$aActive = ($_SESSION['pagination'] == $a) ? true : false;
-$bActive = ($_SESSION['pagination'] == $b) ? true : false;
-$cActive = ($_SESSION['pagination'] == $c) ? true : false;
 
 ?>
 
@@ -35,19 +23,6 @@ $cActive = ($_SESSION['pagination'] == $c) ? true : false;
             <?php
           }
             ?>
-      </li>
-      <li class="page-item <?php echo ($aActive) ? 'active' : '' ?>">
-        <button type="submit" class="page-link" name="page" value="<?php echo $a ?>"><?php echo $a ?></button>
-      </li>
-      <li class="page-item <?php echo ($bActive) ? 'active' : '' ?>">
-        <button type="submit" class="page-link <?php echo ($bState) ? "" : "bg-light" ?>" name="page" value="<?php echo $b . '" ';
-                                                                                                              echo ($bState) ? "" : "disabled" ?>><?php echo $b ?></button>
-      </li>
-      <li class=" page-item <?php echo ($cActive) ? 'active' : '' ?>">
-          <button type="submit" class="page-link <?php echo ($cState) ? "" : "bg-light" ?>" name="page" value="<?php echo $c . '" ';
-                                                                                                                echo ($cState) ? "" : "disabled" ?>><?php echo $c ?></button>
-      </li>
-      <li class=" page-item">
       </li>
       <li class="page-item">
         <?php if ($nextState) {

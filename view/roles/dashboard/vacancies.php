@@ -1,18 +1,21 @@
 <?php
 session_start();
+include '../../src/init.php';
 include "vacanciesDemoDataSet.php";
+
 
 if (!isset($_POST['page'])) {
   $_SESSION['pagination'] = 1;
   $_SESSION['paginationNum'] = 0;
 }
+
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $page = $_POST['page'];
 
   if ($page === "next") {
     if (isset($_SESSION['paginationNum'])) {
       $_SESSION['paginationNum'] += 1;
-      $_SESSION['pagination'] = 3 * $_SESSION['paginationNum'] + 1;
     }
   } else if ($page === "previous") {
     if (isset($_SESSION['paginationNum'])) {
@@ -26,21 +29,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $_SESSION['pagination'] = (int) $page;
   }
 }
+
+$data = $func->selectall_join3_offset_limit('employer_job_posts', 'employer_users', 'companies', 'author_id', 'user_id', 'company_id', 'id',  $_SESSION['paginationNum'] * 5, 6);
+
 $_SESSION['alumniPage'] = "vacancies";
 
-function maxPagination($demoData)
-{
-  return round(sizeof($demoData) / 15);
+if (sizeof($data) == 6) {
+  $nextState = true;
 }
 
-if (sizeof($demoData) > (($_SESSION['paginationNum'] + 1) * 15)) {
-  $nextState = true;
-} else {
-  $nextState = false;
-  if ($_SESSION['paginationNum'] > maxPagination($demoData)) {
-    $_SESSION['paginationNum'] = maxPagination($demoData);
-  }
-}
 ?>
 
 <!doctype html>
@@ -177,6 +174,10 @@ if (sizeof($demoData) > (($_SESSION['paginationNum'] + 1) * 15)) {
                         </select>
                       </div>
                     </div>
+                    <?php
+                    var_dump($data);
+                    var_dump($_SESSION['paginationNum']);
+                    ?>
                     <?php include "vacanciesCard.php" ?>
                   </div>
                   <?php include "vacanciesPagination.php" ?>
