@@ -1398,6 +1398,18 @@ class res
 			}
 			*/
 
+	function selectall_offset_limit($table, $offset, $limit)
+	{
+		global $con;
+		$list = array();
+		$sql = "SELECT * FROM {$table} LIMIT {$limit} OFFSET {$offset}";
+		$qry = $con->query($sql);
+		while ($row = mysqli_fetch_assoc($qry)) {
+			$list[] = $row;
+		}
+		return $list;
+	}
+
 
 
 	// select * not in logic

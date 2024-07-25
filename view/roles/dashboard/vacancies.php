@@ -1,6 +1,7 @@
 <?php
 session_start();
 include "vacanciesDemoDataSet.php";
+
 if (!isset($_POST['page'])) {
   $_SESSION['pagination'] = 1;
   $_SESSION['paginationNum'] = 0;
