@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE-edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- <link rel="icon" href="static/images/Sogo.png" type="image/x-icon"> -->
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.ico">
+    
+
+    
+</head>
+    <style>
+        body {
+            font-family: "Arial", sans-serif;
+            background-image: url("../CICTCHARM/assets/img/bg/h1_bgv2.png");
+            background-repeat: no-repeat;
+            background-size: cover;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        body::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #d3d3d38e;
+    }
+
+        .container {
+          width: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            backdrop-filter: blur(3.5px);
+            -webkit-backdrop-filter: blur(3.5px);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        .form-container {
+            flex: 1;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #010101;
+            margin-bottom: 20px;
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        label {
+            text-align: left;
+            display: block;
+            margin-bottom: 2px;
+            color: #000000;
+            font-size: small;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="tel"] {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            display: inline-block;
+            font-size: small;
+
+        }
+
+        input[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 12px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        p {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .already-acc {
+            color: #000000;
+        }
+    </style>
+    <title>CICT CHARM</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="form-container">
+            <h1>SIGN UP</h1>
+            <form action="" method="post">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="username">Username</label>
+                        <input type="text"  placeholder="Enter your username" required />
+                    </div>
+                    <div class="col-md-6">
+                        <label for="email">Email</label>
+                        <input type="email"  placeholder="Enter your email" required/>
+                    </div>
+                    
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="password">Password</label>
+                        <input type="password"  placeholder="Enter your password" required />
+                    </div>
+                    <div class="col-md-6">
+                        <label for="confirm_password">Confirm Password</label>
+                        <input type="password" placeholder="Confirm your password" required />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="firstname">First Name</label>
+                        <input type="text" placeholder="Enter your first-name" required />
+                    </div>
+                    <div class="col-md-6">
+                        <label for="lastname">Last Name</label>
+                        <input type="text" placeholder="Enter your last-name" required />
+                    </div>
+                    
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="contact">Contact Number</label>
+                        <input type="tel"  placeholder="Enter your contact number" required oninput="validateContactNumber(this)" />
+                    </div>
+                    <div class="col-md-6">
+                        <label for="address">Address</label>
+                        <input type="text"  placeholder="Enter your address" required />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="terms_conditions">
+                        <input type="checkbox" id="terms_conditions" name="terms_conditions" value="accepted" required>
+                        I accept the <a href="#" target="_blank">terms and conditions</a>
+                    </label>
+                </div>
+                <input type="hidden" id="recaptchaResponse" name="g-recaptcha-response" />
+                <input type="submit" value="Register" />
+                <p class="already-acc">
+                    Already have an account? <a href="log_in.html">Login</a>
+                </p>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
