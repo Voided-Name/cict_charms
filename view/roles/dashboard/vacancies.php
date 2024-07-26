@@ -4,14 +4,14 @@ include '../../src/init.php';
 include "vacanciesDemoDataSet.php";
 
 
-if (!isset($_POST['page'])) {
+if (!isset($_GET['page'])) {
   $_SESSION['pagination'] = 1;
   $_SESSION['paginationNum'] = 0;
 }
 
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  $page = $_POST['page'];
+if ($_SERVER["REQUEST_METHOD"] == "GET") {
+  $page = $_GET['page'];
 
   if ($page === "next") {
     if (isset($_SESSION['paginationNum'])) {
@@ -175,8 +175,8 @@ if (sizeof($data) == 6) {
                       </div>
                     </div>
                     <?php
-                    var_dump($data);
-                    var_dump($_SESSION['paginationNum']);
+                    //var_dump($data);
+                    //var_dump($_SESSION['paginationNum']);
                     ?>
                     <?php include "vacanciesCard.php" ?>
                   </div>

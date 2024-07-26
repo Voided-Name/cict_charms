@@ -8,9 +8,6 @@ if (isset($_POST['applyButton'])) {
 
 $dataInstance = $func->selectjoin3_where('employer_job_posts', 'employer_users', 'companies', 'author_id', 'user_id', 'company_id', 'id', 'employer_job_posts', array('post_id', '=', $applyId));
 
-$regionMap = array(
-  '01',
-);
 
 $locationArr = array();
 $regionInformation = array();
@@ -148,7 +145,7 @@ if ($dataInstance[0]['job_type'] == '000000') {
         <div class="row">
           <div class="col-sm-12">
             <div class="card">
-              <div class="card-body px-0 m-0">
+              <div class="card-body px-0 m-0 px-5">
                 <div class="container w-100">
                   <button type="button" class="btn btn-secondary" onclick="goBack()">Back</button>
                   <hr>
