@@ -6,24 +6,76 @@ if (isset($_POST['applyButton'])) {
   $applyId = $_POST['applyButton'];
 }
 
-$dataInstance = $func->selectall_where('employer_job_posts', array('post_id', '=', $applyId));
+$dataInstance = $func->selectjoin3_where('employer_job_posts', 'employer_users', 'companies', 'author_id', 'user_id', 'company_id', 'id', 'employer_job_posts', array('post_id', '=', $applyId));
 
-for ($x = 0; $x < sizeof($demoData); $x++) {
-  if ($applyId == "apply" . $demoData[$x][5]) {
-    $applyPosition = $demoData[$x][0];
-    $applyCompany = $demoData[$x][1];
-    $applyLocation = $demoData[$x][2];
-    $applySalary = $demoData[$x][3];
-    $applyHistory = $demoData[$x][4];
-    $description = $demoData[$x][6];
-    $applyType = $demoData[$x][7];
-    $applySlot = $demoData[$x][8];
-    $applyShiftSched = $demoData[$x][9];
-    $responsibilities = $demoDataResponsibilities[$x];
-    $qualifications = $demoDataQualifications[$x];
-    break;
+$regionMap = array(
+  '01',
+);
+
+$locationArr = array();
+$regionInformation = array();
+$regionInformation['01'] = 'Region I';
+$regionInformation['02'] = 'Region II';
+$regionInformation['03'] = 'Region III';
+$regionInformation['4A'] = 'Region IV-A';
+$regionInformation['4B'] = 'Region IV-B';
+$regionInformation['05'] = 'Region V';
+$regionInformation['06'] = 'Region VI';
+$regionInformation['07'] = 'Region VII';
+$regionInformation['08'] = 'Region VII';
+$regionInformation['09'] = 'Region XI';
+$regionInformation['10'] = 'Region X';
+$regionInformation['11'] = 'Region XI';
+$regionInformation['12'] = 'Region XII';
+$regionInformation['13'] = 'Region XIII';
+$regionInformation['BARMM'] = 'BARMM';
+$regionInformation['CAR'] = 'CAR';
+$regionInformation['NCR'] = 'NCR';
+
+if ($dataInstance[0]['job_region']) {
+  array_push($locationArr, $regionInformation[$dataInstance[0]['job_region']]);
+}
+if ($dataInstance[0]['job_province']) {
+  array_push($locationArr, $dataInstance[0]['job_province']);
+}
+if ($dataInstance[0]['job_municipality']) {
+  array_push($locationArr, $dataInstance[0]['job_municipality']);
+}
+if ($dataInstance[0]['job_barangay']) {
+  array_push($locationArr, $dataInstance[0]['job_barangay']);
+}
+
+if (sizeof($locationArr) > 0) {
+  $location = implode(', ', $locationArr);
+}
+
+if ($dataInstance[0]['job_type'] == '000000') {
+  $jobType = false;
+} else {
+  $jobType = true;
+  $jobTypeArray = array();
+
+  if ($dataInstance[0]['job_type'][0] == '1') {
+    array_push($jobTypeArray, "Full-Time");
+  }
+  if ($dataInstance[0]['job_type'][1] == '1') {
+    array_push($jobTypeArray, "Part-Time");
+  }
+  if ($dataInstance[0]['job_type'][2] == '1') {
+    array_push($jobTypeArray, "Contract");
+  }
+  if ($dataInstance[0]['job_type'][3] == '1') {
+    array_push($jobTypeArray, "Temporary");
+  }
+  if ($dataInstance[0]['job_type'][4] == '1') {
+    array_push($jobTypeArray, "Remote");
+  }
+  if ($dataInstance[0]['job_type'][5] == '1') {
+    array_push($jobTypeArray, "Freelance");
   }
 }
+
+
 ?>
 
 <!doctype html>
@@ -98,69 +150,103 @@ for ($x = 0; $x < sizeof($demoData); $x++) {
             <div class="card">
               <div class="card-body px-0 m-0">
                 <div class="container w-100">
-                  <?php var_dump($dataInstance) ?>
-                  <h1><?php echo  $applyPosition ?></h1>
-                  <h4><?php echo  $applyCompany ?></h4>
-                  <p><?php echo $applySlot ?> </p>
-                  <hr class="border border-dark border-1">
-                  <h4>Location</h4>
-                  <div class="d-flex align-items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
-                      <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10" />
-                      <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
-                    </svg>
-                    <h6 class="ms-2 bg-light p-1 rounded"><?php echo  $applyLocation ?></h6>
-                  </div>
+                  <button type="button" class="btn btn-secondary" onclick="goBack()">Back</button>
                   <hr>
-                  <h4>Job Type</h4>
+                  <?php
+                  //var_dump($dataInstance);
+                  ?>
+                  <h1><?php echo  $dataInstance[0]['position'] ?></h1>
+                  <h4><?php echo  $dataInstance[0]['name'] ?></h4>
+                  <p>Slots: <?php echo $dataInstance[0]['slot_available'] ?> </p>
+                  <hr class="border border-dark border-1">
+                  <?php if ($location) { ?>
+                    <div class="d-flex align-items-center">
+                      <svg class="me-2" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
+                        <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10" />
+                        <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
+                      </svg>
+                      <h4>Location</h4>
+                    </div>
+                    <div class="d-flex align-items-center">
+                      <h6 class="ms-2 bg-light p-1 rounded"> <?php echo $location ?></h6>
+                    </div>
+                    <hr>
+                  <?php
+                  }
+                  ?>
                   <div class="d-flex align-items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16">
+                    <svg class="me-2" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16">
                       <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001m-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708z" />
                     </svg>
-                    <?php for ($x = 0; $x < sizeof($applyType); $x++) { ?>
-                      <h6 class="ms-2 bg-light p-1 rounded"><?php echo  $applyType[$x] ?></h6>
-                    <?php } ?>
+                    <h4>Job Type</h4>
+                  </div>
+                  <div class="d-flex align-items-center">
+                    <?php
+                    foreach ($jobTypeArray as $jobTypeInstance) {
+                    ?>
+                      <h6 class="ms-2 bg-light p-1 rounded"> <?php echo $jobTypeInstance ?></h6>
+                    <?php
+                    }
+                    ?>
                   </div>
                   <hr>
-                  <h4>Salary</h4>
                   <div class="d-flex align-items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cash" viewBox="0 0 16 16">
+                    <svg class="me-2" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cash" viewBox="0 0 16 16">
                       <path d="M8 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4" />
                       <path d="M0 4a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1zm3 0a2 2 0 0 1-2 2v4a2 2 0 0 1 2 2h10a2 2 0 0 1 2-2V6a2 2 0 0 1-2-2z" />
                     </svg>
-                    <h6 class="ms-2 bg-light p-1 rounded"><?php echo  $applySalary ?></h6>
+                    <h4>Salary</h4>
+                  </div>
+                  <div class="d-flex align-items-center">
+                    <?php
+                    if ($dataInstance[0]['salary_format'] == 'hour') {
+                    ?>
+                      <h6 class="ms-2 bg-light p-1 rounded">Php <?php echo ($dataInstance[0]['salary_hour']) ?>/hr</h6>
+                    <?php
+                    } else if ($dataInstance[0]['salary_format'] == 'range') {
+                    ?>
+                      <h6 class="ms-2 bg-light p-1 rounded">Php <?php echo ($dataInstance[0]['salary_min']) ?> - Php <?php echo ($dataInstance[0]['salary_max']) ?></h6>
+                    <?php
+                    } else {
+                    ?>
+                      <h6 class="ms-2 bg-light p-1 rounded">Php <?php echo ($dataInstance[0]['salary_format']) ?>/hr</h6>
+                    <?php
+                    }
+                    ?>
                   </div>
                   <hr>
-                  <h4>Shift and Schedule</h4>
                   <div class="d-flex align-items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clock" viewBox="0 0 16 16">
+                    <svg class="me-2" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clock" viewBox="0 0 16 16">
                       <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z" />
                       <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0" />
                     </svg>
-                    <?php for ($x = 0; $x < sizeof($applyShiftSched); $x++) { ?>
-                      <h6 class="ms-2 bg-light p-1 rounded"><?php echo  $applyShiftSched[$x] ?></h6>
-                    <?php } ?>
+                    <h4>Shift and Schedule</h4>
+                  </div>
+                  <div class="d-flex align-items-center">
+                    <?php
+                    switch ($dataInstance[0]['job_shift']) {
+                      case '1': {
+                          $schedule = "Morning Shift";
+                        }
+                      case '2': {
+                          $schedule = "Evening Shift";
+                        }
+                      case '3': {
+                          $schedule = "Night Shift";
+                        }
+                      case '4': {
+                          $schedule = "Rotating Shift";
+                        }
+                      case '5': {
+                          $schedule = "Flexible Shift";
+                        }
+                    }
+                    ?>
+                    <h6 class="ms-2 bg-light p-1 rounded"><?php echo  $schedule ?></h6>
                   </div>
                   <hr>
-                  <p class="text-dark"><?php echo $description; ?></p>
+                  <p class="text-dark"><?php echo $dataInstance[0]['job_description']; ?></p>
                   <hr class="border border-1">
-                  <h3>Responsibilities</h3>
-                  <ul>
-                    <?php
-                    for ($x = 1; $x < sizeof($responsibilities); $x++) {
-                      echo "<li>" . $responsibilities[$x] . "</li>";
-                    }
-                    ?>
-                  </ul>
-                  <hr class="border border-1">
-                  <h3>Qualifications</h3>
-                  <ul>
-                    <?php
-                    for ($x = 1; $x < sizeof($qualifications); $x++) {
-                      echo "<li>" . $qualifications[$x] . "</li>";
-                    }
-                    ?>
-                  </ul>
                   <!-- Button trigger modal -->
                   <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#applyModal">
                     Apply
@@ -243,6 +329,10 @@ for ($x = 0; $x < sizeof($demoData); $x++) {
                   icon: 'success',
                   confirmButtonText: 'OK'
                 });
+              }
+
+              function goBack() {
+                window.history.back();
               }
             </script>
 

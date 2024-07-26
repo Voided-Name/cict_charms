@@ -241,6 +241,8 @@ $vacanciesData = $func->selectall_where('employer_job_posts', array('author_id',
                                     <h4 class="card-title">Manage Jobs</h4>
                                 </div>
                             </div>
+                            <?php
+                            ?>
                             <div class="card-body px-0">
                                 <?php if (!$edit) { ?>
                                     <div class="table-responsive">
@@ -559,7 +561,6 @@ $vacanciesData = $func->selectall_where('employer_job_posts', array('author_id',
                             $('#barangays').val("<?php echo $vacanciesData[$_POST['editBtnVal']]['job_region'] ?>");
                         }
                     });
-
                     $("#regions").change(function() {
                         $('#provinces').empty();
                         $('#municipalities').empty();

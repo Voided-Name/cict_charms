@@ -618,9 +618,6 @@ class res
 		}
 	}
 
-
-
-
 	function selectjoin3_where($table, $table2, $table3, $ref, $ref2, $ref3, $ref4, $tableref, $where = array())
 	{
 		global $con;
@@ -2260,6 +2257,7 @@ class res
 		}
 
 		$sql = "UPDATE {$table} SET {$set} WHERE {$param} = {$param_value}";
+
 
 		//echo $sql;
 		$qry = $con->query($sql);

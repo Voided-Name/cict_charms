@@ -204,7 +204,7 @@
       <textarea class="form-select form-select-lg mb-3" placeholder="Job Description" id="jobDescription" name="jobDescription" required><?php echo $vacanciesData[$_POST['editBtnVal']]['job_description'] ?></textarea>
     </div>
     <div class="bd-example">
-      <button type="submit" class="btn btn-primary" onclick="" name="editSaveBtn" value="<?php echo $vacanciesData[$_POST['editBtnVal']]['id']; ?>">Save Changes</button>
+      <button type="submit" class="btn btn-primary" onclick="" name="editSaveBtn" value="<?php echo $vacanciesData[$_POST['editBtnVal']]['post_id']; ?>">Save Changes</button>
     </div>
   </form>
 </div>
