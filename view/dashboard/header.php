@@ -133,7 +133,7 @@
             </div>
           </a>
           <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="../../login.php">Logout</a>
+            <li><a class="dropdown-item" href="../logout.php">Logout</a>
             </li>
           </ul>
         </li>
