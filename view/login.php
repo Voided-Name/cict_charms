@@ -222,7 +222,7 @@ include 'src/init.php';
         heightAuto: false
       }).then((result) => {
         if (result.isConfirmed) {
-          location.replace("roles/dashboard/index.php");
+          location.replace("dashboard/index.php");
         }
       });
     <?php } else if ($loggedUnverified) {
