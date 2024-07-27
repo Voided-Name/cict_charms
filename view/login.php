@@ -1,8 +1,15 @@
 <?php
-
 session_start();
 include 'src/init.php';
 
+/**
+ * 
+ * @var strip $strip
+ */
+/**
+ * 
+ * @var res $func
+ */
 ?>
 <!doctype html>
 
@@ -13,7 +20,6 @@ include 'src/init.php';
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>CHARMS</title>
   <link href="../css/style.css" rel="stylesheet">
-  <link href="../node_modules/animate.css/animate.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <style>
     html,
@@ -56,10 +62,6 @@ include 'src/init.php';
       fill: #5174db;
     }
 
-    .animate__animated .animate__pulse {
-      --animate-duration: 0.25;
-    }
-
     .loginFormContainer {
       max-width: 500px;
       height: 100%;
@@ -99,9 +101,10 @@ include 'src/init.php';
       z-index: 1000;
     }
   </style>
-  <script type="module">
-    import '../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js';
-  </script>
+  <!-- Jquery, Popper, Bootstrap -->
+  <script src="../view/assets/js/vendor/jquery-1.12.4.min.js"></script>
+  <script src="../js/popper.min.js"></script>
+  <script src="../js/bootstrap.min.js"></script>
 </head>
 
 
@@ -202,7 +205,6 @@ include 'src/init.php';
     </div>
   </div>
   -->
-  <script defer src="../app.js"></script>
   <script>
     <?php
     if ($invalid) {
@@ -235,71 +237,7 @@ include 'src/init.php';
         }
       });
     <?php
-    } ?> async function loginNext() {
-      let username = document.getElementById("inputUsernameLog").value;
-      let password = document.getElementById("inputPasswordLog").value;
-      let logged = false;
-      let role = 0;
-      let errors = [];
-
-      if (!password || !username) {
-        if (!username) {
-          addDanger("inputUsernameLog");
-        }
-        if (!password) {
-          addDanger("inputPasswordLog");
-        }
-        errors.push("Fill-up all fields");
-      }
-
-      let login_request = {
-        "username": username,
-        "password": password,
-        "context": "login",
-      };
-
-      await fetch("../controller/auth.php", {
-        "method": "POST",
-        "headers": {
-          "Content-Type": "application/json; charset=utf-8"
-        },
-        "body": JSON.stringify(login_request),
-      }).then(function(response) {
-        return response.json();
-      }).then(function(data) {
-        if (data[0] == false) {
-          addDanger("inputUsernameLog");
-          addDanger("inputPasswordLog");
-        } else {
-          logged = true;
-          role = data[1];
-        }
-      }).catch(error => {
-        console.error("Err", error);
-      })
-
-      if (errors.length > 0) {
-        shakeForm(document.getElementById("loginForm"));
-        showErrors(errors, "loginAlert");
-      } else if (logged == false) {
-        shakeForm(document.getElementById("loginForm"));
-      } else {
-        switch (role) {
-          case (1):
-            window.location.href = "employer.php";
-            break;
-          case (2):
-            window.location.href = "alumni.php";
-            break;
-          case (3):
-            window.location.href = "admin/dashboard/app/alumni-workhistory.html";
-            break;
-          case (4):
-            window.location.href = "admin/dashboard/index.html";
-            break;
-        }
-      }
-    }
+    } ?>
   </script>
 </body>
 

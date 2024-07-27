@@ -28,10 +28,6 @@ function addDanger(elString) {
   inputElement.addEventListener('focusout', removeDanger);
 }
 
-function loadAnimate() {
-
-}
-
 function shakeForm(form) {
   form.classList.add("animate__animated");
   form.classList.add("animate__headShake");
