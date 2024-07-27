@@ -1,6 +1,13 @@
 <?php
 
-
+/**
+ * 
+ * @var strip $strip
+ */
+/**
+ * 
+ * @var res $func
+ */
 
 $alumniUnverified  = $func->selectjoin3_where2_orderby('users', 'userdetails', 'alumni_graduated_course', 'id', 'user_id', 'user_id', 'user_id', 'users', 'users', array('is_verified', '=', 0), 'AND', array('role', '=', 1), 'users', 'created_at', 'ASC');
 
