@@ -6,11 +6,10 @@ include '../src/init.php';
 $_SESSION['adminPage'] = "validateAlumni";
 
 if ($_SESSION['role'] != 4) {
-  header("location: ../../../");
+  header("location: ../../");
   exit();
 }
 
-// Function to handle approval
 function approveAction($id, $func)
 {
   // Your logic to approve the action

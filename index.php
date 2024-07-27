@@ -354,39 +354,33 @@
   <!-- JS here -->
 
   <!-- All JS Custom Plugins Link Here here -->
-  <script src="./view/assets/js/vendor/modernizr-3.5.0.min.js"></script>
+  <script src="js/vendor/modernizr-3.5.0.min.js"></script>
   <!-- Jquery, Popper, Bootstrap -->
-  <script src="./view/assets/js/vendor/jquery-1.12.4.min.js"></script>
-  <script src="./view/assets/js/popper.min.js"></script>
-  <script src="./view/assets/js/bootstrap.min.js"></script>
+  <script src="js/vendor/jquery-1.12.4.min.js"></script>
+  <script src="js/popper.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
   <!-- Jquery Mobile Menu -->
-  <script src="./view/assets/js/jquery.slicknav.min.js"></script>
+  <script src="js/jquery.slicknav.min.js"></script>
 
   <!-- Jquery Slick , Owl-Carousel Plugins -->
-  <!-- <script src="./view/assets/js/owl.carousel.min.js"></script> -->
-  <script src="./view/assets/js/slick.min.js"></script>
-  <script src="./view/assets/js/price_rangs.js"></script>
+  <!-- <script src="js/owl.carousel.min.js"></script> -->
+  <script src="js/slick.min.js"></script>
+  <script src="js/price_rangs.js"></script>
 
   <!-- One Page, Animated-HeadLin -->
-  <script src="./view/assets/js/wow.min.js"></script>
-  <script src="./view/assets/js/animated.headline.js"></script>
-  <script src="./view/assets/js/jquery.magnific-popup.js"></script>
+  <script src="js/wow.min.js"></script>
+  <script src="js/animated.headline.js"></script>
+  <script src="js/jquery.magnific-popup.js"></script>
 
   <!-- Scrollup, nice-select, sticky -->
-  <script src="./view/assets/js/jquery.scrollUp.min.js"></script>
-  <script src="./view/assets/js/jquery.nice-select.min.js"></script>
-  <script src="./view/assets/js/jquery.sticky.js"></script>
+  <script src="js/jquery.scrollUp.min.js"></script>
+  <script src="js/jquery.nice-select.min.js"></script>
+  <script src="js/jquery.sticky.js"></script>
 
-  <!-- contact js -->
-  <!-- <script src="./view/assets/js/contact.js"></script>
-<script src="./view/assets/js/jquery.form.js"></script>
-<script src="./view/assets/js/jquery.validate.min.js"></script>
-<script src="./view/assets/js/mail-script.js"></script>
-<script src="./view/assets/js/jquery.ajaxchimp.min.js"></script> -->
 
   <!-- Jquery Plugins, main Jquery -->
-  <script src="./view/assets/js/plugins.js"></script>
-  <script src="./view/assets/js/main.js"></script>
+  <script src="js/plugins.js"></script>
+  <script src="js/main.js"></script>
 
 </body>
 
