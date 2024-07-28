@@ -97,6 +97,40 @@ class res
 				}
 	*/
 
+  function select_count_where($table, $field, $operator, $value)
+  {
+    global $con;
+
+    $sql = "SELECT COUNT(*) AS total FROM {$table} WHERE {$field} {$operator} {$value}";
+    $qry = $con->query($sql);
+
+    $rowcount = mysqli_num_rows($qry);
+
+    if ($rowcount != 0) {
+      $res = $qry->fetch_assoc();
+
+      return $res['total'];
+    }
+    return null;
+  }
+
+  function select_count_where2($table, $field, $operator, $value, $field2, $operator2, $value2)
+  {
+    global $con;
+
+    $sql = "SELECT COUNT(*) AS total FROM {$table} WHERE {$field} {$operator} {$value} AND {$field2} {$operator2} {$value2}";
+    $qry = $con->query($sql);
+
+    $rowcount = mysqli_num_rows($qry);
+
+    if ($rowcount != 0) {
+      $res = $qry->fetch_assoc();
+
+      return $res['total'];
+    }
+    return null;
+  }
+
 
 
 
@@ -124,9 +158,6 @@ class res
 
       $sql = "SELECT * FROM {$table} JOIN {$table2} ON {$table}.{$ref}={$table2}.{$ref2} WHERE {$tbl1}.{$field1}  LIKE '{$likeval}' OR {$tbl2}.{$field2}  LIKE '{$likeval}' ORDER BY {$tblorder}.{$byfield}";
     }
-
-
-
 
     $qry = $con->query($sql);
 
@@ -646,6 +677,40 @@ class res
           }
           return $list;
         }
+
+        return $sql;
+      }
+    }
+  }
+
+  function selectLeftjoin3_where($table, $table2, $table3, $ref, $ref2, $ref3, $ref4, $tableref, $where = array())
+  {
+    global $con;
+    $list = array();
+
+    if (count($where) === 3) {
+      $operators = array('=', '>', '<', '>=', '<=');
+
+      $field    = $where[0];
+      $operator   = $where[1];
+      $value     = $where[2];
+
+      if (in_array($operator, $operators)) {
+        $sql = "SELECT * FROM {$table} LEFT JOIN {$table2} ON {$table}.{$ref}={$table2}.{$ref2} LEFT JOIN {$table3} ON {$table2}.{$ref3}={$table3}.{$ref4} WHERE {$tableref}.{$field} {$operator} '{$value}'";
+
+        $qry = $con->query($sql);
+
+
+        $rowcount = mysqli_num_rows($qry);
+
+        if ($rowcount != 0) {
+          for ($x = 1; $x <= $rowcount; $x++) {
+            $row = mysqli_fetch_assoc($qry);
+            $list[] = $row;
+          }
+          return $list;
+        }
+
         return $sql;
       }
     }
@@ -690,6 +755,43 @@ class res
           return $list;
         }
         return null;
+      }
+    }
+  }
+
+  function selectLeftjoin3_where2_orderby($table, $table2, $table3, $ref, $ref2, $ref3, $ref4, $tableref, $tableref2, $where = array(), $logic, $where2 = array(), $tableorder, $col, $sortorder)
+  {
+    global $con;
+    $list = array();
+
+    if (count($where) === 3 && count($where2)) {
+      $operators = array('=', '>', '<', '>=', '<=', '<>');
+
+      $field    = $where[0];
+      $operator   = $where[1];
+      $value     = $where[2];
+      $field2    = $where2[0];
+      $operator2   = $where2[1];
+      $value2    = $where2[2];
+
+
+      if (in_array($operator, $operators)) {
+        $sql = "SELECT * FROM {$table} LEFT JOIN {$table2} ON {$table}.{$ref}={$table2}.{$ref2} LEFT JOIN {$table3} ON {$table2}.{$ref3}={$table3}.{$ref4} WHERE {$tableref}.{$field} {$operator} '{$value}' {$logic} {$tableref2}.{$field2} {$operator2} '{$value2}'  ORDER BY {$tableorder}.{$col} {$sortorder} ";
+
+        $qry = $con->query($sql);
+
+
+        $rowcount = mysqli_num_rows($qry);
+
+
+        if ($rowcount != 0) {
+          for ($x = 1; $x <= $rowcount; $x++) {
+            $row = mysqli_fetch_assoc($qry);
+            $list[] = $row;
+          }
+          return $list;
+        }
+        return $sql;
       }
     }
   }
@@ -1748,10 +1850,18 @@ class res
 
     $sql = "SELECT * FROM {$table} WHERE {$field} {$operator} {$value}";
     $qry = $con->query($sql);
-    while ($row = mysqli_fetch_assoc($qry)) {
-      $list[] = $row;
+
+    $rowcount = mysqli_num_rows($qry);
+
+
+    if ($rowcount != 0) {
+      for ($x = 1; $x <= $rowcount; $x++) {
+        $row = mysqli_fetch_assoc($qry);
+        $list[] = $row;
+      }
+      return $list;
     }
-    return $list;
+    return null;
   }
 
   function selectall_where_orderby($table, $where = array(), $ref, $sortorder)
@@ -2262,10 +2372,10 @@ class res
     //echo $sql;
     $qry = $con->query($sql);
 
-    if ($qry) {
+    if ($qry && $con->affected_rows > 0) {
       return true;
     } else {
-      return $sql;
+      return null;
     }
   }
 

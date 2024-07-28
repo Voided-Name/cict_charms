@@ -1,5 +1,12 @@
 <?php
 session_start();
+include '../src/init.php';
+
+if ($_SESSION['role'] != 4) {
+  header("location: ../../");
+  exit();
+}
+
 $_SESSION['adminPage'] = "listUsers";
 ?>
 <!doctype html>

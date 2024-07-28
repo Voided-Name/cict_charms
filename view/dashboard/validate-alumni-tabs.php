@@ -9,7 +9,8 @@
  * @var res $func
  */
 
-$alumniUnverified  = $func->selectjoin3_where2_orderby('users', 'userdetails', 'alumni_graduated_course', 'id', 'user_id', 'user_id', 'user_id', 'users', 'users', array('is_verified', '=', 0), 'AND', array('role', '=', 1), 'users', 'created_at', 'ASC');
+//$alumniUnverified  = $func->selectjoin3_where2_orderby('users', 'userdetails', 'alumni_graduated_course', 'id', 'user_id', 'user_id', 'user_id', 'users', 'users', array('is_verified', '=', 0), 'AND', array('role', '=', 1), 'users', 'created_at', 'ASC');
+$alumniUnverified  = $func->selectLeftjoin3_where2_orderby('users', 'userdetails', 'alumni_graduated_course', 'id', 'user_id', 'user_id', 'user_id', 'users', 'users', array('is_verified', '=', 0), 'AND', array('role', '=', 1), 'users', 'created_at', 'ASC');
 
 $camp0 = '';
 $course0 = '';
@@ -57,6 +58,8 @@ $major0 = '';
 <div class="card-header d-flex justify-content-between">
   <div class="header-title">
     <h4 class="card-title">Validate Alumni Account</h4>
+    <p><?php //var_dump($alumniUnverified) 
+        ?></p>
   </div>
 </div>
 <div class="card-body px-0">

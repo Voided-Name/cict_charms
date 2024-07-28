@@ -1,6 +1,6 @@
-<?php 
-  session_start();
-    include 'src/init.php';
+<?php
+session_start();
+include 'src/init.php';
 
 ?>
 
@@ -81,9 +81,9 @@
 
     <div class="col-4" id="divInputEmail">
       <label for="inputEmail" class="form-label">Email</label>
-      <input type="email" class="form-control" id="inputEmail" name="inputEmail"  required>
+      <input type="email" class="form-control" id="inputEmail" name="inputEmail" required>
     </div>
-    
+
     <div class="col-4" id="divInputPassword">
       <label for="inputPassword" class="form-label">Password</label>
       <input type="password" class="form-control" id="inputPassword" name="inputPassword" required>
@@ -110,32 +110,32 @@
       <label for="inputAddress" class="form-label">Address</label>
     </div>
 
-      <div class="col-4" id="divInputRegion">
-        <select class="form-select" name="region" id="region">
+    <div class="col-4" id="divInputRegion">
+      <select class="form-select" name="region" id="region">
         <option disabled selected>Region..</option>
       </select>
-      </div>
-      <div class="col-4" id="divInputProvince">
-        <select class="form-select" name="province" id="province">
+    </div>
+    <div class="col-4" id="divInputProvince">
+      <select class="form-select" name="province" id="province">
         <option disabled selected>Province..</option>
       </select>
-      </div>
-      <div class="col-4" id="divInputMunicipality">
-        <select class="form-select" name="municipality" id="municipality">
+    </div>
+    <div class="col-4" id="divInputMunicipality">
+      <select class="form-select" name="municipality" id="municipality">
         <option disabled selected>City/Municipality</option>
       </select>
-      </div>
-      <div class="col-6" id="divInputBarangay">
-        <select class="form-select" name="barangay" id="barangay">
+    </div>
+    <div class="col-6" id="divInputBarangay">
+      <select class="form-select" name="barangay" id="barangay">
         <option disabled selected>Barangay...</option>
       </select>
-      </div>
-      <div class="col-6" id="divInputStAdd">
-        <input type="text" class="form-control" id="StreetAdd" name="StreetAdd" placeholder="St. Address" required>
-      </div>
+    </div>
+    <div class="col-6" id="divInputStAdd">
+      <input type="text" class="form-control" id="StreetAdd" name="StreetAdd" placeholder="St. Address" required>
+    </div>
 
-     
-    
+
+
     <div class="col-6" id="divInputCPNumber">
       <label for="inputCPNum" class="form-label">Contact Number</label>
       <input type="text" class="form-control" id="inputCPNum" name="inputCPNum" placeholder="09XXXXXXXXX" maxlength="11" required>
@@ -172,19 +172,19 @@
     </div>
 
 
-    <?php $allcompany =$func->selectallorderby('companies','name','ASC'); ?> 
+    <?php $allcompany = $func->selectallorderby('companies', 'name', 'ASC'); ?>
 
-    
+
     <div class="col-6" id="divInputCompanyName" style="display: none;">
       <label for="inputCompanyName" class="form-label">Company Name</label>
       <select id="inputCompanyName" name="inputCompanyName" class="form-select">
-        <?php for($allc=0;$allc<count($allcompany);$allc++){ ?>
-            <option value="<?php echo $allcompany[$allc]['id']?>"><?php echo $allcompany[$allc]['name']?></option>
+        <?php for ($allc = 0; $allc < count($allcompany); $allc++) { ?>
+          <option value="<?php echo $allcompany[$allc]['id'] ?>"><?php echo $allcompany[$allc]['name'] ?></option>
 
-            <?php } ?>
+        <?php } ?>
         <option value="0">Other</option>
-        </select>
-        <input type="text" id="inputOtherCompany" name="inputOtherCompany" class="form-control" placeholder="Please specify" style="display:none; margin-top: 10px;">
+      </select>
+      <input type="text" id="inputOtherCompany" name="inputOtherCompany" class="form-control" placeholder="Please specify" style="display:none; margin-top: 10px;">
 
 
     </div>
@@ -228,7 +228,7 @@
       </div>
     </div>
     <div class="col-12 text-center" id="divSignUpBtn">
-      <button type="submit" id="signUpBtn" name="signUpBtn"  class="btn btn-primary">Sign Up</button>
+      <button type="submit" id="signUpBtn" name="signUpBtn" class="btn btn-primary">Sign Up</button>
     </div>
     <a href="login.php" class="link-secondary link-underline-opacity-10 link-underline-opacity-50-hover text-center">Login Instead</a>
   </form>
@@ -250,217 +250,208 @@
   </div>
   <script defer src="../app.js"></script>
 
-   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 
-<script>
-
-
-        //location finder
-       $(document).ready(function() {
-
-   let brg = document.getElementById("brgy");
-    
-         $.getJSON('locations.json', function(jd) {
-
-          console.log(jd.province_list);
-            Object.keys(jd).forEach(function(key) {
-
-              let option = document.createElement("option");
-              option.value = key;
-              option.text = key;
-
-              option.id = key;
-              brg.add(option);
-            });
-         });
-
-});
+  <script>
+    //location finder
+    // $(document).ready(function() {
+    //
+    //   let brg = document.getElementById("brgy");
+    //
+    //   $.getJSON('locations.json', function(jd) {
+    //
+    //     console.log(jd.province_list);
+    //     Object.keys(jd).forEach(function(key) {
+    //
+    //       let option = document.createElement("option");
+    //       option.value = key;
+    //       option.text = key;
+    //
+    //       option.id = key;
+    //       brg.add(option);
+    //     });
+    //   });
+    //
+    // });
 
 
 
-       // address dynamic
+    // address dynamic
 
-         $(document).ready(function(){
-        $.getJSON("locations.json", function(result){
-        $.each(result, function(i, field){
-            $('#region').append(`<option value="${i}">
+    $(document).ready(function() {
+      $.getJSON("locations.json", function(result) {
+        $.each(result, function(i, field) {
+          $('#region').append(`<option value="${i}">
                                        ${field.region_name}
                                   </option>`);
         });
-        });
+      });
 
-        $("#region").change(function(){
-            $('#province').empty();
-            $('#municipality').empty();
-            $('#barangay').empty();
-            // alert($("#myregion").val());
-            getProvinces($("#region").val());
-        });
+      $("#region").change(function() {
+        $('#province').empty();
+        $('#municipality').empty();
+        $('#barangay').empty();
+        getProvinces($("#region").val());
+      });
 
-        function getProvinces(region_name){
-            $.getJSON("locations.json", function(result){
-                $.each( result[region_name].province_list, function( key, value ) {
-                    $('#province').append(`<option value="${key}">
+      function getProvinces(region_name) {
+        $.getJSON("locations.json", function(result) {
+          $.each(result[region_name].province_list, function(key, value) {
+            $('#province').append(`<option value="${key}">
                                        ${key}
                                   </option>`);
-                });
-            });
-            
-        }
-
-        $("#province").change(function(){
-
-            $('#municipality').empty();
-            $('#barangay').empty();
-            getMunicipality($("#region").val(),$("#province").val());
+          });
+          getMunicipality($("#region").val(), $("#province").val());
         });
+      }
 
-        function getMunicipality(region_name,province_name){
-            $.getJSON("locations.json", function(result){
-                // console.log(result[region_name].province_list[province_name]);
-                $.each( result[region_name].province_list[province_name].municipality_list, function( key, value ) {
-                    // console.log(key);
-                    $('#municipality').append(`<option value="${key}">
+      $("#province").change(function() {
+        $('#municipality').empty();
+        $('#barangay').empty();
+        getMunicipality($("#region").val(), $("#province").val());
+      });
+
+      function getMunicipality(region_name, province_name) {
+        $.getJSON("locations.json", function(result) {
+          // console.log(result[region_name].province_list[province_name]);
+          $.each(result[region_name].province_list[province_name].municipality_list, function(key, value) {
+            // console.log(key);
+            $('#municipality').append(`<option value="${key}">
                                        ${key}
                                   </option>`);
-                });
-            });
-            
-        }
-
-        $("#municipality").change(function(){
-       
-            $('#barangay').empty();
-            getBarangay($("#region").val(),$("#province").val(),$("#municipality").val());
+          });
+          getBarangay($("#region").val(), $("#province").val(), $("#municipality").val());
         });
+      }
 
-        function getBarangay(region_name,province_name,municipality_name){
-            $.getJSON("locations.json", function(result){
-                // console.log(result[region_name].province_list[province_name].municipality_list[municipality_name].barangay_list);
-                $.each( result[region_name].province_list[province_name].municipality_list[municipality_name].barangay_list, function( key, value ) {
-                    // console.log(key);
-                    $('#barangay').append(`<option value="${value}">
+      $("#municipality").change(function() {
+
+        $('#barangay').empty();
+        getBarangay($("#region").val(), $("#province").val(), $("#municipality").val());
+      });
+
+      function getBarangay(region_name, province_name, municipality_name) {
+        $.getJSON("locations.json", function(result) {
+          // console.log(result[region_name].province_list[province_name].municipality_list[municipality_name].barangay_list);
+          $.each(result[region_name].province_list[province_name].municipality_list[municipality_name].barangay_list, function(key, value) {
+            // console.log(key);
+            $('#barangay').append(`<option value="${value}">
                                        ${value}
                                   </option>`);
-                });
-            });
-            
-        }
-
-        $("#showmylocation").click(function(){
-            $("#mycompletelocation").text(" Region : "+$("#myregion").val()+" Province of : "+$("#myprovince").val()+" Municipality of : "+$("#mymunicipality").val()+" Barangay : "+$("#mybarangay").val());
-
-            
+          });
         });
+      }
+
+      $("#showmylocation").click(function() {
+        $("#mycompletelocation").text(" Region : " + $("#myregion").val() + " Province of : " + $("#myprovince").val() + " Municipality of : " + $("#mymunicipality").val() + " Barangay : " + $("#mybarangay").val());
+      });
 
 
 
 
-     //CPnumber format validation
-            $('#inputCPNum').focusout(function () {
-                var input = $(this).val();
-                
-                // Regular expression to check if input starts with 09 and has exactly 11 digits
-                var regex = /^09\d{9}$/;
+      //CPnumber format validation
+      $('#inputCPNum').focusout(function() {
+        var input = $(this).val();
 
-                if (!regex.test(input)) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Invalid Input',
-                        text: 'The input must be 11 digits, start with 09, and contain no alphabets or special characters.'
-                    }).then(() => {
-                        $('#inputCPNum').focus();
-                    });
-                }
-            });
+        // Regular expression to check if input starts with 09 and has exactly 11 digits
+        var regex = /^09\d{9}$/;
+
+        if (!regex.test(input)) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Invalid Input',
+            text: 'The input must be 11 digits, start with 09, and contain no alphabets or special characters.'
+          }).then(() => {
+            $('#inputCPNum').focus();
+          });
+        }
+      });
 
 
       //bday input validation
-            $('#inputBDate').focusout(function () {
-                var inputDate = new Date($(this).val());
-                var today = new Date();
-                
-                // Calculate age
-                var age = today.getFullYear() - inputDate.getFullYear();
-                var monthDifference = today.getMonth() - inputDate.getMonth();
-                if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < inputDate.getDate())) {
-                    age--;
-                }
+      $('#inputBDate').focusout(function() {
+        var inputDate = new Date($(this).val());
+        var today = new Date();
 
-                // Check if age is less than 18
-                if (age < 18) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Invalid Age',
-                        text: 'You must be 18 years or older.'
-                    }).then(() => {
-                        $('#inputBDate').focus();
-                    });
-                }
-            });
+        // Calculate age
+        var age = today.getFullYear() - inputDate.getFullYear();
+        var monthDifference = today.getMonth() - inputDate.getMonth();
+        if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < inputDate.getDate())) {
+          age--;
+        }
+
+        // Check if age is less than 18
+        if (age < 18) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Invalid Age',
+            text: 'You must be 18 years or older.'
+          }).then(() => {
+            $('#inputBDate').focus();
+          });
+        }
+      });
 
       //add new role
-            $('#inputCompanyName').change(function () {
-                if ($(this).val() === '0') {
-                    $('#inputOtherCompany').show().attr('required', true);
-                } else {
-                    $('#inputOtherCompany').hide().val('').attr('required', false);
-                }
-            });
-  
+      $('#inputCompanyName').change(function() {
+        if ($(this).val() === '0') {
+          $('#inputOtherCompany').show().attr('required', true);
+        } else {
+          $('#inputOtherCompany').hide().val('').attr('required', false);
+        }
+      });
+
 
       // password verification
 
-            $('#inputCPassword').focusout(function () {
-                var password = $('#inputPassword').val();
-                var confirmPassword = $(this).val();
+      $('#inputCPassword').focusout(function() {
+        var password = $('#inputPassword').val();
+        var confirmPassword = $(this).val();
 
-                if (confirmPassword && password !== confirmPassword) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Password Mismatch',
-                        text: 'The passwords do not match. Where would you like to set focus?',
-                        showCancelButton: true,
-                        confirmButtonText: 'Password',
-                        cancelButtonText: 'Confirm Password'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            $('#inputPassword').focus();
-                        } else {
-                            $('#inputCPassword').focus();
-                        }
-                    });
-                }
-            });
+        if (confirmPassword && password !== confirmPassword) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Password Mismatch',
+            text: 'The passwords do not match. Where would you like to set focus?',
+            showCancelButton: true,
+            confirmButtonText: 'Password',
+            cancelButtonText: 'Confirm Password'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              $('#inputPassword').focus();
+            } else {
+              $('#inputCPassword').focus();
+            }
+          });
+        }
+      });
 
-            $('#inputPassword').focusout(function () {
-                var password = $(this).val();
-                var confirmPassword = $('#inputCPassword').val();
+      $('#inputPassword').focusout(function() {
+        var password = $(this).val();
+        var confirmPassword = $('#inputCPassword').val();
 
-                if (confirmPassword && password !== confirmPassword) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Password Mismatch',
-                        text: 'The passwords do not match. Where would you like to set focus?',
-                        showCancelButton: true,
-                        confirmButtonText: 'Password',
-                        cancelButtonText: 'Confirm Password'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            $('#inputPassword').focus();
-                        } else {
-                            $('#inputCPassword').focus();
-                        }
-                    });
-                }
-            });
+        if (confirmPassword && password !== confirmPassword) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Password Mismatch',
+            text: 'The passwords do not match. Where would you like to set focus?',
+            showCancelButton: true,
+            confirmButtonText: 'Password',
+            cancelButtonText: 'Confirm Password'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              $('#inputPassword').focus();
+            } else {
+              $('#inputCPassword').focus();
+            }
+          });
+        }
+      });
 
-            
+
 
     });
-
-
-     </script>
+  </script>
 
 
 </body>
@@ -470,12 +461,12 @@
 
 
 
-<?php 
+<?php
 if (isset($_POST['signUpBtn'])) {
 
- 
-  $regEmail= $strip->strip($_POST['inputEmail']);
-  $regPass= $strip->strip($_POST['inputPassword']);
+
+  $regEmail = $strip->strip($_POST['inputEmail']);
+  $regPass = $strip->strip($_POST['inputPassword']);
   $regFname = $strip->strip($_POST['inputFName']);
   $regMname = $strip->strip($_POST['inputMName']);
   $regLname = $strip->strip($_POST['inputLName']);
@@ -498,152 +489,144 @@ if (isset($_POST['signUpBtn'])) {
   //  echo '<script>alert("'.$regEmail.'");</script>';
 
   // echo '<script>alert("'.$regPass.'");</script>';
-  
 
-  $passhash = md5($regpassword);
+
+  $passhash = md5($regPass);
   $userID = "";
   $registered = false;
 
-        $selectUser = $func->select_one('users',array('username','=',$regEmail));
+  $selectUser = $func->select_one('users', array('username', '=', $regEmail));
 
-        if($selectUser){
+  if ($selectUser) {
 
-        ?>
-               <script>
-                  Swal.fire({
-                   icon: 'error',
-                   title: 'Registration failed!',
-                   text: 'email address already registered'
-                            })
-               </script>
-        <?php
-  
-        }  else {
-            //insert data
-            $profix = null;
-            if($regSex == 1){
-              $profix = 'images/profilepix/man_gen.jpg';
-            } else {
-              $profix = 'images/profilepix/lady_def.jpg';
-            }
+?>
+    <script>
+      Swal.fire({
+        icon: 'error',
+        title: 'Registration failed!',
+        text: 'email address already registered'
+      })
+    </script>
+    <?php
 
-            $UserInsert = $func->insert('users',array(
-            'username' => $regEmail,
-            'passAlias' => $regPass,
-            'password' => $passhash,
-            'role' => $regRole
-            ));
+  } else {
+    //insert data
+    $profix = null;
+    if ($regSex == 1) {
+      $profix = 'images/profilepix/man_gen.jpg';
+    } else {
+      $profix = 'images/profilepix/lady_def.jpg';
+    }
 
-
-
-            if($UserInsert){
-              
-              $userID = mysqli_insert_id($con);
-
-
-              $personInsert = $func->insert('userdetails',array(
-              'user_id' => $userID,
-              'profile_pic_url' => $profix,
-              'email_address' => $regEmail,
-              'contact_number' => $regCPNum,
-              'first_name' => $regFname,
-              'middle_name' => $regMname, 
-              'last_name' => $regLname,
-              'birth_date' => $regBDate,
-              'sex' =>$regSex,
-              'region' =>$regSex,
-              'province' =>$regProvince,
-              'city' =>$regMunicipality,
-              'barangay' =>$regBarangay,
-              'street_add' =>$regStreetAdd
-
-              ));
+    $UserInsert = $func->insert('users', array(
+      'username' => $regEmail,
+      'passAlias' => $regPass,
+      'password' => $passhash,
+      'role' => $regRole
+    ));
 
 
 
-              if($regRole == 1){
+    if ($UserInsert) {
 
-                $AlumniInsert = $func->insert('alumni_graduated_course',array(
-                'user_id' => $userID,
-                'studnum' => $regSID
-
-                ));
-
-              } else if($regRole == 2){
-
-                  $compID = 0;
-
-                if($regCompanyName == 0){
-
-                    $CompanyInsert = $func->insert('users',array(
-                      'name' => $regOtherCompany
-                      ));
-
-                    if($CompanyInsert){
-              
-                      $compID = mysqli_insert_id($con);
-
-                    }  
-
-                } else {
-                  $compID = $regCompanyName;
-                }
+      $userID = mysqli_insert_id($con);
 
 
-                $employer_usersInsert = $func->insert('employer_users',array(
-                'user_id' => $userID,
-                'company_id' => $compID,
-                'employer_num' => $regEID
+      $personInsert = $func->insert('userdetails', array(
+        'user_id' => $userID,
+        'profile_pic_url' => $profix,
+        'email_address' => $regEmail,
+        'contact_number' => $regCPNum,
+        'first_name' => $regFname,
+        'middle_name' => $regMname,
+        'last_name' => $regLname,
+        'birth_date' => $regBDate,
+        'sex' => $regSex,
+        'region' => $regSex,
+        'province' => $regProvince,
+        'city' => $regMunicipality,
+        'barangay' => $regBarangay,
+        'street_add' => $regStreetAdd
 
-                ));
-
-
-              } else if($regRole == 3){
-
-                $facultyInsert = $func->insert('faculty',array(
-                'user_id' => $userID,
-                'employee_num' => $regFID
-
-                ));
-
-              } 
-
-
-               $registered = true;
-
-
-            }
+      ));
 
 
 
-              if($registered){
-                  ?>
-                    <script> swal.fire({
-                          title: "New Account Creadted Successfully!",
-                          text: "Click ok to refresh the page.",
-                          type: "success"
-                        }).then(function(){
-                          window.location="login.php";
-                        });
-                        </script>
+      if ($regRole == 1) {
 
-                } else {
-                   ?>
-                        <script>
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Registration Failed'
-                            })
-                        </script>
-                        <?php
+        $AlumniInsert = $func->insert('alumni_graduated_course', array(
+          'user_id' => $userID,
+          'studnum' => $regSID
+
+        ));
+      } else if ($regRole == 2) {
+
+        $compID = 0;
+
+        if ($regCompanyName == 0) {
+
+          $CompanyInsert = $func->insert('users', array(
+            'name' => $regOtherCompany
+          ));
+
+          if ($CompanyInsert) {
+
+            $compID = mysqli_insert_id($con);
+          }
+        } else {
+          $compID = $regCompanyName;
+        }
+
+
+        $employer_usersInsert = $func->insert('employer_users', array(
+          'user_id' => $userID,
+          'company_id' => $compID,
+          'employer_num' => $regEID
+
+        ));
+      } else if ($regRole == 3) {
+
+        $facultyInsert = $func->insert('faculty', array(
+          'user_id' => $userID,
+          'employee_num' => $regFID
+
+        ));
+      }
+
+
+      $registered = True;
+    }
 
 
 
-                  
-                }
-       }
+    if ($registered) {
+    ?>
+      <script>
+        swal.fire({
+          title: "New Account Creadted Successfully!",
+          text: "Click ok to refresh the page.",
+          type: "success"
+        }).then(function() {
+          window.location = "login.php";
+        });
+      </script>
+    <?php
+    } else {
+    ?>
+      <script>
+        Swal.fire({
+          icon: 'error',
+          title: 'Registration Failed'
+        })
+      </script>
+<?php
 
+
+
+
+    }
+  }
 }
 
 
-?>
+?> text: "Click ok to refresh th?>?> text: "Click ok to refresh th?>?>

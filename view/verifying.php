@@ -2,6 +2,7 @@
 session_start();
 include 'src/init.php';
 
+
 function cleanAlphaNumString($string)
 {
   return preg_replace("/[^a-zA-Z0-9]/", "", $string);
@@ -9,6 +10,15 @@ function cleanAlphaNumString($string)
 
 
 if (isset($_POST['saveBtn'])) {
+  /**
+   * 
+   * @var strip $strip
+   */
+  /**
+   * 
+   * @var res $func
+   */
+
   if ($_SESSION['role'] == 1) {
     $email = $strip->strip($_POST['alumniEmail']);
     $username = $strip->strip($_POST['alumniUsername']);
@@ -57,13 +67,6 @@ if (isset($_POST['saveBtn'])) {
       $updateDetails2 = $func->update('users', 'id', $_SESSION['userid'], array('username' => $username));
     }
 
-
-    // sample procedure for page
-    //$userInsert = $func->insert('users',array(
-    //'name' => 'Dale',
-    //'username' => 'Dale',
-    //'password' => 'password'
-    //	));
     $updateDetails1 = $func->update('userdetails', 'user_id', $_SESSION['userid'], array(
       'contact_number' => $contactNumber,
       'first_name' => $firstName,
@@ -90,6 +93,22 @@ if (isset($_POST['saveBtn'])) {
       'year_started' => $yearEnrolled,
       'year_graduated' => $yearGraduated
     ));
+
+    if (!$updateDetails3) {
+      $alumni_grad_table_exist = $func->selectall_where('alumni_graduated_course', array('user_id', '=', $_SESSION['userid']));
+
+      if (!$alumni_grad_table_exist) {
+        $insertDetails = $func->insert('alumni_graduated_course', array(
+          'user_id' => $_SESSION['userid'],
+          'course_id' => $course,
+          'campus' => $campus,
+          'alumniNum' => $studentId,
+          'major_id' => $mapMajors[$major],
+          'year_started' => $yearEnrolled,
+          'year_graduated' => $yearGraduated
+        ));
+      }
+    }
   } else if ($_SESSION['role'] == 2) {
     $email = $strip->strip($_POST['employerEmail']);
     $username = $strip->strip($_POST['employerUsername']);
@@ -158,11 +177,36 @@ if (isset($_POST['saveBtn'])) {
         'company_id' => 0,
         'company_position' => $position,
       ));
+
+      if (!$updateDetails3) {
+        $employer_users_exists = $func->selectall_where('employer_users', array('user_id', '=', $_SESSION['userid']));
+
+        if (!$employer_users_exists) {
+          $insertDetails = $func->insert('employer_users', array(
+            'user_id' => $_SESSION['userid'],
+            'company_unvalidated' => $companyName2,
+            'company_id' => 0,
+            'company_position' => $position,
+          ));
+        }
+      }
     } else {
       $updateDetails3 = $func->update('employer_users', 'user_id', $_SESSION['userid'], array(
         'company_id' => $companyName,
         'company_position' => $position,
       ));
+
+      if (!$updateDetails3) {
+        $employer_users_exists = $func->selectall_where('employer_users', array('user_id', '=', $_SESSION['userid']));
+
+        if (!$employer_users_exists) {
+          $insertDetails = $func->insert('employer_users', array(
+            'user_id' => $_SESSION['userid'],
+            'company_id' => $companyName,
+            'company_position' => $position,
+          ));
+        }
+      }
     }
   } else if ($_SESSION['role'] == 3) {
     $email = $strip->strip($_POST['facultyEmail']);
@@ -224,11 +268,24 @@ if (isset($_POST['saveBtn'])) {
       'suffix' => $suffix
     ));
 
-    $updateDetails2 = $func->update('faculty', 'user_id', $_SESSION['userid'], array(
+    $updateDetails3 = $func->update('faculty', 'user_id', $_SESSION['userid'], array(
       'campus_id' => $campus,
       'acadrank_id' => $acadRank,
       'employee_num' => $facultyID
     ));
+
+    if (!$updateDetails3) {
+      $faculty_exists = $func->selectall_where('faculty', array('user_id', '=', $_SESSION['userid']));
+
+      if (!$faculty_exists) {
+        $insertDetails = $func->insert('faculty', array(
+          'user_id' => $_SESSION['userid'],
+          'campus_id' => $campus,
+          'acadrank_id' => $acadRank,
+          'employee_num' => $facultyID
+        ));
+      }
+    }
   }
 }
 
@@ -239,7 +296,7 @@ $barangays = $func->selectall('barangays');
 $companies = $func->selectall('companies');
 
 if ($_SESSION['role'] == 1) {
-  $alumniData = $func->selectjoin3_where('users', 'userdetails', 'alumni_graduated_course', 'id', 'user_id', 'user_id', 'user_id', 'users', array('id', '=', $_SESSION['userid']));
+  $alumniData = $func->selectLeftjoin3_where('users', 'userdetails', 'alumni_graduated_course', 'id', 'user_id', 'user_id', 'user_id', 'users', array('id', '=', $_SESSION['userid']));
 
   $courses = $func->selectall('courses');
   $campuses = $func->selectall('campuses');
@@ -248,11 +305,11 @@ if ($_SESSION['role'] == 1) {
     $mapMajors = array_combine(array_column($majors, 'majorName'), array_column($majors, 'id'));
   }
 } else if ($_SESSION['role'] == 2) {
-  $employerData = $func->selectjoin3_where('users', 'userdetails', 'employer_users', 'id', 'user_id', 'user_id', 'user_id', 'users', array('id', '=', $_SESSION['userid']));
+  $employerData = $func->selectLeftjoin3_where('users', 'userdetails', 'employer_users', 'id', 'user_id', 'user_id', 'user_id', 'users', array('id', '=', $_SESSION['userid']));
 } else if ($_SESSION['role'] == 3) {
   $campuses = $func->selectall('campuses');
   $acadRanks = $func->selectall('faculty_rankings');
-  $facultyData = $func->selectjoin3_where('users', 'userdetails', 'faculty', 'id', 'user_id', 'user_id', 'user_id', 'users', array('id', '=', $_SESSION['userid']));
+  $facultyData = $func->selectLeftjoin3_where('users', 'userdetails', 'faculty', 'id', 'user_id', 'user_id', 'user_id', 'users', array('id', '=', $_SESSION['userid']));
 }
 ?>
 <!doctype html>
@@ -295,8 +352,12 @@ if ($_SESSION['role'] == 1) {
 
 <body class="d-flex row align-items-center justify-content-center">
   <?php
-  var_dump($_SESSION['role']);
-  var_dump($facultyData);
+  //var_dump($_SESSION['role']);
+  //var_dump($alumniData);
+  var_dump($true);
+  var_dump($updateDetails3);
+  var_dump($alumni_grad_table_exist);
+  var_dump($insertDetails);
   ?>
   <div class="text-center" id="loading-screen">
     <div class="spinner-grow" style="width: 40%; padding-top: 40%;" role="status">
@@ -503,7 +564,7 @@ if ($_SESSION['role'] == 1) {
               </div>
               <div class="col-12">
                 <label for="alumniStAdd" class="form-label">Street Address</label>
-                <input type="text" class="form-control" id="alumniStAdd" name="alumniStAdd" value="<?php echo $employerData[0]['street_add'] ?>">
+                <input type="text" class="form-control" id="alumniStAdd" name="alumniStAdd" value="<?php echo $alumniData[0]['street_add'] ?>">
               </div>
               <div class="col-md-6 col-sm-12" id="">
                 <label for="alumniCPNumber" class="form-label">Contact Number</label>
@@ -631,7 +692,7 @@ if ($_SESSION['role'] == 1) {
             </div>
             <div class="col-12">
               <label for="facultyStAdd" class="form-label">Street Address</label>
-              <input type="text" class="form-control" id="facultyStAdd" name="facultyStAdd" value="<?php echo $employerData[0]['street_add'] ?>">
+              <input type="text" class="form-control" id="facultyStAdd" name="facultyStAdd" value="<?php echo $facultyData[0]['street_add'] ?>">
             </div>
             <div class="col-md-6 col-sm-12" id="">
               <label for="facultyCPNumber" class="form-label">Contact Number</label>

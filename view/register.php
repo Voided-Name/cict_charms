@@ -10,10 +10,8 @@ include 'src/init.php';
  * 
  * @var res $func
  */
+
 ?>
-
-
-
 <!doctype html>
 <html lang="en">
 
@@ -22,6 +20,7 @@ include 'src/init.php';
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Bootstrap demo</title>
   <link href="../css/style.css" rel="stylesheet">
+  <link href="../node_modules/animate.css/animate.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
   <style>
     html,
@@ -64,15 +63,18 @@ include 'src/init.php';
     .custom-shape-divider-top-1716877928 .shape-fill {
       fill: #5174db;
     }
+
+    .animate__animated .animate__pulse {
+      --animate-duration: 0.25;
+    }
   </style>
-  <!-- Jquery, Popper, Bootstrap -->
-  <script src="../view/assets/js/vendor/jquery-1.12.4.min.js"></script>
-  <script src="../js/popper.min.js"></script>
-  <script src="../js/bootstrap.min.js"></script>
+  <script type="module">
+    import '../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js';
+  </script>
 </head>
 
-<body class="d-flex row align-items-center">
-  <form id="signUpForm" method="post" class="signForm m-auto row g-3 border border-3 bg-light border-primary-subtle rounded col shadow ">
+<body class="d-flex row align-items-center" onload="registerOnload()">
+  <form id="signUpForm" method="post" onload="loadAnimate()" class="signForm m-auto row g-3 border border-3 bg-light border-primary-subtle rounded col shadow ">
     <div id="title1" class="col-12 text-center text-primary-emphasis">
       <h1>Register</h1>
     </div>
@@ -252,9 +254,218 @@ include 'src/init.php';
       </div>
     </div>
   </div>
+  <script defer src="../app.js"></script>
+
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+
+  <script>
+    //location finder
+    // $(document).ready(function() {
+    //
+    //   let brg = document.getElementById("brgy");
+    //
+    //   $.getJSON('locations.json', function(jd) {
+    //
+    //     console.log(jd.province_list);
+    //     Object.keys(jd).forEach(function(key) {
+    //
+    //       let option = document.createElement("option");
+    //       option.value = key;
+    //       option.text = key;
+    //
+    //       option.id = key;
+    //       brg.add(option);
+    //     });
+    //   });
+    //
+    // });
+
+
+
+    // address dynamic
+
+    $(document).ready(function() {
+      $.getJSON("locations.json", function(result) {
+        $.each(result, function(i, field) {
+          $('#region').append(`<option value="${i}">
+                                       ${field.region_name}
+                                  </option>`);
+        });
+      });
+
+      $("#region").change(function() {
+        $('#province').empty();
+        $('#municipality').empty();
+        $('#barangay').empty();
+        getProvinces($("#region").val());
+      });
+
+      function getProvinces(region_name) {
+        $.getJSON("locations.json", function(result) {
+          $.each(result[region_name].province_list, function(key, value) {
+            $('#province').append(`<option value="${key}">
+                                       ${key}
+                                  </option>`);
+          });
+          getMunicipality($("#region").val(), $("#province").val());
+        });
+      }
+
+      $("#province").change(function() {
+        $('#municipality').empty();
+        $('#barangay').empty();
+        getMunicipality($("#region").val(), $("#province").val());
+      });
+
+      function getMunicipality(region_name, province_name) {
+        $.getJSON("locations.json", function(result) {
+          // console.log(result[region_name].province_list[province_name]);
+          $.each(result[region_name].province_list[province_name].municipality_list, function(key, value) {
+            // console.log(key);
+            $('#municipality').append(`<option value="${key}">
+                                       ${key}
+                                  </option>`);
+          });
+          getBarangay($("#region").val(), $("#province").val(), $("#municipality").val());
+        });
+      }
+
+      $("#municipality").change(function() {
+
+        $('#barangay').empty();
+        getBarangay($("#region").val(), $("#province").val(), $("#municipality").val());
+      });
+
+      function getBarangay(region_name, province_name, municipality_name) {
+        $.getJSON("locations.json", function(result) {
+          // console.log(result[region_name].province_list[province_name].municipality_list[municipality_name].barangay_list);
+          $.each(result[region_name].province_list[province_name].municipality_list[municipality_name].barangay_list, function(key, value) {
+            // console.log(key);
+            $('#barangay').append(`<option value="${value}">
+                                       ${value}
+                                  </option>`);
+          });
+        });
+      }
+
+      $("#showmylocation").click(function() {
+        $("#mycompletelocation").text(" Region : " + $("#myregion").val() + " Province of : " + $("#myprovince").val() + " Municipality of : " + $("#mymunicipality").val() + " Barangay : " + $("#mybarangay").val());
+      });
+
+
+
+
+      //CPnumber format validation
+      $('#inputCPNum').focusout(function() {
+        var input = $(this).val();
+
+        // Regular expression to check if input starts with 09 and has exactly 11 digits
+        var regex = /^09\d{9}$/;
+
+        if (!regex.test(input)) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Invalid Input',
+            text: 'The input must be 11 digits, start with 09, and contain no alphabets or special characters.'
+          }).then(() => {
+            $('#inputCPNum').focus();
+          });
+        }
+      });
+
+
+      //bday input validation
+      $('#inputBDate').focusout(function() {
+        var inputDate = new Date($(this).val());
+        var today = new Date();
+
+        // Calculate age
+        var age = today.getFullYear() - inputDate.getFullYear();
+        var monthDifference = today.getMonth() - inputDate.getMonth();
+        if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < inputDate.getDate())) {
+          age--;
+        }
+
+        // Check if age is less than 18
+        if (age < 18) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Invalid Age',
+            text: 'You must be 18 years or older.'
+          }).then(() => {
+            $('#inputBDate').focus();
+          });
+        }
+      });
+
+      //add new role
+      $('#inputCompanyName').change(function() {
+        if ($(this).val() === '0') {
+          $('#inputOtherCompany').show().attr('required', true);
+        } else {
+          $('#inputOtherCompany').hide().val('').attr('required', false);
+        }
+      });
+
+
+      // password verification
+
+      $('#inputCPassword').focusout(function() {
+        var password = $('#inputPassword').val();
+        var confirmPassword = $(this).val();
+
+        if (confirmPassword && password !== confirmPassword) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Password Mismatch',
+            text: 'The passwords do not match. Where would you like to set focus?',
+            showCancelButton: true,
+            confirmButtonText: 'Password',
+            cancelButtonText: 'Confirm Password'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              $('#inputPassword').focus();
+            } else {
+              $('#inputCPassword').focus();
+            }
+          });
+        }
+      });
+
+      $('#inputPassword').focusout(function() {
+        var password = $(this).val();
+        var confirmPassword = $('#inputCPassword').val();
+
+        if (confirmPassword && password !== confirmPassword) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Password Mismatch',
+            text: 'The passwords do not match. Where would you like to set focus?',
+            showCancelButton: true,
+            confirmButtonText: 'Password',
+            cancelButtonText: 'Confirm Password'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              $('#inputPassword').focus();
+            } else {
+              $('#inputCPassword').focus();
+            }
+          });
+        }
+      });
+
+
+
+    });
+  </script>
+
+
 </body>
 
 </html>
+
+
+
 
 <?php
 if (isset($_POST['signUpBtn'])) {
@@ -293,7 +504,6 @@ if (isset($_POST['signUpBtn'])) {
   $selectUser = $func->select_one('users', array('username', '=', $regEmail));
 
   if ($selectUser) {
-
 ?>
     <script>
       Swal.fire({
@@ -307,6 +517,7 @@ if (isset($_POST['signUpBtn'])) {
   } else {
     //insert data
     $profix = null;
+
     if ($regSex == 1) {
       $profix = 'images/profilepix/man_gen.jpg';
     } else {
@@ -320,12 +531,9 @@ if (isset($_POST['signUpBtn'])) {
       'role' => $regRole
     ));
 
-
-
     if ($UserInsert) {
 
       $userID = mysqli_insert_id($con);
-
 
       $personInsert = $func->insert('userdetails', array(
         'user_id' => $userID,
@@ -342,17 +550,13 @@ if (isset($_POST['signUpBtn'])) {
         'city' => $regMunicipality,
         'barangay' => $regBarangay,
         'street_add' => $regStreetAdd
-
       ));
 
-
-
       if ($regRole == 1) {
-
+        $runs = true;
         $AlumniInsert = $func->insert('alumni_graduated_course', array(
           'user_id' => $userID,
-          'studnum' => $regSID
-
+          'alumniNum' => $regSID
         ));
       } else if ($regRole == 2) {
 
@@ -392,15 +596,22 @@ if (isset($_POST['signUpBtn'])) {
       $registered = True;
     }
 
-
-
+    if ($runs) {
+    ?>
+      <script>
+        alert("runs\n" + "<?php echo $userID ?>" + "\n" + "<?php echo $regSID ?>");
+      </script>
+    <?php
+    }
     if ($registered) {
     ?>
       <script>
+        document.getElementById("signUpForm").style.display = "none";
         swal.fire({
-          title: "New Account Creadted Successfully!",
+          title: "New Account Created Successfully!",
           text: "Click ok to refresh the page.",
-          type: "success"
+          type: "success",
+          heightAuto: "false",
         }).then(function() {
           window.location = "login.php";
         });
@@ -415,13 +626,7 @@ if (isset($_POST['signUpBtn'])) {
         })
       </script>
 <?php
-
-
-
-
     }
   }
 }
-
-
 ?>

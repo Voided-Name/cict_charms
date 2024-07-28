@@ -1,5 +1,18 @@
 <?php
 session_start();
+include '../src/init.php';
+/**
+ * 
+ * @var strip $strip
+ */
+/**
+ * 
+ * @var res $func
+ */
+
+$numVacancies = $func->select_count_where('employer_job_posts', 'is_draft', '=', 0);
+$numAlumnis = $func->select_count_where2('users', 'role', '=', 1, 'is_verified', '=', 1);
+
 ?>
 <!doctype html>
 <html lang="en" dir="ltr">
@@ -90,7 +103,7 @@ session_start();
                       </div>
                       <div class="progress-detail">
                         <p class="mb-2">Job Vacancies</p>
-                        <h4 class="counter">167</h4>
+                        <h4 class="counter"><?php echo $numVacancies ?></h4>
                       </div>
                     </div>
                   </div>
@@ -104,29 +117,35 @@ session_start();
                         </svg>
                       </div>
                       <div class="progress-detail">
-                        <p class="mb-2">Total of Alumni</p>
-                        <h4 class="counter">198</h4>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-                <li class="swiper-slide card card-slide" data-aos="fade-up" data-aos-delay="900">
-                  <div class="card-body">
-                    <div class="progress-widget">
-                      <div id="circle-progress-03" class="text-center circle-progress-01 circle-progress circle-progress-primary" data-min-value="0" data-max-value="100" data-value="70" data-type="percent">
-                        <svg class="card-slie-arrow icon-24" width="24" viewBox="0 0 24 24">
-                          <path fill="currentColor" d="M19,6.41L17.59,5L7,15.59V9H5V19H15V17H8.41L19,6.41Z" />
-                        </svg>
-                      </div>
-                      <div class="progress-detail">
-                        <p class="mb-2">Applicants</p>
-                        <h4 class="counter">135</h4>
+                        <p class="mb-2">Alumnis</p>
+                        <h4 class="counter"><?php echo $numAlumnis ?></h4>
                       </div>
                     </div>
                   </div>
                 </li>
               </ul>
-
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12 col-lg-12">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card" data-aos="fade-up" data-aos-delay="800">
+                <div class="flex-wrap row d-flex justify-content-evenly align-items-center p-3">
+                  <a href="validate-user-acc.php" class="col-md-12 col-lg-5 btn btn-primary p-2 m-2 fs-1">
+                    Validate Users
+                  </a>
+                  <a href="list-of-users.php" class="col-md-12 col-lg-5 btn btn-secondary p-2 m-2 fs-1">
+                    List of Users
+                  </a>
+                  <a href="report.php" class="col-md-12 col-lg-5 btn btn-success p-2 m-2 fs-1">
+                    Generate Report
+                  </a>
+                  <a href="manage-acc.php" class="col-md-12 col-lg-5 btn btn-info p-2 m-2 fs-1">
+                    User Settings
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
         </div>
