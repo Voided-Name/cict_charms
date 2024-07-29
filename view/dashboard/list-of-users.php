@@ -8,6 +8,25 @@ if ($_SESSION['role'] != 4) {
 }
 
 $_SESSION['adminPage'] = "listUsers";
+
+$regionInformation = array();
+$regionInformation['01'] = 'Region I';
+$regionInformation['02'] = 'Region II';
+$regionInformation['03'] = 'Region III';
+$regionInformation['4A'] = 'Region IV-A';
+$regionInformation['4B'] = 'Region IV-B';
+$regionInformation['05'] = 'Region V';
+$regionInformation['06'] = 'Region VI';
+$regionInformation['07'] = 'Region VII';
+$regionInformation['08'] = 'Region VII';
+$regionInformation['09'] = 'Region XI';
+$regionInformation['10'] = 'Region X';
+$regionInformation['11'] = 'Region XI';
+$regionInformation['12'] = 'Region XII';
+$regionInformation['13'] = 'Region XIII';
+$regionInformation['BARMM'] = 'BARMM';
+$regionInformation['CAR'] = 'CAR';
+$regionInformation['NCR'] = 'NCR';
 ?>
 <!doctype html>
 <html lang="en" dir="ltr">

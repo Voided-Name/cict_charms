@@ -16,26 +16,7 @@ $employer = array(
 
 $employerVerified  = $func->selectjoin3_where2_orderby('users', 'userdetails', 'employer_users', 'id', 'user_id', 'user_id', 'user_id', 'users', 'users', array('is_verified', '=', 1), 'AND', array('role', '=', 2), 'users', 'created_at', 'ASC');
 
-foreach ($employerVerified as $employerInstance) {
-  $compName = $func->select_one('companies', array('id', '=', $employerInstance['company_id']));
-  $compName0 = $compName[0]['name'];
-  $employerContact = $employerInstance['contact_number'];
-  $employerEmail = $employerInstance['email_address'];
-
-  if ($compName[0]['contact_number']) {
-    $contact = $compName[0]['contact_number'];
-  } else {
-    $contact = $employerContact;
-  }
-  if ($compName[0]['email_add']) {
-    $email = $compName[0]['email_add'];
-  } else {
-    $email = $employerEmail;
-  }
-}
-
 ?>
-
 <div class="card-header d-flex justify-content-between">
   <div class="header-title">
     <h4 class="card-title">Employer List</h4>
@@ -54,12 +35,41 @@ foreach ($employerVerified as $employerInstance) {
         </tr>
       </thead>
       <tbody>
-        <?php for ($x = 0; $x < sizeof($employer); $x++) {
+        <?php
+        $x = 0;
+        foreach ($employerVerified as $employerInstance) {
+          $compName = $func->select_one('companies', array('id', '=', $employerInstance['company_id']));
+          $compName0 = $compName[0]['name'];
+          $employerContact = $employerInstance['contact_number'];
+          $employerEmail = $employerInstance['email_address'];
+
+          if ($compName[0]['contact_number']) {
+            $contact = $compName[0]['contact_number'];
+          } else {
+            $contact = $employerContact;
+          }
+          if ($compName[0]['email_add']) {
+            $email = $compName[0]['email_add'];
+          } else {
+            $email = $employerEmail;
+          }
+
+          $position = $employerInstance['company_position'];
+          $first_name = $employerInstance['first_name'];
+          $middle_name = $employerInstance['middle_name'];
+          $last_name = $employerInstance['last_name'];
+          $name = implode(" ", array($first_name, $middle_name, $last_name));
+          $bDate = $employerInstance['birth_date'];
+          $province = $employerInstance['province'];
+          $city = $employerInstance['city'];
+          $barangay = $employerInstance['barangay'];
+          $streetAdd = $employerInstance['street_add'];
+          $address = implode(", ", array($province, $city, $barangay, $streetAdd));
           echo "<tr>";
-          echo "  <td>" . $employer[$x][0] .  "</td>";
-          echo "  <td>" . $employer[$x][1] . "</td>";
-          echo "  <td>" . $employer[$x][2] . "</td>";
-          echo "  <td>" . $employer[$x][4] . "</td>";
+          echo "  <td>" . $compName0 .  "</td>";
+          echo "  <td>" . $contact . "</td>";
+          echo "  <td>" . $email . "</td>";
+          echo "  <td>" . $position . "</td>";
           echo "  <td>";
           echo "    <div class='flex align-items-center list-user-action'>";
           echo "      <button type='button' class='btn btn-success btn-sm' data-bs-toggle='modal' data-bs-target='#employer$x'>View</button>";
@@ -78,23 +88,44 @@ foreach ($employerVerified as $employerInstance) {
                 <div class="modal-body" style="font-size: 20px; color:black">
                   <div class="row mb-2">
                     <div class="col-md-4"><strong>Company Name:</strong></div>
-                    <div class="col-md-8"><?php echo $employer[$x][0]; ?></div>
+                    <div class="col-md-8"><?php echo $compName0; ?></div>
+                  </div>
+                  <div class="row mb-2">
+                    <div class="col-md-4"><strong>Employer Name:</strong></div>
+                    <div class="col-md-8"><?php echo $name; ?></div>
                   </div>
                   <div class="row mb-2">
                     <div class="col-md-4"><strong>Address:</strong></div>
-                    <div class="col-md-8"><?php echo $employer[$x][3]; ?></div>
+                    <div class="col-md-8"><?php echo $address; ?></div>
                   </div>
+                  <?php
+                  if ($compName[0]['contact_number']) {
+                  ?>
+                    <div class="row mb-2">
+                      <div class="col-md-4"><strong>Company Contact No. :</strong></div>
+                      <div class="col-md-8"><?php echo $contact; ?></div>
+                    </div>
+                  <?php
+                  }
+                  if ($compName[0]['email_add']) {
+                  ?>
+                    <div class="row mb-2">
+                      <div class="col-md-4"><strong>Company Email:</strong></div>
+                      <div class="col-md-8"><?php echo $email; ?></div>
+                    </div>
+                  <?php
+                  }                   ?>
                   <div class="row mb-2">
                     <div class="col-md-4"><strong>Contact No. :</strong></div>
-                    <div class="col-md-8"><?php echo $employer[$x][1]; ?></div>
+                    <div class="col-md-8"><?php echo $employerContact; ?></div>
                   </div>
                   <div class="row mb-2">
                     <div class="col-md-4"><strong>Email:</strong></div>
-                    <div class="col-md-8"><?php echo $employer[$x][2]; ?></div>
+                    <div class="col-md-8"><?php echo $employerEmail; ?></div>
                   </div>
                   <div class="row mb-2">
                     <div class="col-md-4"><strong>Position:</strong></div>
-                    <div class="col-md-8"><?php echo $employer[$x][4]; ?></div>
+                    <div class="col-md-8"><?php echo $position; ?></div>
                   </div>
                 </div>
                 <div class="modal-footer">
@@ -124,7 +155,9 @@ foreach ($employerVerified as $employerInstance) {
               </div>
             </div>
           </div>
-        <?php } ?>
+        <?php
+          $x++;
+        } ?>
       </tbody>
     </table>
   </div>
