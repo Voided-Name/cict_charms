@@ -4,6 +4,36 @@ $employer = array(
   array("Techno-G", "09070691580", "techno@gmail.com", "Cabanatuan City", "Position"),
   array("TeknoGuild", "09215218666", "guild@gmail.com", "Cabanatuan City", "Position"),
 );
+
+/**
+ * 
+ * @var strip $strip
+ */
+/**
+ * 
+ * @var res $func
+ */
+
+$employerVerified  = $func->selectjoin3_where2_orderby('users', 'userdetails', 'employer_users', 'id', 'user_id', 'user_id', 'user_id', 'users', 'users', array('is_verified', '=', 1), 'AND', array('role', '=', 2), 'users', 'created_at', 'ASC');
+
+foreach ($employerVerified as $employerInstance) {
+  $compName = $func->select_one('companies', array('id', '=', $employerInstance['company_id']));
+  $compName0 = $compName[0]['name'];
+  $employerContact = $employerInstance['contact_number'];
+  $employerEmail = $employerInstance['email_address'];
+
+  if ($compName[0]['contact_number']) {
+    $contact = $compName[0]['contact_number'];
+  } else {
+    $contact = $employerContact;
+  }
+  if ($compName[0]['email_add']) {
+    $email = $compName[0]['email_add'];
+  } else {
+    $email = $employerEmail;
+  }
+}
+
 ?>
 
 <div class="card-header d-flex justify-content-between">

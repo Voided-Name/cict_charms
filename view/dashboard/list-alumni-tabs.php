@@ -1,10 +1,16 @@
 <?php
 // TODO currently mock data, to update to match how the back end retrieves data
-$alumnis = array(
-  array("naeberber@gmail.com", "09123456789", "Nash Andre",  "E.", "Berber", "Cabu, Cabanatuan City", "06/25/2004", "123456789", "Database Systems Technology", "BSIT", "2019", "Sumacab", "2015"),
-  //array("yno@gmail.com", "09215218528", "Yno", "ME.", "Reyes", "Cabu", "mm/dd/yyyy", "SUM126-356", "Web Systems Technology", "BSIT", "2020", "Sumacab", "2016"),
-  //array("leon@gmail.com", "09215218528", "Leon", "ME.", "Laborina", "Cabu", "mm/dd/yyyy", "SUM126-2556", "Networking Systems Technology", "BSIT", "2021", "Sumacab", "2017"),
-);
+
+/**
+ * 
+ * @var strip $strip
+ */
+/**
+ * 
+ * @var res $func
+ */
+
+$alumniVerified = $func->selectjoin3_where2_orderby('users', 'userdetails', 'alumni_graduated_course', 'id', 'user_id', 'user_id', 'user_id', 'users', 'users', array('is_verified', '=', 1), 'AND', array('role', '=', 1), 'users', 'created_at', 'ASC');
 
 $abbrev = [
   "BSIT" => "Bachelor of Sciene in Information and Techonoloy",
@@ -25,7 +31,8 @@ $abbrev = [
   "BSHRM" => "Bachelor of Science in Hotel and Restaurant Management",
   "BSTM" => "Bachelor of Science in Tourism Management",
   "BPA" => "Bachelor of Public Administration",
-]
+];
+
 ?>
 
 <div class="card-header d-flex justify-content-between">
@@ -49,14 +56,30 @@ $abbrev = [
       </thead>
       <tbody>
         <?php
-        for ($x = 0; $x < sizeof($alumnis); $x++) {
+        foreach ($alumniVerified as $alumniInstance) {
+          $first_name = $alumniInstance['first_name'];
+          $middle_name = $alumniInstance['middle_name'];
+          $last_name = $alumniInstance['last_name'];
+          $name = implode(" ", array($first_name, $middle_name, $last_name));
+          $contact = $alumniInstance['contact_number'];
+          $email_address = $alumniInstance['email_address'];
+          $campus = $func->select_one('campuses', array('campusID', '=', $alumniInstance['campus']));
+          $camp0 = $campus[0]['campusName'];
+          $yearGrad = $alumniInstance['year_graduated'];
+          $yearEnrolled = $alumniInstance['year_started'];
+          $course = $func->select_one('courses', array('courseID', '=', $alumniInstance['course_id']));
+          $course0 = $course[0]['courseName'];
+          $course1 = $course[0]['courseAcronym'];
+          $major = $func->select_one('coursesmajor', array('id', '=', $alumniInstance['major_id']));
+          $major0 = $major[0]['majorName'];
+          $alumniNum = $alumniInstance['alumniNum'];
           echo "<tr>";
-          echo "  <td>" . $alumnis[$x][2] . " " . $alumnis[$x][4]  . "</td>";
-          echo "  <td>" . $alumnis[$x][1] . "</td>";
-          echo "  <td>" . $alumnis[$x][0] . "</td>";
-          echo "  <td>" . "Sumacab" . "</td>"; // TODO change to how the back end retrieves the data 
-          echo "  <td>" .  $alumnis[$x][10] . "</td>";
-          echo "  <td>" .  "BSIT" . "</td>"; // TODO change to how the back end retrieves the data
+          echo "  <td>" . $name  . "</td>";
+          echo "  <td>" . $contact . "</td>";
+          echo "  <td>" . $email_address . "</td>";
+          echo "  <td>" . $camp0 . "</td>"; // TODO change to how the back end retrieves the data 
+          echo "  <td>" .  $yearGrad . "</td>";
+          echo "  <td>" .  $course1 . "</td>"; // TODO change to how the back end retrieves the data
           echo "  <td>";
           echo "    <div class='flex align-items-center list-user-action'>";
           echo "      <!-- Edit Button -->";
@@ -80,65 +103,44 @@ $abbrev = [
                   <div class="alumni-details">
                     <div class="row mb-2">
                       <div class="col-md-4"><strong>First Name:</strong></div>
-                      <div class="col-md-8"><?php echo $alumnis[$x][2]; ?></div>
+                      <div class="col-md-8"><?php echo $first_name; ?></div>
                       <div class="col-md-4"><strong>Middle Name:</strong></div>
-                      <div class="col-md-8"><?php echo $alumnis[$x][3]; ?></div>
+                      <div class="col-md-8"><?php echo $middle_name; ?></div>
                       <div class="col-md-4"><strong>Last Name:</strong></div>
-                      <div class="col-md-8"><?php echo $alumnis[$x][4]; ?></div>
+                      <div class="col-md-8"><?php echo $last_name; ?></div>
                     </div>
                     <div class="row mb-2">
                       <div class="col-md-4"><strong>Year Graduated:</strong></div>
-                      <div class="col-md-8"><?php echo $alumnis[$x][10]; ?></div>
+                      <div class="col-md-8"><?php echo $yearGrad; ?></div>
                     </div>
                     <div class="row mb-2">
                       <div class="col-md-4"><strong>Year Enrolled:</strong></div>
-                      <div class="col-md-8"><?php echo $alumnis[$x][12]; ?></div>
+                      <div class="col-md-8"><?php echo $yearEnrolled; ?></div>
                     </div>
                     <div class="row mb-2">
                       <div class="col-md-4"><strong>Campus:</strong></div>
-                      <div class="col-md-8"><?php echo $alumnis[$x][11]; ?></div>
+                      <div class="col-md-8"><?php echo $camp0; ?></div>
                     </div>
                     <div class="row mb-2">
                       <div class="col-md-4"><strong>Course:</strong></div>
-                      <div class="col-md-8"><?php echo $abbrev[$alumnis[$x][9]]; ?></div>
+                      <div class="col-md-8"><?php echo $course0; ?></div>
                     </div>
                     <div class="row mb-2">
                       <div class="col-md-4"><strong>Major:</strong></div>
-                      <div class="col-md-8"><?php echo $alumnis[$x][8]; ?></div>
+                      <div class="col-md-8"><?php echo $major0; ?></div>
                     </div>
                     <div class="row mb-3">
                       <div class="col-md-4"><strong>Alumni Number:</strong></div>
-                      <div class="col-md-8"><?php echo $alumnis[$x][7]; ?></div>
+                      <div class="col-md-8"><?php echo $alumniNum; ?></div>
                     </div>
                     <div class="row mb-2">
                       <div class="col-md-4"><strong>Email:</strong></div>
-                      <div class="col-md-8"><?php echo $alumnis[$x][0]; ?></div>
+                      <div class="col-md-8"><?php echo $email_address; ?></div>
                     </div>
                   </div>
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="modal fade" id="deleteModal<?php echo $x ?>" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
-            <div class="modal-dialog modal-dialog-centered">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h1 class="modal-title fs-5" id="exampleModalToggleLabel">Decline <?php echo $alumnis[$x][2] ?>'s Registration</h1>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                  <div class="form-floating">
-                    <h5 class="text-secondary m-2">Reason for Declining</h5>
-                    <textarea style="height: 100px" class="form-control text-secondary" id="floatingTextarea"></textarea>
-                  </div>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                  <button class="btn btn-primary" data-bs-target="#myModal<?php echo $x; ?>" data-bs-toggle="modal">Back to Details</button>
-                  <button type="button" class="btn btn-danger delButton" id="" data-bs-dismiss="modal">Decline</button>
                 </div>
               </div>
             </div>

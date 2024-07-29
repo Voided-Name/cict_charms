@@ -354,10 +354,10 @@ if ($_SESSION['role'] == 1) {
   <?php
   //var_dump($_SESSION['role']);
   //var_dump($alumniData);
-  var_dump($true);
-  var_dump($updateDetails3);
-  var_dump($alumni_grad_table_exist);
-  var_dump($insertDetails);
+  //var_dump($true);
+  //var_dump($updateDetails3);
+  //var_dump($alumni_grad_table_exist);
+  //var_dump($insertDetails);
   ?>
   <div class="text-center" id="loading-screen">
     <div class="spinner-grow" style="width: 40%; padding-top: 40%;" role="status">

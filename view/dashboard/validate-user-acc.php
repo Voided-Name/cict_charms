@@ -172,9 +172,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <!-- Sidebar Menu End -->
   </aside>
   <main class="main-content">
-
     <div class="position-relative iq-banner">
-
       <!--Nav Start-->
       <?php include 'header.php'; ?>
       <!-- Nav Header Component Start -->

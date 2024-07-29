@@ -148,7 +148,15 @@ $major0 = '';
                     </div>
                     <div class="row mb-2">
                       <div class="col-md-4"><strong>Year Started:</strong></div>
-                      <div class="col-md-8"><?php echo $alumniUnverified[$x]['year_started']; ?></div>
+                      <div class="col-md-8">
+                        <?php
+                        if ($alumniUnverified[$x]['year_started']) {
+                          echo $alumniUnverified[$x]['year_started'];
+                        } else {
+                          echo "Not Filled Yet";
+                        }
+                        ?>
+                      </div>
                     </div>
                     <div class="row mb-2">
                       <div class="col-md-4"><strong>Year Graduated:</strong></div>
@@ -164,15 +172,39 @@ $major0 = '';
                     </div>
                     <div class="row mb-2">
                       <div class="col-md-4"><strong>Campus:</strong></div>
-                      <div class="col-md-8"><?php echo $camp0; ?></div>
+                      <div class="col-md-8">
+                        <?php
+                        if ($camp0) {
+                          echo $camp0;
+                        } else {
+                          echo "Not Filled Yet";
+                        }
+                        ?>
+                      </div>
                     </div>
                     <div class="row mb-2">
                       <div class="col-md-4"><strong>Course:</strong></div>
-                      <div class="col-md-8"><?php echo $course0; ?></div>
+                      <div class="col-md-8">
+                        <?php
+                        if ($course0) {
+                          echo $course0;
+                        } else {
+                          echo "Not Filled Yet";
+                        }
+                        ?>
+                      </div>
                     </div>
                     <div class="row mb-2">
                       <div class="col-md-4"><strong>Major:</strong></div>
-                      <div class="col-md-8"><?php echo $major0;; ?></div>
+                      <div class="col-md-8">
+                        <?php
+                        if ($major0 || $course0) {
+                          echo $major0;
+                        } else {
+                          echo "Not Filled Yet";
+                        }
+                        ?>
+                      </div>
                     </div>
                     <div class="row mb-3">
                       <div class="col-md-4"><strong>Alumni Number:</strong></div>
