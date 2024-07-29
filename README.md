@@ -3,6 +3,7 @@
 - [ ] Admin create user acc
 - [ ] Dynamic dashboard/index.php (add UI)
 - [ ] Fix missing image references 
+- [ ] minibar state (session)
 - [x] Street Address Bug
 - [x] Redo Structure
 - [x] Fix routing to avoid duplicates

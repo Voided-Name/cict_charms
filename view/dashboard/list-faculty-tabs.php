@@ -1,9 +1,16 @@
 <?php
-$faculty = array(
-  array("Jodell R. Bulaclac", "09215218528", "bulaclac@gmail.com", "Cabanatuan City", "Sumacab", "Rank"),
-  array("Nino Herera", "09070691580", "herera@gmail.com", "Cabanatuan City", "Sumacab", "Rank"),
-  array("Gel Cunanan", "09215218666", "cunanan@gmail.com", "Cabanatuan City", "Sumacab", "Rank"),
-);
+
+/**
+ * 
+ * @var strip $strip
+ */
+/**
+ * 
+ * @var res $func
+ */
+
+$facultyVerified = $func->selectjoin3_where2_orderby('users', 'userdetails', 'FACULTY', 'id', 'user_id', 'user_id', 'user_id', 'users', 'users', array('is_verified', '=', 1), 'AND', array('role', '=', 3), 'users', 'created_at', 'ASC');
+
 ?>
 
 <div class="card-header d-flex justify-content-between">
@@ -25,13 +32,28 @@ $faculty = array(
         </tr>
       </thead>
       <tbody>
-        <?php for ($x = 0; $x < sizeof($faculty); $x++) {
+        <?php
+        $x = 0;
+        foreach ($facultyVerified as $facultyInstance) {
+          $first_name = $facultyInstance['first_name'];
+          $middle_name = $facultyInstance['middle_name'];
+          $last_name = $facultyInstance['last_name'];
+          $name = implode(" ", array($first_name, $middle_name, $last_name));
+          $contact = $facultyInstance['contact_number'];
+          $email = $facultyInstance['email_address'];
+          $camp = $func->select_one('campuses', array('campusID', '=', $facultyInstance['campus_id']));
+          $camp0 = $camp[0]['campusName'];
+          $acadRank = $func->select_one('faculty_rankings', array('id', '=', $facultyInstance['acadrank_id']));
+          $acadRank0 = $acadRank[0]['description'];
+          $bDate = $facultyInstance['birth_date'];
+          $address = implode(", ", array($facultyInstance['province'], $facultyInstance['city'], $facultyInstance['barangay'], $facultyInstance['street_add']));
+
           echo "<tr>";
-          echo "  <td>" . $faculty[$x][0] .  "</td>";
-          echo "  <td>" . $faculty[$x][1] . "</td>";
-          echo "  <td>" . $faculty[$x][2] . "</td>";
-          echo "  <td>" . $faculty[$x][4] . "</td>";
-          echo "  <td>" . $faculty[$x][5] . "</td>";
+          echo "  <td>" . $name . "</td>";
+          echo "  <td>" . $contact . "</td>";
+          echo "  <td>" . $email . "</td>";
+          echo "  <td>" . $camp0 . "</td>";
+          echo "  <td>" . $acadRank0 . "</td>";
           echo "  <td>";
           echo "    <div class='flex align-items-center list-user-action'>";
           echo "      <button type='button' class='btn btn-success btn-sm' data-bs-toggle='modal' data-bs-target='#faculty$x'>View</button>";
@@ -49,19 +71,31 @@ $faculty = array(
                 <div class="modal-body" style="font-size: 20px; color:black">
                   <div class="row mb-2">
                     <div class="col-md-4"><strong>Faculty Name:</strong></div>
-                    <div class="col-md-8"><?php echo $faculty[$x][0]; ?></div>
+                    <div class="col-md-8"><?php echo $name; ?></div>
                   </div>
                   <div class="row mb-2">
                     <div class="col-md-4"><strong>Address:</strong></div>
-                    <div class="col-md-8"><?php echo $faculty[$x][3]; ?></div>
+                    <div class="col-md-8"><?php echo $address; ?></div>
+                  </div>
+                  <div class="row mb-2">
+                    <div class="col-md-4"><strong>Birth Date:</strong></div>
+                    <div class="col-md-8"><?php echo $bDate; ?></div>
                   </div>
                   <div class="row mb-2">
                     <div class="col-md-4"><strong>Contact No. :</strong></div>
-                    <div class="col-md-8"><?php echo $faculty[$x][1]; ?></div>
+                    <div class="col-md-8"><?php echo $contact; ?></div>
                   </div>
                   <div class="row mb-2">
                     <div class="col-md-4"><strong>Email:</strong></div>
-                    <div class="col-md-8"><?php echo $faculty[$x][2]; ?></div>
+                    <div class="col-md-8"><?php echo $email; ?></div>
+                  </div>
+                  <div class="row mb-2">
+                    <div class="col-md-4"><strong>Campus:</strong></div>
+                    <div class="col-md-8"><?php echo $camp0; ?></div>
+                  </div>
+                  <div class="row mb-2">
+                    <div class="col-md-4"><strong>Academic Rank:</strong></div>
+                    <div class="col-md-8"><?php echo $acadRank0; ?></div>
                   </div>
                 </div>
                 <div class="modal-footer">
@@ -91,7 +125,8 @@ $faculty = array(
               </div>
             </div>
           </div>
-        <?php } ?>
+        <?php $x++;
+        } ?>
       </tbody>
     </table>
   </div>
