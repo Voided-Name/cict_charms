@@ -163,9 +163,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <link rel="stylesheet" href="../../css/theme_1/customizer.min.css">
 </head>
 
+
 <body class="  ">
+  <!-- loader Start -->
+  <div id="loading">
+    <div class="loader simple-loader">
+      <div class="loader-body"></div>
+    </div>
+  </div>
+  <!-- loader END -->
   <!-- Sidebar Menu Start -->
-  <aside>
+  <aside class>
     <?php include 'adminSidebar.php'; ?>
     </div>
     </div>
@@ -394,7 +402,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           });
         });
       </script>
+      <script>
+        if (sessionStorage.getItem('sidebarState') == 'mini') {
+          const sideBar = document.getElementById('sidebar');
 
+          sideBar.classList.add("sidebar-mini");
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+          const sidebarToggle = document.querySelector('.sidebar-toggle');
+          const sideBar = document.getElementById('sidebar');
+
+
+          sidebarToggle.addEventListener('click', function() {
+            if (sideBar.classList.contains('sidebar-mini')) {
+              sessionStorage.setItem('sidebarState', 'mini');
+            } else {
+              sessionStorage.setItem('sidebarState', 'default');
+            }
+          });
+        });
+      </script>
 </body>
 
 

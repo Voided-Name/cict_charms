@@ -1,4 +1,4 @@
-<aside class="sidebar sidebar-default sidebar-white sidebar-base navs-rounded-all ">
+<aside id="sidebar" class="sidebar sidebar-default sidebar-white sidebar-base navs-rounded-all ">
   <div class="sidebar-header d-flex align-items-center justify-content-start">
     <a href="index.php" class="navbar-brand">
       <h4 class="logo-title">CICT CHARM</h4>
