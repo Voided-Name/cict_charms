@@ -146,3 +146,24 @@ if ($_SESSION['employerPage'] == "createNewJob") {
   </li>
 -->
           </ul>
+          <script>
+            if (sessionStorage.getItem('sidebarState') == 'mini') {
+              const sideBar = document.getElementById('sidebar');
+
+              sideBar.classList.add("sidebar-mini");
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              const sidebarToggle = document.querySelector('.sidebar-toggle');
+              const sideBar = document.getElementById('sidebar');
+
+
+              sidebarToggle.addEventListener('click', function() {
+                if (sideBar.classList.contains('sidebar-mini')) {
+                  sessionStorage.setItem('sidebarState', 'mini');
+                } else {
+                  sessionStorage.setItem('sidebarState', 'default');
+                }
+              });
+            });
+          </script>
