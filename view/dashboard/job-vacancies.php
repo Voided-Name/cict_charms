@@ -199,6 +199,13 @@ $vacanciesData = $func->selectall_where('employer_job_posts', array('author_id',
 </head>
 
 <body class="  ">
+<!-- loader Start -->
+<div id="loading">
+    <div class="loader simple-loader">
+      <div class="loader-body"></div>
+    </div>
+</div>
+<!-- loader END -->
 
   <!-- Sidebar Menu Start -->
   <?php include 'employerSidebar.php' ?>

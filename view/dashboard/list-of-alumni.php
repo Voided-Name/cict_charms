@@ -34,6 +34,13 @@ $alumniVerified = $func->selectjoin3_where2_orderby('users', 'userdetails', 'alu
 </head>
 
 <body class="  ">
+<!-- loader Start -->
+<div id="loading">
+    <div class="loader simple-loader">
+      <div class="loader-body"></div>
+    </div>
+</div>
+<!-- loader END -->
 
   <aside class="sidebar sidebar-default sidebar-white sidebar-base navs-rounded-all ">
     <div class="sidebar-header d-flex align-items-center justify-content-start">

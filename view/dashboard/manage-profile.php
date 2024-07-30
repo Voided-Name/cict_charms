@@ -19,6 +19,13 @@ session_start();
 </head>
 
 <body class="  ">
+<!-- loader Start -->
+<div id="loading">
+    <div class="loader simple-loader">
+      <div class="loader-body"></div>
+    </div>
+</div>
+<!-- loader END -->
   <!-- Sidebar Menu Start -->
   <?php
   if ($_SESSION["role"] == 1) {
