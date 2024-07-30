@@ -1,9 +1,17 @@
 # TODO
-- [ ] Admin list of users page
+- [ ] paste sidebar logic to the different views
+- [ ] fix loading screen
 - [ ] Admin create user acc
+- [ ] back end of user settings
+
 - [ ] Dynamic dashboard/index.php (add UI)
+- [ ] Alumni applicant form 
+- [ ] Employer view, view applicants
 - [ ] Fix missing image references 
-- [ ] minibar state (session)
+
+# Done
+- [x] Admin list of users page
+- [x] minibar state (session)
 - [x] Street Address Bug
 - [x] Redo Structure
 - [x] Fix routing to avoid duplicates
