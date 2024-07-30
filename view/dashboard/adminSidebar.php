@@ -41,7 +41,6 @@ if ($_SESSION['adminPage'] == "dashboard") {
         <li class="nav-item">
           <a class="nav-link" data-bs-toggle="collapse" href="#horizontal-menu" role="button" aria-expanded="false" aria-controls="horizontal-menu">
             <i class="icon">
-
               <svg width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon-20">
                 <path opacity="0.4" d="M10.0833 15.958H3.50777C2.67555 15.958 2 16.6217 2 17.4393C2 18.2559 2.67555 18.9207 3.50777 18.9207H10.0833C10.9155 18.9207 11.5911 18.2559 11.5911 17.4393C11.5911 16.6217 10.9155 15.958 10.0833 15.958Z" fill="currentColor"></path>
                 <path opacity="0.4" d="M22.0001 6.37867C22.0001 5.56214 21.3246 4.89844 20.4934 4.89844H13.9179C13.0857 4.89844 12.4102 5.56214 12.4102 6.37867C12.4102 7.1963 13.0857 7.86 13.9179 7.86H20.4934C21.3246 7.86 22.0001 7.1963 22.0001 6.37867Z" fill="currentColor"></path>
@@ -56,7 +55,7 @@ if ($_SESSION['adminPage'] == "dashboard") {
               </svg>
             </i>
           </a>
-          <ul class="sub-nav collapse" id="horizontal-menu" data-bs-parent="#sidebar-menu">
+          <ul class="sub-nav collapse ms-2" id="horizontal-menu" data-bs-parent="#sidebar-menu">
             <li class="nav-item">
               <a class="nav-link 
 
@@ -65,14 +64,12 @@ if ($_SESSION['adminPage'] == "validateAlumni") {
   echo "active";
 } ?>
 " href="validate-user-acc.php">
-                <i class="icon">
-                  <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
-                    <g>
-                      <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
-                    </g>
+                <i class="sidenav-mini-icon m-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person-bounding-box" viewBox="0 0 20 20">
+                    <path d="M1.5 1a.5.5 0 0 0-.5.5v3a.5.5 0 0 1-1 0v-3A1.5 1.5 0 0 1 1.5 0h3a.5.5 0 0 1 0 1zM11 .5a.5.5 0 0 1 .5-.5h3A1.5 1.5 0 0 1 16 1.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 1-.5-.5M.5 11a.5.5 0 0 1 .5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 1 0 1h-3A1.5 1.5 0 0 1 0 14.5v-3a.5.5 0 0 1 .5-.5m15 0a.5.5 0 0 1 .5.5v3a1.5 1.5 0 0 1-1.5 1.5h-3a.5.5 0 0 1 0-1h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 1 .5-.5" />
+                    <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
                   </svg>
                 </i>
-                <i class="sidenav-mini-icon"></i>
                 <span class="item-name"> Validate Users</span>
               </a>
             </li>
@@ -85,14 +82,11 @@ if ($_SESSION['adminPage'] == "listUsers") {
 } ?>
 
 " href="list-of-users.php">
-                <i class="icon">
-                  <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
-                    <g>
-                      <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
-                    </g>
+                <i class="sidenav-mini-icon m-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-lines-fill" viewBox="0 0 16 16">
+                    <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5 6s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zM11 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5m.5 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1zm2 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1zm0 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1z" />
                   </svg>
                 </i>
-                <i class="sidenav-mini-icon"> </i>
                 <span class="item-name">List Of Users</span>
               </a>
             </li>
@@ -169,7 +163,7 @@ if ($_SESSION['adminPage'] == "genReport") {
               </svg>
             </i>
           </a>
-          <ul class="sub-nav collapse" id="sidebar-user" data-bs-parent="#sidebar-menu">
+          <ul class="sub-nav collapse ms-2" id="sidebar-user" data-bs-parent="#sidebar-menu">
             <li class="nav-item">
               <a class="nav-link
 
@@ -180,14 +174,12 @@ if ($_SESSION['adminPage'] == "userProfile") {
 ?>
 
 " href="user-profile.php">
-                <i class="icon">
-                  <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
-                    <g>
-                      <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
-                    </g>
+                <i class="sidenav-mini-icon m-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-badge" viewBox="0 0 16 16">
+                    <path d="M6.5 2a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1zM11 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
+                    <path d="M4.5 0A2.5 2.5 0 0 0 2 2.5V14a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2.5A2.5 2.5 0 0 0 11.5 0zM3 2.5A1.5 1.5 0 0 1 4.5 1h7A1.5 1.5 0 0 1 13 2.5v10.795a4.2 4.2 0 0 0-.776-.492C11.392 12.387 10.063 12 8 12s-3.392.387-4.224.803a4.2 4.2 0 0 0-.776.492z" />
                   </svg>
                 </i>
-                <i class="sidenav-mini-icon"></i>
                 <span class="item-name">User Profile</span>
               </a>
             </li>
@@ -201,14 +193,11 @@ if ($_SESSION['adminPage'] == "manageAcc") {
 ?>
 
 " href="manage-acc.php">
-                <i class="icon">
-                  <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
-                    <g>
-                      <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
-                    </g>
+                <i class="sidenav-mini-icon m-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill-gear" viewBox="0 0 16 16">
+                    <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0m-9 8c0 1 1 1 1 1h5.256A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1 1.544-3.393Q8.844 9.002 8 9c-5 0-6 3-6 4m9.886-3.54c.18-.613 1.048-.613 1.229 0l.043.148a.64.64 0 0 0 .921.382l.136-.074c.561-.306 1.175.308.87.869l-.075.136a.64.64 0 0 0 .382.92l.149.045c.612.18.612 1.048 0 1.229l-.15.043a.64.64 0 0 0-.38.921l.074.136c.305.561-.309 1.175-.87.87l-.136-.075a.64.64 0 0 0-.92.382l-.045.149c-.18.612-1.048.612-1.229 0l-.043-.15a.64.64 0 0 0-.921-.38l-.136.074c-.561.305-1.175-.309-.87-.87l.075-.136a.64.64 0 0 0-.382-.92l-.148-.045c-.613-.18-.613-1.048 0-1.229l.148-.043a.64.64 0 0 0 .382-.921l-.074-.136c-.306-.561.308-1.175.869-.87l.136.075a.64.64 0 0 0 .92-.382zM14 12.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0" />
                   </svg>
                 </i>
-                <i class="sidenav-mini-icon"> </i>
                 <span class="item-name">Manage Account</span>
               </a>
             </li>
