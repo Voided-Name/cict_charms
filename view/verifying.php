@@ -765,6 +765,13 @@ if ($_SESSION['role'] == 1) {
                     }
                     ?>";
 
+    function removeOptions(selectElement) {
+      var i, L = selectElement.options.length - 1;
+      for (i = L; i >= 0; i--) {
+        selectElement.remove(i);
+      }
+    }
+
     <?php if ($_SESSION['role'] == 1) { ?>
       const courseOptions = document.getElementById('alumniCourse');
       courseOptions.addEventListener("change", alumniMajorOptions);

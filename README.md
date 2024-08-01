@@ -1,15 +1,30 @@
 # TODO
-- [ ] paste sidebar logic to the different views
-- [ ] fix loading screen
+## 31
 - [ ] Admin create user acc
 - [ ] back end of user settings
 
-- [ ] Dynamic dashboard/index.php (add UI)
+## 1
 - [ ] Alumni applicant form 
 - [ ] Employer view, view applicants
-- [ ] Fix missing image references 
+
+## 2
+- [ ] Dynamic dashboard/index.php (add UI)
+  - default to user profile with alumnis and employers?
+- [ ] Faculty functionalities
+
+
+## 3
+
+## 4
+
+# Wish List
+- [ ] chat capabilities
+- [ ] notifications 
+
 
 # Done
+- [x] fix loading screen
+- [x] paste sidebar logic to the different views
 - [x] Admin list of users page
 - [x] minibar state (session)
 - [x] Street Address Bug

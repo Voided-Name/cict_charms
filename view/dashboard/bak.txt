@@ -1,0 +1,228 @@
+
+        $(document).ready(function() {
+          //<?php if ($_SESSION['role'] == 2) { ?>
+          //updateCompanyName(true);
+          //<?php
+            } ?>
+          $('#alumniCPNumber').focusout(function() {
+            var input = $(this).val();
+
+            // Regular expression to check if input starts with 09 and has exactly 11 digits
+            var regex = /^09\d{9}$/;
+
+            if (!regex.test(input)) {
+              Swal.fire({
+                icon: 'error',
+                title: 'Invalid Input',
+                text: 'The input must be 11 digits, start with 09, and contain no alphabets or special characters.'
+              }).then(() => {
+                $('#alumniCPNumber').focus();
+              });
+            }
+          });
+
+          $('#employerCPNumber').focusout(function() {
+            var input = $(this).val();
+
+            // Regular expression to check if input starts with 09 and has exactly 11 digits
+            var regex = /^09\d{9}$/;
+
+            if (!regex.test(input)) {
+              Swal.fire({
+                icon: 'error',
+                title: 'Invalid Input',
+                text: 'The input must be 11 digits, start with 09, and contain no alphabets or special characters.'
+              }).then(() => {
+                $('#employerCPNumber').focus();
+              });
+            }
+          });
+
+          $('#facultyCPNumber').focusout(function() {
+            var input = $(this).val();
+
+            // Regular expression to check if input starts with 09 and has exactly 11 digits
+            var regex = /^09\d{9}$/;
+
+            if (!regex.test(input)) {
+              Swal.fire({
+                icon: 'error',
+                title: 'Invalid Input',
+                text: 'The input must be 11 digits, start with 09, and contain no alphabets or special characters.'
+              }).then(() => {
+                $('#facultyCPNumber').focus();
+              });
+            }
+          });
+
+          $('#alumniBDate').focusout(function() {
+            var inputDate = new Date($(this).val());
+            alert(inputDate);
+            var today = new Date();
+
+            // Calculate age
+            var age = today.getFullYear() - inputDate.getFullYear();
+            var monthDifference = today.getMonth() - inputDate.getMonth();
+            if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < inputDate.getDate())) {
+              age--;
+            }
+
+            // Check if age is less than 18
+            if (age < 18) {
+              Swal.fire({
+                icon: 'error',
+                title: 'Invalid Age',
+                text: 'You must be 18 years or older.'
+              }).then(() => {
+                $('#inputBDate').focus();
+              });
+            }
+          });
+
+          $('#employerBDate').focusout(function() {
+            var inputDate = new Date($(this).val());
+            alert(inputDate);
+            var today = new Date();
+
+            // Calculate age
+            var age = today.getFullYear() - inputDate.getFullYear();
+            var monthDifference = today.getMonth() - inputDate.getMonth();
+            if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < inputDate.getDate())) {
+              age--;
+            }
+
+            // Check if age is less than 18
+            if (age < 18) {
+              Swal.fire({
+                icon: 'error',
+                title: 'Invalid Age',
+                text: 'You must be 18 years or older.'
+              }).then(() => {
+                $('#inputBDate').focus();
+              });
+            }
+          });
+
+          $('#facultyBDate').focusout(function() {
+            var inputDate = new Date($(this).val());
+            alert(inputDate);
+            var today = new Date();
+
+            // Calculate age
+            var age = today.getFullYear() - inputDate.getFullYear();
+            var monthDifference = today.getMonth() - inputDate.getMonth();
+            if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < inputDate.getDate())) {
+              age--;
+            }
+
+            // Check if age is less than 18
+            if (age < 18) {
+              Swal.fire({
+                icon: 'error',
+                title: 'Invalid Age',
+                text: 'You must be 18 years or older.'
+              }).then(() => {
+                $('#inputBDate').focus();
+              });
+            }
+          });
+
+          $.getJSON("locations.json", function(result) {
+            $.each(result, function(i, field) {
+              $('#alumniRegion').append(`<option value="${i}">
+                                       ${field.region_name}
+                                  </option>`);
+            });
+            getProvinces($("#alumniRegion").val());
+            getMunicipality($("#alumniRegion").val(), $("#alumniProvince").val());
+            getBarangay($("#alumniRegion").val(), $("#alumniProvince").val(), $("#alumniMunicipality").val());
+          });
+          $.getJSON("locations.json", function(result) {
+            $.each(result, function(i, field) {
+              $('#employerRegion').append(`<option value="${i}">
+                                       ${field.region_name}
+                                  </option>`);
+            });
+            getProvinces($("#employerRegion").val());
+            getMunicipality($("#employerRegion").val(), $("#employerProvince").val());
+            getBarangay($("#employerRegion").val(), $("#employerProvince").val(), $("#employerMunicipality").val());
+          });
+          $.getJSON("locations.json", function(result) {
+            $.each(result, function(i, field) {
+              $('#facultyRegion').append(`<option value="${i}">
+                                       ${field.region_name}
+                                  </option>`);
+            });
+            getProvinces($("#facultyRegion").val());
+            getMunicipality($("#facultyRegion").val(), $("#facultyProvince").val());
+            getBarangay($("#facultyRegion").val(), $("#facultyProvince").val(), $("#facultyMunicipality").val());
+          });
+
+          $("#alumniRegion").change(function() {
+            $('#alumniProvince').empty();
+            $('#alumniMunicipality').empty();
+            $('#alumniBarangay').empty();
+            getProvinces($("#alumniRegion").val());
+          });
+          $("#employerRegion").change(function() {
+            $('#employerProvince').empty();
+            $('#employerMunicipality').empty();
+            $('#employerBarangay').empty();
+            getProvinces($("#employerRegion").val());
+          });
+          $("#employerRegion").change(function() {
+            $('#employerProvince').empty();
+            $('#employerMunicipality').empty();
+            $('#employerBarangay').empty();
+            getProvinces($("#employerRegion").val());
+          });
+
+          function getProvinces(region_name) {
+            $.getJSON("locations.json", function(result) {
+              $.each(result[region_name].province_list, function(key, value) {
+                $('#' + userRole + 'Province').append(`<option value="${key}">
+                                       ${key}
+                                  </option>`);
+              });
+              getMunicipality($("#" + userRole + "Region").val(), $("#" + userRole + "Province").val());
+            });
+          }
+
+          $("#" + userRole + "Province").change(function() {
+            $('#' + userRole + 'Municipality').empty();
+            $('#' + userRole + 'Barangay').empty();
+            getMunicipality($("#" + userRole + "Region").val(), $("#" + userRole + "Province").val());
+          });
+
+          function getMunicipality(region_name, province_name) {
+            $.getJSON("locations.json", function(result) {
+              // console.log(result[region_name].province_list[province_name]);
+              $.each(result[region_name].province_list[province_name].municipality_list, function(key, value) {
+                // console.log(key);
+                $('#' + userRole + 'Municipality').append(`<option value="${key}">
+                                       ${key}
+                                  </option>`);
+              });
+              getBarangay($("#" + userRole + "Region").val(), $("#" + userRole + "Province").val(), $("#" + userRole + "Municipality").val());
+            });
+          }
+
+          $("#" + userRole + "Municipality").change(function() {
+
+            $('#' + userRole + 'Barangay').empty();
+            getBarangay($("#" + userRole + "Region").val(), $("#" + userRole + "Province").val(), $("#" + userRole + "Municipality").val());
+          });
+
+          function getBarangay(region_name, province_name, municipality_name) {
+            $.getJSON("locations.json", function(result) {
+              // console.log(result[region_name].province_list[province_name].municipality_list[municipality_name].barangay_list);
+              $.each(result[region_name].province_list[province_name].municipality_list[municipality_name].barangay_list, function(key, value) {
+                // console.log(key);
+                $('#' + userRole + 'Barangay').append(`<option value="${value}">
+                                       ${value}
+                                  </option>`);
+              });
+            });
+          }
+
+        });
