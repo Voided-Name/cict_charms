@@ -1,6 +1,7 @@
 <?php
 session_start();
 include '../src/init.php';
+require_once 'renderer.php';
 
 /**
  * 
@@ -14,6 +15,9 @@ include '../src/init.php';
 if ($_SESSION['role'] != 4) {
   header("location: ../../");
   exit();
+}
+
+if (isset($_POST['alumniRegister'])) {
 }
 
 $_SESSION['adminPage'] = "createAccount";
@@ -138,8 +142,8 @@ $companies = $func->selectall('companies');
                   </div>
                 </div>
               </div>
-              <div class="tab-pane fade" id="employer" role="tabpanel" aria-labelledby="employer-tab">
-                <div class="tab-pane fade show active" id="alumni" role="tabpanel" aria-labelledby="alumni-tab">
+              <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade" id="employer" role="tabpanel" aria-labelledby="employer-tab">
                   <div class="card-header d-flex justify-content-between">
                     <div class="header-title">
                       <h4 class="card-title">Create Account</h4>
@@ -381,6 +385,34 @@ $companies = $func->selectall('companies');
         }
 
       });
+
+      companyNameSel = document.getElementById("employerCompany");
+      companyNameSel.addEventListener("change", function() {
+        updateCompanyName(false)
+      });
+
+      function updateCompanyName(isStart) {
+        let input1 = document.getElementById("employerCompany");
+        if (input1.value == "0") {
+          document.getElementById("companySTRdiv").style.display = "block";
+          if (!isStart) {
+            document.getElementById("companySTRdiv").classList.add("animate__animated");
+            document.getElementById("companySTRdiv").classList.add("animate__shakeX");
+          }
+          document.getElementById("employerCompanyDiv").classList.remove("col-md-6");
+          document.getElementById("employerCompanyDiv").classList.add("col-md-2");
+          document.getElementById("employerCompanySTR").required = true;
+        } else {
+          document.getElementById("companySTRdiv").style.display = "none";
+          document.getElementById("companySTRdiv").classList.remove("animate__animated");
+          document.getElementById("companySTRdiv").classList.remove("animate__shakeX");
+          document.getElementById("employerCompanyDiv").classList.add("col-md-6");
+          document.getElementById("employerCompanyDiv").classList.remove("col-md-2");
+          document.getElementById("employerCompanySTR").required = false;
+        }
+      }
+
+      updateCompanyName(true);
     </script>
 </body>
 

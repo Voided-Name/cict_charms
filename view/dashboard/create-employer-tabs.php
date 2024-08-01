@@ -1,14 +1,6 @@
 <?php
 
 /**
- * 
- * @var strip $strip
- */
-/**
- * 
- * @var res $func
- */
-/**
  * @var array<array{
  *     id: int,
  *     name: string
@@ -17,62 +9,21 @@
 
 ?>
 <form method="POST" class="row">
-  <div class="col-md-4 col-sm-12" id="">
-    <label for="employerEmail" class="form-label">Email</label>
-    <input type="email" class="form-control" id="employerEmail" required value="<?php echo $employerData[0]['email_address'] ?>" name="employerEmail">
-  </div>
-  <div class="col-md-4 col-sm-12" id="">
-    <label for="employerUsername" class="form-label">Username</label>
-    <input type="text" class="form-control" id="employerUsername" required value="<?php echo $employerData[0]['username'] ?>" name="employerUsername">
-  </div>
-  <div class="col-md-4 col-sm-12" id="">
-    <label for="employerFName" class="form-label">First Name</label>
-    <input type="text" class="form-control" id="" placeholder="Mark" required value="<?php echo $employerData[0]['first_name'] ?>" name="employerFName">
-  </div>
-  <div class="col-md-4 col-sm-12" id="">
-    <label for="employerMName" class="form-label">Middle Name</label>
-    <input type="text" class="form-control" id="employerMName" placeholder="Santos" value="<?php echo $employerData[0]['middle_name'] ?>" name="employerMName">
-  </div>
-  <div class="col-md-4 col-sm-12" id="">
-    <label for="employerLName" class="form-label">Last Name</label>
-    <input type="text" class="form-control" id="employerLName" placeholder="Santos" required value="<?php echo $employerData[0]['last_name'] ?>" name="employerLName">
-  </div>
-  <div class="col-md-4 col-sm-12" id="">
-    <label for="employerSuffix" class="form-label">Suffix</label>
-    <input type="text" class="form-control" id="employerSuffix" placeholder="Santos" value="<?php echo $employerData[0]['suffix'] ?>" name="employerSuffix">
-  </div>
-  <div class="col-md-3 col-sm-12" id="">
-    <label for="employerRegion" class="form-label">Region</label>
-    <select class="form-select" id="employerRegion" name="employerRegion">
-    </select>
-  </div>
-  <div class="col-md-3 col-sm-12" id="">
-    <label for="employerProvince" class="form-label">Province</label>
-    <select class="form-select" id="employerProvince" name="employerProvince">
-    </select>
-  </div>
-  <div class="col-md-3 col-sm-12" id="">
-    <label for="employerMunicipality" class="form-label">City</label>
-    <select class="form-select" id="employerMunicipality" name="employerMunicipality">
-    </select>
-  </div>
-  <div class="col-md-3 col-sm-12" id="">
-    <label for="employerBarangay" class="form-label">Barangay</label>
-    <select class="form-select" id="employerBarangay" name="employerBarangay">
-    </select>
-  </div>
-  <div class="col-12">
-    <label for="employerStAdd" class="form-label">Street Address</label>
-    <input type="text" class="form-control" id="employerStAdd" name="employerStAdd" value="<?php echo $employerData[0]['street_add'] ?>">
-  </div>
-  <div class="col-md-6 col-sm-12" id="">
-    <label for="employerCPNumber" class="form-label">Contact Number</label>
-    <input type="text" class="form-control" id="employerCPNumber" placeholder="09XXXXXXXXX" maxlength="11" required value="<?php echo $employerData[0]['contact_number'] ?>" name="employerCPNumber">
-  </div>
-  <div class="col-md-6 col-sm-12" id="">
-    <label for="employerBDate" class="form-label">Birth Date</label>
-    <input id="employerBDate" class="form-control" type="date" required value="<?php echo $employerData[0]['birth_date'] ?>" name="employerBDate" />
-  </div>
+  <?php
+  echo renderTextInput('employerEmail', 'employerEmail', 'Email', true, '', '', 4, 12);
+  echo renderTextInput('employerUsername', 'employerUsername', 'Username', true, '', '', 4, 12);
+  echo renderTextInput('employerFName', 'employerFName', 'First Name', true, '', '', 4, 12);
+  echo renderTextInput('employerLName', 'employerLName', 'Last Name', true, '', '', 4, 12);
+  echo renderTextInput('employerMName', 'employerMName', 'Middle Name', true, '', '', 4, 12);
+  echo renderTextInput('employerSuffix', 'employerSuffix', 'Suffix', true, '', '', 4, 12);
+  echo renderSelect('employerRegion', 'employerRegion', 'Region', true, 3, 12);
+  echo renderSelect('employerProvince', 'employerProvince', 'Province', true, 3, 12);
+  echo renderSelect('employerMunicipality', 'employerMunicipality', 'Municipality', true, 3, 12);
+  echo renderSelect('employerBarangay', 'employerBarangay', 'Barangay', true, 3, 12);
+  echo renderTextInput('employerStAdd', 'employerStAdd', 'Street Address', true, '', '', 12, 12);
+  echo insertAttribute(renderTextInput('employerCPNumber', 'employerCPNumber', 'Contact Number', true, '', '', 6, 12), "input", "maxlength='11'");
+  echo renderDateInput('employerBDate', 'employerBDate', 'Birth Date', true, '', '', 6, 12);
+  ?>
   <div class="col-md-6 col-sm-12" id="employerCompanyDiv">
     <label for="employerCompany" class="form-label">Company Name</label>
     <select class="form-select" id="employerCompany" name="employerCompany">
@@ -108,7 +59,14 @@
                                                                                                       }
                                                                                                       ?>" />
   </div>
-  <div class="col-6" id="">
-    <label for="employerPosition" class="form-label">Company Position</label>
-    <input type="text" class="form-control" id="employerPosition" value="<?php echo $employerData[0]['company_position'] ?>" name="employerPosition">
+  <?php
+  echo renderTextInput('employerPosition', 'employerPosition', 'Company Position', true, '', '', 6, 12);
+  echo '<hr>';
+  echo renderPasswordInput('employerPass', 'employerPass', 'Temporary Password', true, '', '', 6, 12);
+  echo renderPasswordInput('employerConfPass', 'employerConfPass', 'Confirm Temporary Password', true, '', '', 6, 12);
+  ?>
+  <div class=" col-sm-12 container m-0 my-2">
+    <button type="submit" class="btn btn-success" name="alumniRegister" value="hello">Register Account</button>
   </div>
+</form>
+<?php

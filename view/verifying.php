@@ -289,10 +289,6 @@ if (isset($_POST['saveBtn'])) {
   }
 }
 
-$regions = $func->selectall('regions');
-$provinces = $func->selectall('provinces');
-$municipalities = $func->selectall('municipalities');
-$barangays = $func->selectall('barangays');
 $companies = $func->selectall('companies');
 
 if ($_SESSION['role'] == 1) {
