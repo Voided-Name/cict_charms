@@ -156,8 +156,19 @@ $companies = $func->selectall('companies');
                   </div>
                 </div>
               </div>
-              <div class="tab-pane fade" id="faculty" role="tabpanel" aria-labelledby="faculty-tab">
-                <?php include 'create-faculty-tabs.php' ?>
+              <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade" id="faculty" role="tabpanel" aria-labelledby="faculty-tab">
+                  <div class="card-header d-flex justify-content-between">
+                    <div class="header-title">
+                      <h4 class="card-title">Create Account</h4>
+                    </div>
+                  </div>
+                  <div class="card-body px-0">
+                    <div class="container">
+                      <?php include 'create-faculty-tabs.php' ?>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -272,118 +283,114 @@ $companies = $func->selectall('companies');
         }
       }
 
+      let userRoles = ['alumni', 'employer', 'faculty'];
+
       $(document).ready(function() {
         <?php if ($_SESSION['role'] == 2) { ?>
           updateCompanyName(true);
         <?php
         } ?>
-        $('#' + sessionStorage.getItem('userRole') + 'CPNumber').focusout(function() {
-          var input = $(this).val();
 
-          // Regular expression to check if input starts with 09 and has exactly 11 digits
-          var regex = /^09\d{9}$/;
+        userRoles.forEach(function(role, index) {
+          $('#' + role + 'BDate').focusout(function() {
+            var inputDate = new Date($(this).val());
+            var today = new Date();
 
-          if (!regex.test(input)) {
-            Swal.fire({
-              icon: 'error',
-              title: 'Invalid Input',
-              text: 'The input must be 11 digits, start with 09, and contain no alphabets or special characters.'
-            }).then(() => {
-              $('#' + sessionStorage.getItem('userRole') + 'CPNumber').focus();
-            });
-          }
-        });
+            // Calculate age
+            var age = today.getFullYear() - inputDate.getFullYear();
+            var monthDifference = today.getMonth() - inputDate.getMonth();
+            if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < inputDate.getDate())) {
+              age--;
+            }
 
-        $('#' + sessionStorage.getItem('userRole') + 'BDate').focusout(function() {
-          var inputDate = new Date($(this).val());
-          alert(inputDate);
-          var today = new Date();
-
-          // Calculate age
-          var age = today.getFullYear() - inputDate.getFullYear();
-          var monthDifference = today.getMonth() - inputDate.getMonth();
-          if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < inputDate.getDate())) {
-            age--;
-          }
-
-          // Check if age is less than 18
-          if (age < 18) {
-            Swal.fire({
-              icon: 'error',
-              title: 'Invalid Age',
-              text: 'You must be 18 years or older.'
-            }).then(() => {
-              $('#inputBDate').focus();
-            });
-          }
+            // Check if age is less than 18
+            if (age < 18) {
+              Swal.fire({
+                icon: 'error',
+                title: 'Invalid Age',
+                text: 'You must be 18 years or older.'
+              }).then(() => {
+                $('#' + role + 'BDate').focus();
+              });
+            }
+          });
         });
 
         $.getJSON("../locations.json", function(result) {
           $.each(result, function(i, field) {
-            $('#' + sessionStorage.getItem('userRole') + 'Region').append(`<option value="${i}">
+            userRoles.forEach(function(role, index) {
+              $('#' + role + 'Region').append(`<option value="${i}">
                                        ${field.region_name}
                                   </option>`);
+            });
           });
-          getProvinces($("#" + sessionStorage.getItem('userRole') + "Region").val());
-          getMunicipality($("#" + sessionStorage.getItem('userRole') + "Region").val(), $("#" + sessionStorage.getItem('userRole') + "Province").val());
-          getBarangay($("#" + sessionStorage.getItem('userRole') + "Region").val(), $("#" + sessionStorage.getItem('userRole') + "Province").val(), $("#" + sessionStorage.getItem('userRole') + "Municipality").val());
+          userRoles.forEach(function(role, index) {
+            getProvinces($("#" + role + "Region").val(), role);
+            getMunicipality($("#" + role + "Region").val(), $("#" + role + "Province").val());
+            getBarangay($("#" + role + "Region").val(), $("#" + role + "Province").val(), $("#" + role + "Municipality").val());
+          });
         });
 
-        $("#" + sessionStorage.getItem('userRole') + "Region").change(function() {
-          $('#' + sessionStorage.getItem('userRole') + 'Province').empty();
-          $('#' + sessionStorage.getItem('userRole') + 'Municipality').empty();
-          $('#' + sessionStorage.getItem('userRole') + 'Barangay').empty();
-          getProvinces($("#" + sessionStorage.getItem('userRole') + "Region").val());
+        userRoles.forEach(function(role, index) {
+          $("#" + role + "Region").change(function() {
+            $('#' + role + 'Province').empty();
+            $('#' + role + 'Municipality').empty();
+            $('#' + role + 'Barangay').empty();
+            getProvinces($("#" + role + "Region").val(), role);
+          });
         });
 
-        function getProvinces(region_name) {
+        function getProvinces(region_name, role) {
           $.getJSON("../locations.json", function(result) {
             $.each(result[region_name].province_list, function(key, value) {
-              $('#' + sessionStorage.getItem('userRole') + 'Province').append(`<option value="${key}">
+              $('#' + role + 'Province').append(`<option value="${key}">
                                        ${key}
                                   </option>`);
             });
-            getMunicipality($("#" + sessionStorage.getItem('userRole') + "Region").val(), $("#" + sessionStorage.getItem('userRole') + "Province").val());
+            getMunicipality($("#" + role + "Region").val(), $("#" + role + "Province").val(), role);
           });
         }
 
-        $("#" + sessionStorage.getItem('userRole') + "Province").change(function() {
-          $('#' + sessionStorage.getItem('userRole') + 'Municipality').empty();
-          $('#' + sessionStorage.getItem('userRole') + 'Barangay').empty();
-          getMunicipality($("#" + sessionStorage.getItem('userRole') + "Region").val(), $("#" + sessionStorage.getItem('userRole') + "Province").val());
+        userRoles.forEach(function(role, index) {
+          $("#" + role + "Province").change(function() {
+            $('#' + role + 'Municipality').empty();
+            $('#' + role + 'Barangay').empty();
+            getMunicipality($("#" + role + "Region").val(), $("#" + role + "Province").val(), role);
+          });
         });
 
-        function getMunicipality(region_name, province_name) {
+        function getMunicipality(region_name, province_name, role) {
           $.getJSON("../locations.json", function(result) {
             // console.log(result[region_name].province_list[province_name]);
             $.each(result[region_name].province_list[province_name].municipality_list, function(key, value) {
               // console.log(key);
-              $('#' + sessionStorage.getItem('userRole') + 'Municipality').append(`<option value="${key}">
+              $('#' + role + 'Municipality').append(`<option value="${key}">
                                        ${key}
                                   </option>`);
             });
-            getBarangay($("#" + sessionStorage.getItem('userRole') + "Region").val(), $("#" + sessionStorage.getItem('userRole') + "Province").val(), $("#" + sessionStorage.getItem('userRole') + "Municipality").val());
+            getBarangay($("#" + role + "Region").val(), $("#" + role + "Province").val(), $("#" + role + "Municipality").val(), role);
           });
         }
 
-        $("#" + sessionStorage.getItem('userRole') + "Municipality").change(function() {
+        userRoles.forEach(function(role, index) {
+          $("#" + role + "Municipality").change(function() {
 
-          $('#' + sessionStorage.getItem('userRole') + 'Barangay').empty();
-          getBarangay($("#" + sessionStorage.getItem('userRole') + "Region").val(), $("#" + sessionStorage.getItem('userRole') + "Province").val(), $("#" + sessionStorage.getItem('userRole') + "Municipality").val());
+            $('#' + role + 'Barangay').empty();
+            getBarangay($("#" + role + "Region").val(), $("#" + role + "Province").val(), $("#" + role + "Municipality").val(), role);
+          });
         });
 
-        function getBarangay(region_name, province_name, municipality_name) {
+        function getBarangay(region_name, province_name, municipality_name, role) {
           $.getJSON("../locations.json", function(result) {
             // console.log(result[region_name].province_list[province_name].municipality_list[municipality_name].barangay_list);
             $.each(result[region_name].province_list[province_name].municipality_list[municipality_name].barangay_list, function(key, value) {
               // console.log(key);
-              $('#' + sessionStorage.getItem('userRole') + 'Barangay').append(`<option value="${value}">
+              $('#' + role + 'Barangay').append(`<option value="${value}">
                                        ${value}
                                   </option>`);
             });
           });
         }
-
       });
 
       companyNameSel = document.getElementById("employerCompany");

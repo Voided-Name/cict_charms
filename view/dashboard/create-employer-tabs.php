@@ -66,7 +66,7 @@
   echo renderPasswordInput('employerConfPass', 'employerConfPass', 'Confirm Temporary Password', true, '', '', 6, 12);
   ?>
   <div class=" col-sm-12 container m-0 my-2">
-    <button type="submit" class="btn btn-success" name="alumniRegister" value="hello">Register Account</button>
+    <button type="submit" class="btn btn-success" name="employerRegister" value="hello">Register Account</button>
   </div>
 </form>
 <?php
