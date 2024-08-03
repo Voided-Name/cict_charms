@@ -545,7 +545,7 @@ if (isset($_POST['signUpBtn'])) {
         'last_name' => $regLname,
         'birth_date' => $regBDate,
         'sex' => $regSex,
-        'region' => $regSex,
+        'region' => $regRegion,
         'province' => $regProvince,
         'city' => $regMunicipality,
         'barangay' => $regBarangay,

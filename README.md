@@ -1,28 +1,24 @@
 # TODO
-## 31
-- [ ] Admin create user acc
-- [ ] back end of user settings
 
-## 1
+- [ ] Admin create user acc
+  - [x] not detecting duplicate email bug
+- [ ] back end of user settings
 - [ ] Alumni applicant form 
 - [ ] Employer view, view applicants
-
-## 2
 - [ ] Dynamic dashboard/index.php (add UI)
   - default to user profile with alumnis and employers?
 - [ ] Faculty functionalities
-
-
-## 3
-
-## 4
 
 # Wish List
 - [ ] chat capabilities
 - [ ] notifications 
 
+# Issues
+- [ ] Gender missing in other views
+
 
 # Done
+- [x] Admin create user acc
 - [x] fix loading screen
 - [x] paste sidebar logic to the different views
 - [x] Admin list of users page

@@ -20,12 +20,6 @@
  *     courseName: string
  * }> $courses
  */
-/**
- * @var array<array{
- *     id: int,
- *     name: string
- * }> $companies
- */
 
 ?>
 <form method="POST" class="row">

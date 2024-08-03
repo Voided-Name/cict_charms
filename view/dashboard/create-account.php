@@ -17,10 +17,174 @@ if ($_SESSION['role'] != 4) {
   exit();
 }
 
-if (isset($_POST['alumniRegister'])) {
-}
+if ($_SERVER['REQUEST_METHOD'] ===  'POST') {
+  if (isset($_POST['register'])) {
+    if ($_POST['register'] == 'alumni') {
+      $email = $strip->strip($_POST['alumniEmail']);
+      $username = $strip->strip($_POST['alumniUsername']);
+      $firstName = $strip->strip($_POST['alumniFName']);
+      $middleName = $strip->strip($_POST['alumniMName']);
+      $lastName = $strip->strip($_POST['alumniLName']);
+      $suffix = $strip->strip($_POST['alumniSuffix']);
+      $region = $strip->strip($_POST['alumniRegion']);
+      $province = $strip->strip($_POST['alumniProvince']);
+      $municipality = $strip->strip($_POST['alumniMunicipality']);
+      $barangay = $strip->strip($_POST['alumniBarangay']);
+      $streetAdd = $strip->strip($_POST['alumniStAdd']);
+      $contactNumber = $strip->strip($_POST['alumniCPNumber']);
+      $regSex = $strip->strip($_POST['alumniSex']);
+      $birthDate = $strip->strip($_POST['alumniBDate']);
+      $studentId = $strip->strip($_POST['alumniStudId']);
+      $course = $strip->strip($_POST['alumniCourse']);
+      $major = $strip->strip($_POST['alumniMajor']);
+      $campus = $strip->strip($_POST['alumniCampus']);
+      $yearGraduated = $strip->strip($_POST['alumniGraduated']);
+      $yearEnrolled = $strip->strip($_POST['alumniEnrolled']);
+      $password = $strip->strip($_POST['alumniPassword']);
+      $confPassword = $strip->strip($_POST['alumniConfPassword']);
+      $regRole = 1;
 
-$_SESSION['adminPage'] = "createAccount";
+
+      $passwordHash = md5($password);
+
+      $thing = array(
+        $email,
+        $username,
+        $firstName,
+        $middleName,
+        $lastName,
+        $suffix,
+        $region,
+        $province,
+        $municipality,
+        $barangay,
+        $regSex,
+        $streetAdd,
+        $contactNumber,
+        $birthDate,
+        $studentId,
+        $course,
+        $major,
+        $campus,
+        $yearGraduated,
+        $yearEnrolled
+      );
+
+      $selectUser = $func->select_one('users', array('username', '=', $email));
+
+      if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $emailInvalid = true;
+      } else {
+        if ($selectUser) {
+          $emailErrExists = true;
+        } else {
+          /* $updateDetails1 = $func->update('userdetails', 'user_id', $_SESSION['userid'], array( */
+          /*   'email_address' => $email */
+          /* )); */
+        }
+      }
+
+      $selectUser = $func->select_one('users', array('username', '=', $username));
+
+      if ($selectUser) {
+        $usernameErr = true;
+      } else {
+        //$updateDetails2 = $func->update('users', 'id', $_SESSION['userid'], array('username' => $username));
+      }
+
+      if ($password != $confPassword) {
+        $differentPassword = true;
+      }
+
+      if (!$userNameErr && !$emailInvalid && !$emailErrExists && !$differentPassword) {
+        if ($regSex == 1) {
+          $profix = 'images/profilepix/man_gen.jpg';
+        } else {
+          $profix = 'images/profilepix/lady_def.jpg';
+        }
+
+        $UserInsert = $func->insert('users', array(
+          'username' => $email,
+          'passAlias' => $password,
+          'password' => $passwordHash,
+          'role' => $regRole
+        ));
+
+        if ($UserInsert) {
+          $userID = mysqli_insert_id($con);
+          $personInsert = $func->insert('userdetails', array(
+            'user_id' => $userID,
+            'profile_pic_url' => $profix,
+            'email_address' => $email,
+            'contact_number' => $contactNumber,
+            'first_name' => $firstName,
+            'middle_name' => $middleName,
+            'last_name' => $lastName,
+            'birth_date' => $birthDate,
+            'sex' => $regSex,
+            'region' => $region,
+            'province' => $province,
+            'city' => $municipality,
+            'barangay' => $barangay,
+            'street_add' => $streetAdd
+          ));
+
+          $AlumniInsert = $func->insert('alumni_graduated_course', array(
+            'user_id' => $userID,
+            'alumniNum' => $studentId
+          ));
+
+          $runs = true;
+          $registered = True;
+        } else {
+          $err = "";
+          if ($usernameErr) {
+            $err += 'Username Already Exists\n';
+          }
+          if ($emailErrExists) {
+            $err += 'Email Format Error\n';
+          }
+          if ($usernameErr) {
+            $err += 'Email Already Exists\n';
+          }
+          if ($differentPassword) {
+            $err += 'Passwords does not Match';
+          }
+        }
+      }
+      if ($runs) {
+?>
+        <script>
+          alert("runs\n" + "<?php echo $userID ?>" + "\n" + "<?php echo $regSID ?>");
+        </script>
+      <?php
+      }
+      if ($registered) {
+      ?>
+        <script>
+          Swal.fire({
+            title: "New Account Created Successfully!",
+            text: "Click ok to refresh the page.",
+            type: "success",
+            heightAuto: "false",
+          }).then(function() {
+            window.location = "login.php";
+          });
+        </script>
+      <?php
+      } else {
+      ?>
+        <script>
+          Swal.fire({
+            icon: 'error',
+            title: 'Registration Failed'
+          })
+        </script>
+<?php
+      }
+    }
+  }
+}
 
 $regionInformation = array();
 $regionInformation['01'] = 'Region I';
@@ -68,6 +232,7 @@ $companies = $func->selectall('companies');
       sessionStorage.setItem('userRole', 'alumni');
     }
   </script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
 </head>
@@ -186,6 +351,15 @@ $companies = $func->selectall('companies');
     <script src="../../js/plugins/form-wizard.js"></script>
     <script src="../../js/hope-ui.js" defer></script>
     <script>
+      <?php
+      if ($userNameErr || $emailInvalid || $emailErrExists || $differentPassword) {
+      ?>
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: '<?php echo $err ?>'
+        });
+      <?php } ?>
       const courseOptions = document.getElementById('alumniCourse');
       courseOptions.addEventListener("change", alumniMajorOptions);
 
