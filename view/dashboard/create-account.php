@@ -4,24 +4,34 @@ include '../src/init.php';
 include '../../kint.phar';
 require_once 'renderer.php';
 
-
-/**
- * 
- * @var strip $strip
- */
-/**
- * 
- * @var res $func
- */
+// /**
+//  * 
+//  * @var strip $strip
+//  */
+// /**
+//  * 
+//  * @var func $func
+//  */
 
 if ($_SESSION['role'] != 4) {
   header("location: ../../");
   exit();
 }
 
+$func;
+
 $_SESSION['adminPage'] = "createAccount";
 
-if ($_SERVER['REQUEST_METHOD'] ===  'POST') {
+/**
+ * @var bool $userNameErr
+ */
+$userNameErr = false;
+$emailInvalid = false;
+$emailErrExists = false;
+$differentPassword = false;
+$runs = false;
+
+if (($_SERVER['REQUEST_METHOD'] ?? 0) ===  'POST') {
   if (isset($_POST['register'])) {
     if ($_POST['register'] == 'alumni') {
       $email = $strip->strip($_POST['alumniEmail']);
@@ -44,9 +54,14 @@ if ($_SERVER['REQUEST_METHOD'] ===  'POST') {
       $campus = $strip->strip($_POST['alumniCampus']);
       $yearGraduated = $strip->strip($_POST['alumniGraduated']);
       $yearEnrolled = $strip->strip($_POST['alumniEnrolled']);
-      $password = $strip->strip($_POST['alumniPassword']);
-      $confPassword = $strip->strip($_POST['alumniConfPassword']);
+      $password = $strip->strip($_POST['alumniPass']);
+      $confPassword = $strip->strip($_POST['alumniConfPass']);
       $regRole = 1;
+
+      /**
+       * @disregard
+       */
+      //d($password);
 
 
       $passwordHash = md5($password);
@@ -69,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] ===  'POST') {
       $selectUser = $func->select_one('users', array('username', '=', $username));
 
       if ($selectUser) {
-        $usernameErr = true;
+        $userNameErr = true;
       } else {
         //$updateDetails2 = $func->update('users', 'id', $_SESSION['userid'], array('username' => $username));
       }
@@ -114,34 +129,26 @@ if ($_SERVER['REQUEST_METHOD'] ===  'POST') {
             'province' => $province,
             'city' => $municipality,
             'barangay' => $barangay,
-            'street_add' => $streetAdd
+            'street_add' => $streetAdd,
+            'suffix' => $suffix
           ));
 
           $AlumniInsert = $func->insert('alumni_graduated_course', array(
             'user_id' => $userID,
-            'alumniNum' => $studentId
+            'alumniNum' => $studentId,
+            'course_id' => $course,
+            'major_id' => $major,
+            'campus' => $campus,
+            'year_started' => $yearEnrolled,
+            'year_graduated' => $yearGraduated
           ));
 
           $runs = true;
           $registered = True;
-        } else {
-          $err = "";
-          if ($usernameErr) {
-            $err .= 'Username Already Exists\n';
-          }
-          if ($emailErrExists) {
-            $err .= 'Email Already Exists\n';
-          }
-          if ($emailInvalid) {
-            $err .= 'Email Format Error\n';
-          }
-          if ($differentPassword) {
-            $err .= 'Passwords does not Match';
-          }
         }
       } else {
         $err = "";
-        if ($usernameErr) {
+        if ($userNameErr) {
           $err .= 'Username Already Exists\n';
         }
         if ($emailErrExists) {
@@ -174,12 +181,13 @@ if ($_SERVER['REQUEST_METHOD'] ===  'POST') {
       $contactNumber = $strip->strip($_POST['employerCPNumber']);
       $regSex = $strip->strip($_POST['employerSex']);
       $birthDate = $strip->strip($_POST['employerBDate']);
-      $password = $strip->strip($_POST['employerPassword']);
-      $confPassword = $strip->strip($_POST['employerConfPassword']);
+      $password = $strip->strip($_POST['employerPass']);
+      $confPassword = $strip->strip($_POST['employerConfPass']);
       $company = $strip->strip($_POST['employerCompany']);
       $companyStr = $strip->strip($_POST['employerCompanySTR']);
+      $empID = $strip->strip($_POST['employerID']);
       $position = $strip->strip($_POST['employerPosition']);
-      $regRole = 1;
+      $regRole = 2;
 
       $passwordHash = md5($password);
 
@@ -214,7 +222,7 @@ if ($_SERVER['REQUEST_METHOD'] ===  'POST') {
       /**
        * @disregard
        */
-      //d($usernameErr, $emailInvalid, $emailErrExists, $differentPassword);
+      d($usernameErr, $emailInvalid, $emailErrExists, $differentPassword);
 
       if (!$userNameErr && !$emailInvalid && !$emailErrExists && !$differentPassword) {
         if ($regSex == 1) {
@@ -246,34 +254,40 @@ if ($_SERVER['REQUEST_METHOD'] ===  'POST') {
             'province' => $province,
             'city' => $municipality,
             'barangay' => $barangay,
-            'street_add' => $streetAdd
+            'street_add' => $streetAdd,
+            'suffix' => $suffix
           ));
 
-          $AlumniInsert = $func->insert('alumni_graduated_course', array(
+          $compID = 0;
+
+          if ($company == 0) {
+
+            $CompanyInsert = $func->insert('users', array(
+              'name' => $companyStr
+            ));
+
+            if ($CompanyInsert) {
+
+              $compID = mysqli_insert_id($con);
+            }
+          } else {
+            $compID = $company;
+          }
+
+
+          $employer_usersInsert = $func->insert('employer_users', array(
             'user_id' => $userID,
-            'alumniNum' => $studentId
+            'company_id' => $compID,
+            'employer_num' => $empID,
+            'company_position' => $position,
           ));
 
           $runs = true;
           $registered = True;
-        } else {
-          $err = "";
-          if ($usernameErr) {
-            $err .= 'Username Already Exists\n';
-          }
-          if ($emailErrExists) {
-            $err .= 'Email Already Exists\n';
-          }
-          if ($emailInvalid) {
-            $err .= 'Email Format Error\n';
-          }
-          if ($differentPassword) {
-            $err .= 'Passwords does not Match';
-          }
         }
       } else {
         $err = "";
-        if ($usernameErr) {
+        if ($userNameErr) {
           $err .= 'Username Already Exists\n';
         }
         if ($emailErrExists) {
@@ -577,9 +591,6 @@ $companies = $func->selectall('companies');
         for (x = 0; x < courseOptionsSpec.length; x++) {
           let el = document.createElement("option");
           el.textContent = courseOptionsSpec[x];
-          if (courseOptionsSpec[x] == "<?php echo  array_search($alumniData[0]["major_id"], $mapMajors) ?>") {
-            el.selected = true;
-          }
           el.value = courseOptionsSpec[x];
           majorOptions.appendChild(el);
         }
@@ -595,10 +606,6 @@ $companies = $func->selectall('companies');
       let userRoles = ['alumni', 'employer', 'faculty'];
 
       $(document).ready(function() {
-        <?php if ($_SESSION['role'] == 2) { ?>
-          updateCompanyName(true);
-        <?php
-        } ?>
 
         userRoles.forEach(function(role, index) {
           $('#' + role + 'BDate').focusout(function() {

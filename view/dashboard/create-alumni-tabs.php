@@ -1,3 +1,6 @@
+<?php
+require_once './renderer.php';
+?>
 <form method="POST" class="row">
   <?php
   echo renderTextInput('alumniEmail', 'alumniEmail', 'Email', true, '', '', 4, 12);
