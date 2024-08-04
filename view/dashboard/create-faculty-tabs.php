@@ -5,13 +5,22 @@
   echo renderTextInput('facultyFName', 'facultyFName', 'First Name', true, '', '', 4, 12);
   echo renderTextInput('facultyLName', 'facultyLName', 'Last Name', true, '', '', 4, 12);
   echo renderTextInput('facultyMName', 'facultyMName', 'Middle Name', true, '', '', 4, 12);
-  echo renderTextInput('facultySuffix', 'facultySuffix', 'Suffix', true, '', '', 4, 12);
+  echo renderTextInput('facultySuffix', 'facultySuffix', 'Suffix', false, '', '', 4, 12);
   echo renderSelect('facultyRegion', 'facultyRegion', 'Region', true, 3, 12);
   echo renderSelect('facultyProvince', 'facultyProvince', 'Province', true, 3, 12);
   echo renderSelect('facultyMunicipality', 'facultyMunicipality', 'Municipality', true, 3, 12);
   echo renderSelect('facultyBarangay', 'facultyBarangay', 'Barangay', true, 3, 12);
   echo renderTextInput('facultyStAdd', 'facultyStAdd', 'Street Address', true, '', '', 12, 12);
   echo insertAttribute(renderTextInput('facultyCPNumber', 'facultyCPNumber', 'Contact Number', true, '', '', 6, 12), "input", "maxlength='11'");
+  ?>
+  <div class="col-md-6 col-sm-12" id="">
+    <label for="facultySex" class="form-label">Sex</label>
+    <select class="form-select" id="facultySex" name="facultySex" required>
+      <option value="1">Male</option>
+      <option value="2">Female</option>
+    </select>
+  </div>
+  <?php
   echo renderDateInput('facultyBDate', 'facultyBDate', 'Birth Date', true, '', '', 6, 12);
   echo renderSelectWithOptions('facultyCampus', 'facultyCampus', 'Campus', array_map(fn($campus) => ['value' => $campus['campusID'], 'name' => $campus['campusName']], $campuses), $facultyData[0]['campus']);
   echo renderTextInput('facultyID', 'facultyID', 'Faculty ID', true, '', '', 4, 12);

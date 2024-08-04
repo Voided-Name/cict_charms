@@ -4,14 +4,14 @@ include '../src/init.php';
 include '../../kint.phar';
 require_once 'renderer.php';
 
-// /**
-//  * 
-//  * @var strip $strip
-//  */
-// /**
-//  * 
-//  * @var func $func
-//  */
+/**
+ * 
+ * @var strip $strip
+ */
+/**
+ * 
+ * @var func $func
+ */
 
 if ($_SESSION['role'] != 4) {
   header("location: ../../");
@@ -297,6 +297,110 @@ if (($_SERVER['REQUEST_METHOD'] ?? 0) ===  'POST') {
         }
         if ($differentPassword) {
           $err .= 'Passwords does not Match';
+        }
+      }
+    } else if ($_POST['register'] == 'faculty') {
+      $email = $strip->strip($_POST['facultyEmail']);
+      $username = $strip->strip($_POST['facultyUsername']);
+      $firstName = $strip->strip($_POST['facultyFName']);
+      $middleName = $strip->strip($_POST['facultyMName']);
+      $lastName = $strip->strip($_POST['facultyLName']);
+      $suffix = $strip->strip($_POST['facultySuffix']);
+      $region = $strip->strip($_POST['facultyRegion']);
+      $province = $strip->strip($_POST['facultyProvince']);
+      $municipality = $strip->strip($_POST['facultyMunicipality']);
+      $barangay = $strip->strip($_POST['facultyBarangay']);
+      $streetAdd = $strip->strip($_POST['facultyStAdd']);
+      $contactNumber = $strip->strip($_POST['facultyCPNumber']);
+      $regSex = $strip->strip($_POST['facultySex']);
+      $birthDate = $strip->strip($_POST['facultyBDate']);
+      $campus = $strip->strip($_POST['facultyCampus']);
+      $facultyID = $strip->strip($_POST['facultyID']);
+      $acadRank = $strip->strip($_POST['facultyRank']);
+      $password = $strip->strip($_POST['facultyPass']);
+      $confPassword = $strip->strip($_POST['facultyConfPass']);
+      $regRole = 3;
+
+      /**
+       * @disregard
+       */
+
+      $passwordHash = md5($password);
+
+      $selectUser = $func->select_one('users', array('username', '=', $email));
+
+      if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $emailInvalid = true;
+      } else {
+        if ($selectUser) {
+          $emailErrExists = true;
+        } else {
+          /* $updateDetails1 = $func->update('userdetails', 'user_id', $_SESSION['userid'], array( */
+          /*   'email_address' => $email */
+          /* )); */
+        }
+      }
+
+      $selectUser = $func->select_one('users', array('username', '=', $username));
+
+      if ($selectUser) {
+        $usernameErr = true;
+      } else {
+        //$updateDetails2 = $func->update('users', 'id', $_SESSION['userid'], array('username' => $username));
+      }
+
+      if ($password != $confPassword) {
+        $differentPassword = true;
+      }
+
+      /**
+       * @disregard
+       */
+      d($usernameErr, $emailInvalid, $emailErrExists, $differentPassword);
+
+      if (!$userNameErr && !$emailInvalid && !$emailErrExists && !$differentPassword) {
+        if ($regSex == 1) {
+          $profix = 'images/profilepix/man_gen.jpg';
+        } else {
+          $profix = 'images/profilepix/lady_def.jpg';
+        }
+
+        $UserInsert = $func->insert('users', array(
+          'username' => $email,
+          'passAlias' => $password,
+          'password' => $passwordHash,
+          'role' => $regRole
+        ));
+
+        if ($UserInsert) {
+          $userID = mysqli_insert_id($con);
+          $personInsert = $func->insert('userdetails', array(
+            'user_id' => $userID,
+            'profile_pic_url' => $profix,
+            'email_address' => $email,
+            'contact_number' => $contactNumber,
+            'first_name' => $firstName,
+            'middle_name' => $middleName,
+            'last_name' => $lastName,
+            'birth_date' => $birthDate,
+            'sex' => $regSex,
+            'region' => $region,
+            'province' => $province,
+            'city' => $municipality,
+            'barangay' => $barangay,
+            'street_add' => $streetAdd,
+            'suffix' => $suffix
+          ));
+
+          $runs = true;
+          $registered = True;
+
+          $facultyInsert = $func->insert('faculty', array(
+            'user_id' => $userID,
+            'employee_num' => $facultyID,
+            'campus_id' => $campus,
+            'acadrank_id' => $acadRank,
+          ));
         }
       }
     }
