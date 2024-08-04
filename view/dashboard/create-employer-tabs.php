@@ -22,6 +22,15 @@
   echo renderSelect('employerBarangay', 'employerBarangay', 'Barangay', true, 3, 12);
   echo renderTextInput('employerStAdd', 'employerStAdd', 'Street Address', true, '', '', 12, 12);
   echo insertAttribute(renderTextInput('employerCPNumber', 'employerCPNumber', 'Contact Number', true, '', '', 6, 12), "input", "maxlength='11'");
+  ?>
+  <div class="col-md-3 col-sm-12" id="">
+    <label for="employerSex" class="form-label">Sex</label>
+    <select class="form-select" id="employerSex" name="employerSex" required>
+      <option value="1">Male</option>
+      <option value="2">Female</option>
+    </select>
+  </div>
+  <?php
   echo renderDateInput('employerBDate', 'employerBDate', 'Birth Date', true, '', '', 6, 12);
   ?>
   <div class="col-md-6 col-sm-12" id="employerCompanyDiv">

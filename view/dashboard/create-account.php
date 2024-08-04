@@ -1,7 +1,9 @@
 <?php
 session_start();
 include '../src/init.php';
+include '../../kint.phar';
 require_once 'renderer.php';
+
 
 /**
  * 
@@ -16,6 +18,8 @@ if ($_SESSION['role'] != 4) {
   header("location: ../../");
   exit();
 }
+
+$_SESSION['adminPage'] = "createAccount";
 
 if ($_SERVER['REQUEST_METHOD'] ===  'POST') {
   if (isset($_POST['register'])) {
@@ -47,30 +51,8 @@ if ($_SERVER['REQUEST_METHOD'] ===  'POST') {
 
       $passwordHash = md5($password);
 
-      $thing = array(
-        $email,
-        $username,
-        $firstName,
-        $middleName,
-        $lastName,
-        $suffix,
-        $region,
-        $province,
-        $municipality,
-        $barangay,
-        $regSex,
-        $streetAdd,
-        $contactNumber,
-        $birthDate,
-        $studentId,
-        $course,
-        $major,
-        $campus,
-        $yearGraduated,
-        $yearEnrolled
-      );
-
       $selectUser = $func->select_one('users', array('username', '=', $email));
+
 
       if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $emailInvalid = true;
@@ -95,6 +77,12 @@ if ($_SERVER['REQUEST_METHOD'] ===  'POST') {
       if ($password != $confPassword) {
         $differentPassword = true;
       }
+
+
+      /**
+       * @disregard
+       */
+      //d($usernameErr, $emailInvalid, $emailErrExists, $differentPassword);
 
       if (!$userNameErr && !$emailInvalid && !$emailErrExists && !$differentPassword) {
         if ($regSex == 1) {
@@ -139,48 +127,164 @@ if ($_SERVER['REQUEST_METHOD'] ===  'POST') {
         } else {
           $err = "";
           if ($usernameErr) {
-            $err += 'Username Already Exists\n';
+            $err .= 'Username Already Exists\n';
           }
           if ($emailErrExists) {
-            $err += 'Email Format Error\n';
+            $err .= 'Email Already Exists\n';
           }
-          if ($usernameErr) {
-            $err += 'Email Already Exists\n';
+          if ($emailInvalid) {
+            $err .= 'Email Format Error\n';
           }
           if ($differentPassword) {
-            $err += 'Passwords does not Match';
+            $err .= 'Passwords does not Match';
           }
         }
-      }
-      if ($runs) {
-?>
-        <script>
-          alert("runs\n" + "<?php echo $userID ?>" + "\n" + "<?php echo $regSID ?>");
-        </script>
-      <?php
-      }
-      if ($registered) {
-      ?>
-        <script>
-          Swal.fire({
-            title: "New Account Created Successfully!",
-            text: "Click ok to refresh the page.",
-            type: "success",
-            heightAuto: "false",
-          }).then(function() {
-            window.location = "login.php";
-          });
-        </script>
-      <?php
       } else {
-      ?>
-        <script>
-          Swal.fire({
-            icon: 'error',
-            title: 'Registration Failed'
-          })
-        </script>
-<?php
+        $err = "";
+        if ($usernameErr) {
+          $err .= 'Username Already Exists\n';
+        }
+        if ($emailErrExists) {
+          $err .= 'Email Already Exists\n';
+        }
+        if ($emailInvalid) {
+          $err .= 'Email Format Error\n';
+        }
+        if ($differentPassword) {
+          $err .= 'Passwords does not Match';
+        }
+      }
+
+      /**
+       * @disregard
+       */
+      //d($err);
+    } else if ($_POST['register'] == "employer") {
+      $email = $strip->strip($_POST['employerEmail']);
+      $username = $strip->strip($_POST['employerUsername']);
+      $firstName = $strip->strip($_POST['employerFName']);
+      $middleName = $strip->strip($_POST['employerMName']);
+      $lastName = $strip->strip($_POST['employerLName']);
+      $suffix = $strip->strip($_POST['employerSuffix']);
+      $region = $strip->strip($_POST['employerRegion']);
+      $province = $strip->strip($_POST['employerProvince']);
+      $municipality = $strip->strip($_POST['employerMunicipality']);
+      $barangay = $strip->strip($_POST['employerBarangay']);
+      $streetAdd = $strip->strip($_POST['employerStAdd']);
+      $contactNumber = $strip->strip($_POST['employerCPNumber']);
+      $regSex = $strip->strip($_POST['employerSex']);
+      $birthDate = $strip->strip($_POST['employerBDate']);
+      $password = $strip->strip($_POST['employerPassword']);
+      $confPassword = $strip->strip($_POST['employerConfPassword']);
+      $company = $strip->strip($_POST['employerCompany']);
+      $companyStr = $strip->strip($_POST['employerCompanySTR']);
+      $position = $strip->strip($_POST['employerPosition']);
+      $regRole = 1;
+
+      $passwordHash = md5($password);
+
+      $selectUser = $func->select_one('users', array('username', '=', $email));
+
+
+      if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $emailInvalid = true;
+      } else {
+        if ($selectUser) {
+          $emailErrExists = true;
+        } else {
+          /* $updateDetails1 = $func->update('userdetails', 'user_id', $_SESSION['userid'], array( */
+          /*   'email_address' => $email */
+          /* )); */
+        }
+      }
+
+      $selectUser = $func->select_one('users', array('username', '=', $username));
+
+      if ($selectUser) {
+        $usernameErr = true;
+      } else {
+        //$updateDetails2 = $func->update('users', 'id', $_SESSION['userid'], array('username' => $username));
+      }
+
+      if ($password != $confPassword) {
+        $differentPassword = true;
+      }
+
+
+      /**
+       * @disregard
+       */
+      //d($usernameErr, $emailInvalid, $emailErrExists, $differentPassword);
+
+      if (!$userNameErr && !$emailInvalid && !$emailErrExists && !$differentPassword) {
+        if ($regSex == 1) {
+          $profix = 'images/profilepix/man_gen.jpg';
+        } else {
+          $profix = 'images/profilepix/lady_def.jpg';
+        }
+
+        $UserInsert = $func->insert('users', array(
+          'username' => $email,
+          'passAlias' => $password,
+          'password' => $passwordHash,
+          'role' => $regRole
+        ));
+
+        if ($UserInsert) {
+          $userID = mysqli_insert_id($con);
+          $personInsert = $func->insert('userdetails', array(
+            'user_id' => $userID,
+            'profile_pic_url' => $profix,
+            'email_address' => $email,
+            'contact_number' => $contactNumber,
+            'first_name' => $firstName,
+            'middle_name' => $middleName,
+            'last_name' => $lastName,
+            'birth_date' => $birthDate,
+            'sex' => $regSex,
+            'region' => $region,
+            'province' => $province,
+            'city' => $municipality,
+            'barangay' => $barangay,
+            'street_add' => $streetAdd
+          ));
+
+          $AlumniInsert = $func->insert('alumni_graduated_course', array(
+            'user_id' => $userID,
+            'alumniNum' => $studentId
+          ));
+
+          $runs = true;
+          $registered = True;
+        } else {
+          $err = "";
+          if ($usernameErr) {
+            $err .= 'Username Already Exists\n';
+          }
+          if ($emailErrExists) {
+            $err .= 'Email Already Exists\n';
+          }
+          if ($emailInvalid) {
+            $err .= 'Email Format Error\n';
+          }
+          if ($differentPassword) {
+            $err .= 'Passwords does not Match';
+          }
+        }
+      } else {
+        $err = "";
+        if ($usernameErr) {
+          $err .= 'Username Already Exists\n';
+        }
+        if ($emailErrExists) {
+          $err .= 'Email Already Exists\n';
+        }
+        if ($emailInvalid) {
+          $err .= 'Email Format Error\n';
+        }
+        if ($differentPassword) {
+          $err .= 'Passwords does not Match';
+        }
       }
     }
   }
@@ -228,11 +332,36 @@ $companies = $func->selectall('companies');
   <link rel="stylesheet" href="../../css/theme_1/rtl.min.css">
   <link rel="stylesheet" href="../../css/theme_1/customizer.min.css">
   <script>
+    if (!sessionStorage.getItem('createAccTab')) {
+      sessionStorage.setItem('createAccTab', 'alumni');
+    }
+  </script>
+  <script>
     if (!sessionStorage.getItem('userRole')) {
       sessionStorage.setItem('userRole', 'alumni');
     }
   </script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <?php
+  if ($runs) {
+  ?>
+    <script>
+      alert("runs\n" + "<?php echo $userID ?>" + "\n" + "<?php echo $regSID ?>");
+    </script>
+  <?php
+  }
+  if ($registered) {
+  ?>
+    <script>
+      Swal.fire({
+        title: "New Account Created Successfully!",
+        type: "success",
+        heightAuto: "false",
+      });
+    </script>
+  <?php
+  }
+  ?>
 
 
 </head>
@@ -350,6 +479,12 @@ $companies = $func->selectall('companies');
     <script src="../../js/plugins/slider-tabs.js"></script>
     <script src="../../js/plugins/form-wizard.js"></script>
     <script src="../../js/hope-ui.js" defer></script>
+    <?php
+    /**
+     * @disregard
+     */
+    //d($err);
+    ?>
     <script>
       <?php
       if ($userNameErr || $emailInvalid || $emailErrExists || $differentPassword) {
@@ -594,6 +729,33 @@ $companies = $func->selectall('companies');
       }
 
       updateCompanyName(true);
+
+      function changeTab() {
+        if (sessionStorage.getItem('createAccTab') == 'alumni') {
+          let alumniTab = new bootstrap.Tab(document.getElementById('alumni-tab'));
+          alumniTab.show();
+        } else if (sessionStorage.getItem('createAccTab') == 'employer') {
+          let employerTab = new bootstrap.Tab(document.getElementById('employer-tab'));
+          employerTab.show();
+        } else if (sessionStorage.getItem('createAccTab') == 'faculty') {
+          let facultyTab = new bootstrap.Tab(document.getElementById('faculty-tab'));
+          facultyTab.show();
+        }
+      }
+
+      document.getElementById('alumni-tab').addEventListener('click', function() {
+        sessionStorage.setItem('createAccTab', 'alumni');
+      });
+
+      document.getElementById('employer-tab').addEventListener('click', function() {
+        sessionStorage.setItem('createAccTab', 'employer');
+      });
+
+      document.getElementById('faculty-tab').addEventListener('click', function() {
+        sessionStorage.setItem('createAccTab', 'faculty');
+      });
+
+      changeTab();
     </script>
 </body>
 
