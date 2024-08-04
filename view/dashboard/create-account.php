@@ -189,6 +189,11 @@ if (($_SERVER['REQUEST_METHOD'] ?? 0) ===  'POST') {
       $position = $strip->strip($_POST['employerPosition']);
       $regRole = 2;
 
+      /**
+       * @disregard
+       */
+      d($company, $companyStr);
+
       $passwordHash = md5($password);
 
       $selectUser = $func->select_one('users', array('username', '=', $email));
@@ -258,29 +263,23 @@ if (($_SERVER['REQUEST_METHOD'] ?? 0) ===  'POST') {
             'suffix' => $suffix
           ));
 
-          $compID = 0;
-
           if ($company == 0) {
-
-            $CompanyInsert = $func->insert('users', array(
-              'name' => $companyStr
+            $employer_usersInsert = $func->insert('employer_users', array(
+              'user_id' => $userID,
+              'company_id' => 0,
+              'company_unvalidated' => $companyStr,
+              'employer_num' => $empID,
+              'company_position' => $position,
             ));
-
-            if ($CompanyInsert) {
-
-              $compID = mysqli_insert_id($con);
-            }
           } else {
-            $compID = $company;
+            $employer_usersInsert = $func->insert('employer_users', array(
+              'user_id' => $userID,
+              'company_id' => $company,
+              'employer_num' => $empID,
+              'company_position' => $position,
+            ));
           }
 
-
-          $employer_usersInsert = $func->insert('employer_users', array(
-            'user_id' => $userID,
-            'company_id' => $compID,
-            'employer_num' => $empID,
-            'company_position' => $position,
-          ));
 
           $runs = true;
           $registered = True;
@@ -329,6 +328,7 @@ $majors = $func->selectall('coursesmajor');
 $mapMajors = array_combine(array_column($majors, 'majorName'), array_column($majors, 'id;'));
 $acadRanks = $func->selectall('faculty_rankings');
 $companies = $func->selectall('companies');
+
 ?>
 <!doctype html>
 <html lang="en" dir="ltr">

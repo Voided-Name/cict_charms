@@ -25,7 +25,7 @@ require_once './renderer.php';
   echo insertAttribute(renderTextInput('employerCPNumber', 'employerCPNumber', 'Contact Number', true, '', '', 6, 12), "input", "maxlength='11'");
   echo renderDateInput('employerBDate', 'employerBDate', 'Birth Date', true, '', '', 6, 12);
   ?>
-  <div class="col-md-3 col-sm-12" id="">
+  <div class="col-md-6 col-sm-12" id="">
     <label for="employerSex" class="form-label">Sex</label>
     <select class="form-select" id="employerSex" name="employerSex" required>
       <option value="1">Male</option>
@@ -36,15 +36,15 @@ require_once './renderer.php';
     <label for="employerCompany" class="form-label">Company Name</label>
     <select class="form-select" id="employerCompany" name="employerCompany">
       <?php
-      foreach ($companies as $company) {
-        echo $company['name'] ?></option>
+      foreach ($companies as $company) { ?>
+        <option value="<?php echo $company['id'] ?>"><?php echo $company['name'] ?></option>
       <?php
       }
       ?>
       <option value="0">Other</option>
     </select>
   </div>
-  <div class="col-md-10 col-sm-12" style="display:none" id="companySTRdiv">
+  <div class="col-md-4 col-sm-12" style="display:none" id="companySTRdiv">
     <label for="employerCompanySTR" class="form-label">Add Company Name</label>
     <input id="employerCompanySTR" class="form-control" type="text" name="employerCompanySTR" value="" />
   </div>
