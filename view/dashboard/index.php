@@ -34,13 +34,13 @@ $numAlumnis = $func->select_count_where2('users', 'role', '=', 1, 'is_verified',
 </head>
 
 <body class="  ">
-<!-- loader Start -->
-<div id="loading">
+  <!-- loader Start -->
+  <div id="loading">
     <div class="loader simple-loader">
       <div class="loader-body"></div>
     </div>
-</div>
-<!-- loader END -->
+  </div>
+  <!-- loader END -->
   <!-- Sidebar Menu Start -->
   <?php
   if ($_SESSION["role"] == 1) {
@@ -134,28 +134,32 @@ $numAlumnis = $func->select_count_where2('users', 'role', '=', 1, 'is_verified',
             </div>
           </div>
         </div>
-        <div class="col-md-12 col-lg-12">
-          <div class="row">
-            <div class="col-md-12">
-              <div class="card" data-aos="fade-up" data-aos-delay="800">
-                <div class="flex-wrap row d-flex justify-content-evenly align-items-center p-3">
-                  <a href="validate-user-acc.php" class="col-md-12 col-lg-5 btn btn-primary p-2 m-2 fs-1">
-                    Validate Users
-                  </a>
-                  <a href="list-of-users.php" class="col-md-12 col-lg-5 btn btn-secondary p-2 m-2 fs-1">
-                    List of Users
-                  </a>
-                  <a href="report.php" class="col-md-12 col-lg-5 btn btn-success p-2 m-2 fs-1">
-                    Generate Report
-                  </a>
-                  <a href="manage-acc.php" class="col-md-12 col-lg-5 btn btn-info p-2 m-2 fs-1">
-                    User Settings
-                  </a>
+        <?php if ($_SESSION['role'] == 4) {
+        ?>
+          <div class="col-md-12 col-lg-12">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="card" data-aos="fade-up" data-aos-delay="800">
+                  <div class="flex-wrap row d-flex justify-content-evenly align-items-center p-3">
+                    <a href="validate-user-acc.php" class="col-md-12 col-lg-5 btn btn-primary p-2 m-2 fs-1">
+                      Validate Users
+                    </a>
+                    <a href="list-of-users.php" class="col-md-12 col-lg-5 btn btn-secondary p-2 m-2 fs-1">
+                      List of Users
+                    </a>
+                    <a href="report.php" class="col-md-12 col-lg-5 btn btn-success p-2 m-2 fs-1">
+                      Generate Report
+                    </a>
+                    <a href="manage-acc.php" class="col-md-12 col-lg-5 btn btn-info p-2 m-2 fs-1">
+                      User Settings
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        <?php
+        } ?>
         <div class="col-md-12 col-lg-12">
           <div class="row">
             <div class="col-md-12">

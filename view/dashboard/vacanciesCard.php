@@ -8,7 +8,7 @@ foreach ($data as $dataInstance) {
   <div class="container jobListItem p-3 mt-3 border border-light-subtle">
     <div class="container row m-0">
       <div class="col-2">
-        <img src="" width="100" height="100" class="border radius">
+        <img src="../../img/companies/<?php echo $dataInstance['img_name'] ?>" width="100" height="100" class="border radius">
       </div>
       <div class="container col-12 col-lg-8 m-0">
         <h4><?php echo $dataInstance['position'] ?></h4>

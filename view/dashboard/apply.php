@@ -9,7 +9,7 @@ session_start();
  * @var res $func
  */
 
-include '../../src/init.php';
+include '../src/init.php';
 include "vacanciesDemoDataSet.php";
 if (isset($_POST['applyButton'])) {
   $applyId = $_POST['applyButton'];
@@ -111,13 +111,13 @@ if ($dataInstance[0]['job_type'] == '000000') {
 </head>
 
 <body class="  ">
-<!-- loader Start -->
-<div id="loading">
+  <!-- loader Start -->
+  <div id="loading">
     <div class="loader simple-loader">
       <div class="loader-body"></div>
     </div>
-</div>
-<!-- loader END -->
+  </div>
+  <!-- loader END -->
   <!-- Sidebar Menu Start -->
   <?php include 'alumniSidebar.php' ?>
   </div>

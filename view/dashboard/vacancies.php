@@ -1,8 +1,9 @@
 <?php
 session_start();
-include '../../src/init.php';
+include '../src/init.php';
 include "vacanciesDemoDataSet.php";
 
+$_SESSION['employerPage'] = 'allVacancies';
 
 if (!isset($_GET['page'])) {
   $_SESSION['pagination'] = 1;
