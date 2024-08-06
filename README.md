@@ -1,4 +1,5 @@
 # TODO
+- [ ] manage work experience functionalities 
 - [ ] back end of user settings
 - [ ] Alumni applicant form 
 - [ ] Employer view, view applicants
@@ -17,6 +18,7 @@
 # Done
 - [x] alumni add award
 - [x] alumni edit award
+- [x] alumni delete award
 - [x] updated admin view leaking to other views
 - [x] Admin create user acc
   - [x] not detecting duplicate email bug

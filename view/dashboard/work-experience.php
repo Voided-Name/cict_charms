@@ -1,6 +1,67 @@
 <?php
 session_start();
+include '../src/init.php';
 $_SESSION['alumniPage'] = "workExp";
+
+if (isset($_POST['addExperience'])) {
+  $workName = $strip->strip($_POST['institution-name']);
+  $workPosition = $strip->strip($_POST['position']);
+  $start = $strip->strip($_POST['start-date']);
+  $end = $strip->strip($_POST['end-date']);
+  $description = $strip->strip($_POST['work-exp-description']);
+
+  $test = array(
+    'owner_id' => $_SESSION['userid'],
+    'work_name' => $workName,
+    'work_position' => $workPosition,
+    'date_started' => $start,
+    'date_end' => $end,
+    'work_description' => $description,
+  );
+
+  $addExperienceFunc = $func->insert("alumni_work_experience", array(
+    'owner_id' => $_SESSION['userid'],
+    'work_name' => $workName,
+    'work_position' => $workPosition,
+    'date_started' => $start,
+    'date_end' => $end,
+    'work_description' => $description,
+  ));
+
+  header("Location: work-experience.php");
+}
+
+if (isset($_POST['editWork'])) {
+  $workName = $strip->strip($_POST['work-name']);
+  $workPosition = $strip->strip($_POST['work-position']);
+  $start = $strip->strip($_POST['date-start']);
+  $end = $strip->strip($_POST['date-start']);
+  $description = $strip->strip($_POST['work-description']);
+
+  $editData = array(
+    'work_name' => $workName,
+    'work_position' => $workPosition,
+    'date_started' => $start,
+    'date_end' => $end,
+    'work_description' => $description,
+  );
+
+  $editExperienceFunc = $func->update('alumni_work_experience', 'id', $_POST['editWork'], array(
+    'work_name' => $workName,
+    'work_position' => $workPosition,
+    'date_started' => $start,
+    'date_end' => $end,
+    'work_description' => $description,
+  ));
+
+  header("Location: work-experience.php");
+}
+
+if (isset($_POST['deleteWork'])) {
+  $deleteAwardFunc = $func->delete('alumni_work_experience', array('id', '=', $_POST['deleteWork']));
+
+  header("Location: work-experience.php");
+}
 ?>
 <!doctype html>
 <html lang="en" dir="ltr">
@@ -91,215 +152,86 @@ $_SESSION['alumniPage'] = "workExp";
                           <h5 class="modal-title" id="staticBackdropLabel">Add Experience</h5>
                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div class="modal-body">
-                          <div class="form-group">
-                            <label for="institution-name" class="form-label">Institution Name</label>
-                            <input type="text" class="form-control" id="institution-name" placeholder="">
-                            <label for="position" class="form-label">Position</label>
-                            <input type="text" class="form-control" id="position" placeholder="">
-                            <label for="start-date" class="form-label">Date Start</label>
-                            <input type="date" class="form-control" id="start-date">
-                            <label for="end-date" class="form-label">Date End</label>
-                            <input type="date" class="form-control" id="end-date">
-                            <label for="work-exp-description" class="form-label">Description</label>
-                            <textarea class="form-control" id="work-exp-description"></textarea>
-                          </div>
-                          <div class="text-start">
-                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Save</button>
-                            <button type="button" class="btn btn-danger btn-close" data-bs-dismiss="modal">Cancel</button>
-                          </div>
-                        </div>
+                        <form method="POST">
+                          <div class="modal-body">
+                            <div class="form-group">
+                              <label for="institution-name" class="form-label">Institution/Company Name</label>
+                              <input type="text" class="form-control" id="institution-name" name="institution-name" placeholder="">
+                              <label for="position" class="form-label">Position</label>
+                              <input type="text" class="form-control" id="position" name='position' placeholder="">
+                              <label for="start-date" class="form-label">Date Start</label>
+                              <input type="date" class="form-control" id="start-date" name="start-date">
+                              <label for="end-date" class="form-label">Date End</label>
+                              <input type="date" class="form-control" id="end-date" name="end-date">
+                              <label for="work-exp-description" class="form-label">Description</label>
+                              <textarea class="form-control" id="work-exp-description" name="work-exp-description"></textarea>
+                            </div>
+                            <div class="text-start">
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                              <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" name="addExperience" value="<?php $_SESSION['userid'] ?>">Add</button>
+                            </div>
+                        </form>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="card-body px-0">
-                <div class="table-responsive">
-                  <table id="user-list-table" class="table table-striped" role="grid" data-bs-toggle="data-table">
-                    <thead>
-                      <tr class="ligth">
-                        <th>Institution Name</th>
-                        <th>Position</th>
-                        <th>Date Start</th>
-                        <th>Date End</th>
-                        <th style="min-width: 90px">Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>Acme Corporation</td>
-                        <td>Position</td>
-                        <td>February 1, 2024</td>
-                        <td>Present</td>
-                        <td>
-                          <div class="flex align-items-center list-user-action">
-                            <!-- Edit Button -->
-                            <a class="btn btn-sm btn-icon" data-bs-toggle="modal" data-bs-target="#myModal" data-bs-placement="top" title="Add" href="#">
-                              <div class="bd-example">
-                                <button type="button" class="btn btn-success btn-sm">Edit</button>
-                              </div>
-                            </a>
-
-                            <!-- Modal Structure -->
-                            <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                              <div class="modal-dialog">
-                                <div class="modal-content">
-                                  <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">
-                                      Job Details</h5>
-                                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                      <span aria-hidden="true">&times;</span>
-                                    </button>
-                                  </div>
-                                  <div class="modal-body">
-                                    <form>
-                                      <div class="form-group">
-                                        <label for="position">Position</label>
-                                        <input type="text" class="form-control" id="position" placeholder="Enter position">
-                                      </div>
-                                      <div class="form-group">
-                                        <label for="vacancy">Number of
-                                          Vacancies</label>
-                                        <input type="number" class="form-control" id="vacancy" placeholder="Enter number of vacancies">
-                                      </div>
-                                      <div class="form-group">
-                                        <label for="location">Location</label>
-                                        <input type="text" class="form-control" id="location" placeholder="Enter location">
-                                      </div>
-                                      <div class="form-group">
-                                        <label for="workHours">Work
-                                          Hours</label>
-                                        <input type="text" class="form-control" id="workHours" placeholder="Enter work hours">
-                                      </div>
-                                    </form>
-                                  </div>
-                                  <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-primary" onclick="showEditAlert()">Save
-                                      changes</button>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-
-                            <a class="btn btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" href="#">
-                              <span class="btn-inner">
-                                <div class="bd-example">
-                                  <button type="button" class="btn btn-danger btn-sm" onclick="showDeleteAlert()">Delete</button>
-                                </div>
-                              </span>
-                            </a>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>Gamma Softworks</td>
-                        <td>System Analyst</td>
-                        <td>January 15, 2022</td>
-                        <td>December 10, 2023</td>
-                        <td>
-                          <div class="flex align-items-center list-user-action">
-                            <!-- Edit Button -->
-                            <a class="btn btn-sm btn-icon" data-bs-toggle="modal" data-bs-target="#myModal" data-bs-placement="top" title="Add" href="#">
-                              <div class="bd-example">
-                                <button type="button" class="btn btn-success btn-sm">Edit</button>
-                              </div>
-                            </a>
-
-                            <!-- Modal Structure -->
-                            <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                              <div class="modal-dialog">
-                                <div class="modal-content">
-                                  <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">
-                                      Job Details</h5>
-                                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                      <span aria-hidden="true">&times;</span>
-                                    </button>
-                                  </div>
-                                  <div class="modal-body">
-                                    <form>
-                                      <div class="form-group">
-                                        <label for="position">Position</label>
-                                        <input type="text" class="form-control" id="position" placeholder="Enter position">
-                                      </div>
-                                      <div class="form-group">
-                                        <label for="vacancy">Number of
-                                          Vacancies</label>
-                                        <input type="number" class="form-control" id="vacancy" placeholder="Enter number of vacancies">
-                                      </div>
-                                      <div class="form-group">
-                                        <label for="location">Location</label>
-                                        <input type="text" class="form-control" id="location" placeholder="Enter location">
-                                      </div>
-                                      <div class="form-group">
-                                        <label for="workHours">Work
-                                          Hours</label>
-                                        <input type="text" class="form-control" id="workHours" placeholder="Enter work hours">
-                                      </div>
-                                    </form>
-                                  </div>
-                                  <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-primary" onclick="showEditAlert()">Save
-                                      changes</button>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-
-                            <a class="btn btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" href="#">
-                              <span class="btn-inner">
-                                <div class="bd-example">
-                                  <button type="button" class="btn btn-danger btn-sm" onclick="showDeleteAlert()">Delete</button>
-                                </div>
-                              </span>
-                            </a>
-                          </div>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
+            </div>
+            <div class="card-body px-0">
+              <div class="table-responsive">
+                <table id="user-list-table" class="table table-striped" role="grid" data-bs-toggle="data-table">
+                  <thead>
+                    <tr class="ligth">
+                      <th>Institution Name</th>
+                      <th>Position</th>
+                      <th>Date Start</th>
+                      <th>Date End</th>
+                      <th style="min-width: 90px">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <?php include 'work-experienceRows.php' ?>
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
         </div>
       </div>
+    </div>
 
-      <script>
-        function showDeleteAlert() {
-          Swal.fire({
-            title: 'Deleted!',
-            text: 'The job is successfully deleted.',
-            icon: 'success',
-            confirmButtonText: 'OK'
-          });
-        }
+    <script>
+      function showDeleteAlert() {
+        Swal.fire({
+          title: 'Deleted!',
+          text: 'The job is successfully deleted.',
+          icon: 'success',
+          confirmButtonText: 'OK'
+        });
+      }
 
-        function showEditAlert() {
-          Swal.fire({
-            title: 'Edited!',
-            text: 'The job is successfully edited.',
-            icon: 'success',
-            confirmButtonText: 'OK'
-          });
-        }
-      </script>
+      function showEditAlert() {
+        Swal.fire({
+          title: 'Edited!',
+          text: 'The job is successfully edited.',
+          icon: 'success',
+          confirmButtonText: 'OK'
+        });
+      }
+    </script>
 
-      <script src="../../js/core/libs.min.js"></script>
-      <script src="../../js/core/external.min.js"></script>
-      <script src="../../js/charts/widgetcharts.js"></script>
-      <script src="../../js/charts/vectore-chart.js"></script>
-      <script src="../../js/charts/dashboard.js"></script>
-      <script src="../../js/plugins/fslightbox.js"></script>
-      <script src="../../js/plugins/setting.js"></script>
-      <script src="../../js/plugins/slider-tabs.js"></script>
-      <script src="../../js/plugins/form-wizard.js"></script>
-      <script src="../../js/hope-ui.js" defer></script>
-      <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.2/dist/sweetalert2.min.js"></script>
+    <script src="../../js/core/libs.min.js"></script>
+    <script src="../../js/core/external.min.js"></script>
+    <script src="../../js/charts/widgetcharts.js"></script>
+    <script src="../../js/charts/vectore-chart.js"></script>
+    <script src="../../js/charts/dashboard.js"></script>
+    <script src="../../js/plugins/fslightbox.js"></script>
+    <script src="../../js/plugins/setting.js"></script>
+    <script src="../../js/plugins/slider-tabs.js"></script>
+    <script src="../../js/plugins/form-wizard.js"></script>
+    <script src="../../js/hope-ui.js" defer></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.2/dist/sweetalert2.min.js"></script>
 </body>
 
 </html>
