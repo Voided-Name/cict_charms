@@ -5,8 +5,6 @@
  */
 $alumniAwardsData = $func->selectall_where('alumni_awards', array('alumni_userID', '=', $_SESSION['userid']));
 
-var_dump($alumniAwardsData);
-
 $x = 0;
 foreach ($alumniAwardsData as $alumniAwardInstance) {
 ?>
@@ -54,13 +52,34 @@ foreach ($alumniAwardsData as $alumniAwardInstance) {
           </div>
         </div>
 
-        <a class=" btn btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" href="#">
-          <span class="btn-inner">
-            <div class="bd-example">
-              <button type="button" class="btn btn-danger btn-sm" onclick="showDeleteAlert(event)" name="delete" value="<?php echo $x ?>"> Delete</button>
-            </div>
-          </span>
+        <a class="btn btn-sm btn-icon" data-bs-toggle="modal" data-bs-target="#awardDeleteModal<?php echo $x ?>" data-bs-placement="top" title="Delete" href="#">
+          <div class="bd-example">
+            <button type="button" class="btn btn-danger btn-sm">Delete</button>
+          </div>
         </a>
+
+        <div class="modal fade" id="awardDeleteModal<?php echo $x ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                  Award Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
+              </div>
+              <div class="modal-body">
+                <form method="POST">
+                  <h3>Confirm Award Removal</h3>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-primary" value="<?php echo $alumniAwardInstance['id'] ?>" name="deleteAward">Delete
+                  Award</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </td>
   </tr>

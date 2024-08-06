@@ -39,6 +39,10 @@ if (isset($_POST['editAward'])) {
     'given_by' => $institution,
   ));
 }
+
+if (isset($_POST['deleteAward'])) {
+  $deleteAwardFunc = $func->delete('alumni_awards', array('id', '=', $_POST['deleteAward']));
+}
 ?>
 
 <!doctype html>
@@ -241,6 +245,14 @@ if (isset($_POST['editAward'])) {
       if ($editAwardFunc) {
       ?>
         showEditAlert();
+      <?php
+      }
+      ?>
+
+      <?php
+      if ($deleteAwardFunc) {
+      ?>
+        showDeleteAward();
       <?php
       }
       ?>
