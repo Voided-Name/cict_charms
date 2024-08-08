@@ -48,6 +48,8 @@ if (isset($_POST['saveBtn'])) {
     } else {
       if ($selectUser) {
         if (!($selectUser[0]['id'] == $_SESSION['userid'])) {
+          $debug = $selectUser[0]['id'];
+          $debug2 = $_SESSION['userid'];
           $emailErrExists = true;
         }
       } else {

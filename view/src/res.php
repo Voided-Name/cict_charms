@@ -759,6 +759,40 @@ class res
     }
   }
 
+  function selectleftjoin4($table, $table2, $table3, $table4, $ref, $ref2, $ref3, $ref4, $ref5, $ref6, $tableref, $where = array())
+  {
+    global $con;
+
+    if (count($where) === 3) {
+      $operators = array('=', '>', '<', '>=', '<=');
+
+      $field    = $where[0];
+      $operator   = $where[1];
+      $value     = $where[2];
+
+      if (in_array($operator, $operators)) {
+        $sql = "SELECT * FROM {$table} LEFT JOIN {$table2} ON {$table}.{$ref}={$table2}.{$ref2} LEFT JOIN {$table3} ON {$table2}.{$ref3}={$table3}.{$ref4} LEFT JOIN {$table4} ON {$table3}.{$ref5}={$table4}.{$ref6} WHERE {$tableref}.{$field} {$operator} '{$value}'";
+
+        return $sql;
+
+        $qry = $con->query($sql);
+
+        $rowcount = mysqli_num_rows($qry);
+
+
+        if ($rowcount != 0) {
+          for ($x = 1; $x <= $rowcount; $x++) {
+            $row = mysqli_fetch_assoc($qry);
+            $list[] = $row;
+          }
+          return $list;
+        }
+        return $sql;
+      }
+    }
+  }
+
+
   function selectLeftjoin3_where2_orderby($table, $table2, $table3, $ref, $ref2, $ref3, $ref4, $tableref, $tableref2, $where = array(), $logic, $where2 = array(), $tableorder, $col, $sortorder)
   {
     global $con;
@@ -791,7 +825,7 @@ class res
           }
           return $list;
         }
-        return $sql;
+        return $null;
       }
     }
   }

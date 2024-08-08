@@ -57,7 +57,6 @@ function deleteAction($id, $func, $reason)
 
 
   //  echo '<script>alert("'.$reason.'");</script>';
-
   //    echo '<script>alert("'.$id.'");</script>';
 
 

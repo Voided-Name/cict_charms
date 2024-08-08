@@ -108,7 +108,7 @@ if (sizeof($data) == 6) {
           </div>
         </div>
         <div class="iq-header-img">
-          <img src="../assets/images/dashboard/top-header.png" alt="header" class="theme-color-default-img img-fluid w-100 h-100 animated-scaleX">
+          <img src="../../img/dashboard/top-header.png" alt="header" class="theme-color-default-img img-fluid w-100 h-100 animated-scaleX">
         </div>
       </div>
       <!-- Nav Header Component End -->

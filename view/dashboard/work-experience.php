@@ -193,6 +193,11 @@ if (isset($_POST['deleteWork'])) {
                     <?php include 'work-experienceRows.php' ?>
                   </tbody>
                 </table>
+                <div class="container">
+                  <form method="GET" action="generate-pdf.php">
+                    <button type="submit" class="btn btn-primary">Generate PDF</button>
+                  </form>
+                </div>
               </div>
             </div>
           </div>
