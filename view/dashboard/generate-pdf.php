@@ -12,9 +12,16 @@ include '../src/init.php';
  * @var res $func
  */
 
-$alumniData = $func->selectleftjoin4('userdetails', 'alumni_awards', 'alumni_graduated_course', 'alumni_work_experience', 'user_id', 'alumni_userID', 'alumni_userID', 'user_id', 'user_id', 'owner_id', 'userdetails', array('user_id', '=', $_SESSION['userid']));
+$alumniDetails = $func->select_one('userdetails', array('user_id', '=', $_SESSION['userid']));
+$alumniCourseDetails = $func->select_one('alumni_graduated_course', array('user_id', '=', $_SESSION['userid']));
+$alumniAwards = $func->select_one('alumni_awards', array('alumni_userID', '=', $_SESSION['userid']));
+$alumniWorkExperience = $func->select_one('alumni_work_experience', array('owner_id', '=', $_SESSION['userid']));
 
-var_dump($alumniData);
+$alumniAwardIDs = array();
+$alumniAwardIDs = $_POST['awardCheckbox'];
+
+$alumniWorkIDs = array();
+$alumniWorkIDs = $_POST['experienceCheckbox'];
 
 // Create instance of FPDF class
 $pdf = new FPDF();
@@ -40,61 +47,63 @@ $pdf->Line($leftMargin, $lineY, $pageWidth - $rightMargin, $lineY);
 $pdf->Ln(10);
 
 // name
-$name = $alumniData[0]['last_name'] . ', ' . $alumniData[0]['first_name'] . ' ' . $alumniData[0]['middle_name'];
+$name = $alumniDetails[0]['last_name'] . ', ' . $alumniDetails[0]['first_name'] . ' ' . $alumniDetails[0]['middle_name'];
 $pdf->SetFont('Courier', 'B', 11);
-$pdf->Cell(15, 0, "Name: ", 0, 0, 'L', false);
+$pdf->Cell(20, 0, "Name: ", 0, 0, 'L', false);
 $pdf->SetFont('Courier', '', 11);
 $pdf->Cell($cellWidth, 0, $name, 0, 2, 'L', false);
 $pdf->SetFont('Courier', 'B', 16);
 $pdf->Ln(5);
 
 // details
-$email = $alumniData[0]['email_address'];
+$email = $alumniDetails[0]['email_address'];
 $pdf->SetFont('Courier', 'B', 11);
-$pdf->Cell(15, 0, "Email: ", 0, 0, 'L', false);
+$pdf->Cell(20, 0, "Email: ", 0, 0, 'L', false);
 $pdf->SetFont('Courier', '', 11);
 $pdf->Cell($cellWidth, 0, $email, 0, 2, 'L', false);
 $pdf->SetFont('Courier', 'B', 16);
-$pdf->Ln(10);
+$pdf->Ln(5);
 
 // Course Information
-$courseBuffer = $func->select_one('courses', array('courseID', '=', $alumniData[0]['course_id']));
-//$course = $courseBuffer[0]['courseAcronym'];
+$courseBuffer = $func->select_one('courses', array('courseID', '=', $alumniCourseDetails[0]['course_id']));
+$course = $courseBuffer[0]['courseName'];
 
 
 $pdf->SetFont('Courier', 'B', 11);
-$pdf->Cell(15, 0, "Program: ", 0, 0, 'L', false);
+$pdf->Cell(20, 0, "Program: ", 0, 0, 'L', false);
 $pdf->SetFont('Courier', '', 11);
-$pdf->Cell($cellWidth, 0, $courseBuffer, 0, 2, 'L', false);
+$pdf->Cell($cellWidth, 0, $course, 0, 2, 'L', false);
 $pdf->SetFont('Courier', 'B', 16);
 $pdf->Ln(5);
 
-$majorBuffer = $func->select_one('coursesMajor', array('id', '=', $alumniData[0]['major_id']));
+$majorBuffer = $func->select_one('coursesMajor', array('id', '=', $alumniCourseDetails[0]['major_id']));
 $major = $majorBuffer[0]['majorName'];
 
-$pdf->SetFont('Courier', 'B', 11);
-$pdf->Cell(15, 0, "Major: ", 0, 0, 'L', false);
-$pdf->SetFont('Courier', '', 11);
-$pdf->Cell($cellWidth, 0, $major, 0, 2, 'L', false);
-$pdf->SetFont('Courier', 'B', 16);
-$pdf->Ln(5);
+if ($major) {
+  $pdf->SetFont('Courier', 'B', 11);
+  $pdf->Cell(20, 0, "Major: ", 0, 0, 'L', false);
+  $pdf->SetFont('Courier', '', 11);
+  $pdf->Cell($cellWidth, 0, $major, 0, 2, 'L', false);
+  $pdf->SetFont('Courier', 'B', 16);
+  $pdf->Ln(5);
+}
 
-$campusBuffer = $func->select_one('campuses', array('campusID', '=', $alumniData[0]['campus']));
+$campusBuffer = $func->select_one('campuses', array('campusID', '=', $alumniCourseDetails[0]['campus']));
 $campus = $campusBuffer[0]['campusName'];
 
 $pdf->SetFont('Courier', 'B', 11);
-$pdf->Cell(15, 0, "Campus: ", 0, 0, 'L', false);
+$pdf->Cell(20, 0, "Campus: ", 0, 0, 'L', false);
 $pdf->SetFont('Courier', '', 11);
 $pdf->Cell($cellWidth, 0, $campus, 0, 2, 'L', false);
 $pdf->SetFont('Courier', 'B', 16);
 $pdf->Ln(5);
 
-$yearStarted = $alumniData[0]['year_started'];
-$yearGraduated = $alumniData[0]['year_graduated'];
+$yearStarted = $alumniCourseDetails[0]['year_started'];
+$yearGraduated = $alumniCourseDetails[0]['year_graduated'];
 $yearDuration = $yearStarted . ' - ' . $yearGraduated;
 
 $pdf->SetFont('Courier', 'B', 11);
-$pdf->Cell(15, 0, "Year: ", 0, 0, 'L', false);
+$pdf->Cell(20, 0, "Year: ", 0, 0, 'L', false);
 $pdf->SetFont('Courier', '', 11);
 $pdf->Cell($cellWidth, 0, $yearDuration, 0, 2, 'L', false);
 $pdf->SetFont('Courier', 'B', 16);
@@ -105,10 +114,61 @@ $lineY = $pdf->GetY() + 5;
 $pdf->Line($leftMargin, $lineY, $pageWidth - $rightMargin, $lineY);
 $pdf->Ln(10);
 
+if ($alumniWorkExperience) {
+  foreach ($alumniWorkExperience as $alumniExperienceInstance) {
+    if (in_array($alumniExperienceInstance['id'], $alumniWorkIDs)) {
+      $pdf->SetFont('Courier', 'B', 11);
+      $pdf->Cell(25, 0, "Position: ", 0, 0, 'L', false);
+      $pdf->Cell($cellWidth, 0, $alumniExperienceInstance['work_position'], 0, 2, 'L', false);
+      $pdf->Ln(5);
+
+      $pdf->SetFont('Courier', '', 11);
+      $pdf->Cell(25, 0, "Company: ", 0, 0, 'L', false);
+      $pdf->Cell($cellWidth, 0, $alumniExperienceInstance['work_name'], 0, 2, 'L', false);
+      $pdf->Ln(5);
+
+      $pdf->SetFont('Courier', '', 11);
+      $pdf->Cell(25, 0, "Duration: ", 0, 0, 'L', false);
+      $pdf->Cell($cellWidth, 0, (date("F j, Y", strtotime($alumniExperienceInstance['date_started'])) . ' - ' . (date("F j, Y", strtotime($alumniExperienceInstance['date_end'])))), 0, 2, 'L', false);
+      $pdf->Ln(2);
+
+      $pdf->SetFont('Courier', '', 11);
+      $pdf->MultiCell(0, 5, "Description: " . $alumniExperienceInstance['work_description'], 0, 'L', false);
+      $pdf->Ln(5);
+    }
+  }
+}
+
+$pdf->SetFont('Courier', 'B', 16);
 $pdf->Cell($cellWidth, 0, 'Awards', 0, 2, 'C', false);
 $lineY = $pdf->GetY() + 5;
 $pdf->Line($leftMargin, $lineY, $pageWidth - $rightMargin, $lineY);
 $pdf->Ln(10);
 
+if ($alumniAwards) {
+  foreach ($alumniAwards as $alumniAwardsInstance) {
+    if (in_array($alumniAwardsInstance['id'], $alumniAwardIDs)) {
+      $pdf->SetFont('Courier', 'B', 11);
+      $pdf->Cell(25, 0, "Award: ", 0, 0, 'L', false);
+      $pdf->Cell($cellWidth, 0, $alumniAwardsInstance['award_name'], 0, 2, 'L', false);
+      $pdf->Ln(5);
+
+      $pdf->SetFont('Courier', '', 11);
+      $pdf->Cell(25, 0, "Given By: ", 0, 0, 'L', false);
+      $pdf->Cell($cellWidth, 0, $alumniAwardsInstance['given_by'], 0, 2, 'L', false);
+      $pdf->Ln(5);
+
+      $pdf->SetFont('Courier', '', 11);
+      $pdf->Cell(25, 0, "Date: ", 0, 0, 'L', false);
+      $pdf->Cell($cellWidth, 0, (date("F j, Y", strtotime($alumniAwardsInstance['award_date']))), 0, 2, 'L', false);
+      $pdf->Ln(2);
+
+      $pdf->SetFont('Courier', '', 11);
+      $pdf->MultiCell(0, 5, "Description: " . $alumniAwardsInstance['award_description'], 0, 'L', false);
+      $pdf->Ln(5);
+    }
+  }
+}
+
 // Output the PDF
-//$pdf->Output();
+$pdf->Output();

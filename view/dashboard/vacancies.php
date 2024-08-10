@@ -31,7 +31,36 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
   }
 }
 
-$data = $func->selectall_join3_offset_limit('employer_job_posts', 'employer_users', 'companies', 'author_id', 'user_id', 'company_id', 'id',  $_SESSION['paginationNum'] * 5, 6);
+
+if (isset($_POST['applyFilters'])) {
+  $filterData = array($_POST['locationCheckboxes'], $_POST['jobTypeCheckboxes'], $_POST['radioShift'], $_POST['radioEducation']);
+
+
+  $locationFilters = array('', '', '', '');
+  $jobTypeFilters = array();
+  $shiftFilter = array();
+  $educFilter = array();
+
+  if ($filterData[0]) {
+    if (in_array('regionCheckVal', $filterData[0])) {
+      $locationFilters[0] = $_POST['regions'];
+    }
+    if (in_array('provinceCheckVal', $filterData[0])) {
+      $locationFilters[1] = $_POST['provinces'];
+    }
+    if (in_array('municipalityCheckVal', $filterData[0])) {
+      $locationFilters[2] = $_POST['municipalities'];
+    }
+    if (in_array('municipalityCheckVal', $filterData[0])) {
+      $locationFilters[3] = $_POST['barangays'];
+    }
+  }
+
+  $_SESSION['locationFilters'] = $locationFilters;
+}
+
+$data = $func->vacancy_filters('employer_job_posts', 'employer_users', 'companies', 'author_id', 'user_id', 'company_id', 'id', $_SESSION['paginationNum'] * 5, 6, $_SESSION['locationFilters']);
+$dataCount = $func->selectall('employer_job_posts');
 
 $_SESSION['alumniPage'] = "vacancies";
 
@@ -58,6 +87,7 @@ if (sizeof($data) == 6) {
   <link rel="stylesheet" href="../../css/theme_1/rtl.min.css">
   <link rel="stylesheet" href="../../css/theme_1/customizer.min.css">
   <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.2/dist/sweetalert2.min.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
   <style>
     .jobListItem {
@@ -123,55 +153,146 @@ if (sizeof($data) == 6) {
                   <div class="col-12 col-lg-3 container">
                     <h3 class="text-primary">Filter Jobs</h3>
                     <div class="container border border-dark-subtle rounded p-3">
-                      <label for="" class="form-label">
-                        <h3>Job Category</h3>
-                      </label>
-                      <select id="" class="form-select">
-                        <option value="1">All Category</option>
-                        <option value="2">Category 1</option>
-                        <option value="3">Category 2</option>
-                      </select>
-                      <hr>
-                      <h3>Job Type</h3>
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="">
-                        <label class="form-check-label" for="">
-                          Full Time
-                        </label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="">
-                        <label class="form-check-label" for="">
-                          Part Time
-                        </label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="">
-                        <label class="form-check-label" for="">
-                          Remote
-                        </label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="">
-                        <label class="form-check-label" for="">
-                          Freelance
-                        </label>
-                      </div>
-                      <hr>
-                      <label for="" class="form-label">
-                        <h3>Job Location</h3>
-                      </label>
-                      <select id="" class="form-select">
-                        <option value="1">Anywhere</option>
-                        <option value="2">Category 1</option>
-                        <option value="3">Category 2</option>
-                      </select>
+                      <form method="POST">
+                        <div class="row mb-2">
+                          <div class="col-12">
+                            <button type="submit" class="btn btn-primary" name="applyFilters">Apply Filters</button>
+                          </div>
+                          <div class="col-12">
+                            <legend>Location of Deployment</legend>
+                          </div>
+                          <div class="col-12">
+                            <ul class="list-group">
+                              <li class="list-group-item">
+                                <input class="form-check-input me-1" type="checkbox" value="regionCheckVal" id="regionCheckbox" name="locationCheckboxes[]">
+                                <label class="form-check-label" for="regionCheckbox">Region</label>
+                              </li>
+                              <li class="list-group-item">
+                                <input class="form-check-input me-1" type="checkbox" value="provinceCheckVal" id="provinceCheckbox" name="locationCheckboxes[]">
+                                <label class="form-check-label" for="provinceCheckbox">Province</label>
+                              </li>
+                              <li class="list-group-item">
+                                <input class="form-check-input me-1" type="checkbox" value="municipalityCheckVal" id="municipalityCheckbox" name="locationCheckboxes[]">
+                                <label class="form-check-label" for="municipalityCheckbox">Municipality</label>
+                              </li>
+                              <li class="list-group-item">
+                                <input class="form-check-input me-1" type="checkbox" value="barangayCheckVal" id="barangayCheckbox" name="locationCheckboxes[]">
+                                <label class="form-check-label" for="barangayCheckbox">Barangay</label>
+                              </li>
+                            </ul>
+                          </div>
+                          <div class="col-12">
+                            <select class="form-select " id="regions" disabled style="display:none" name="regions">
+                              <option selected="" disabled>Region</option>
+                            </select>
+                            <select class="form-select " id="provinces" disabled style="display:none" name="provinces">
+                              <option selected="" disabled>Province</option>
+                            </select>
+                            <select class="form-select " id="municipalities" disabled style="display:none" name="municipalities">
+                              <option selected="" disabled>Municipality</option>
+                            </select>
+                            <select class="form-select " id="barangays" disabled style="display:none" name="barangays">
+                              <option selected="" disabled>Barangay</option>
+                            </select>
+                          </div>
+                        </div>
+                        <hr class="border border-1 border-primary opacity-25">
+                        <div class="row mb-2">
+                          <div class="col-12">
+                            <legend>Job Type</legend>
+                          </div>
+                          <div class="col-12">
+                            <ul class="list-group">
+                              <li class="list-group-item">
+                                <input class="form-check-input me-1" type="checkbox" value="fullTime" id="fullTimeBtn" name="jobTypeCheckboxes[]">
+                                <label class="form-check-label" for="">Full-Time</label>
+                              </li>
+                              <li class="list-group-item">
+                                <input class="form-check-input me-1" type="checkbox" value="partTime" id="partTimeBtn" name="jobTypeCheckboxes[]">
+                                <label class="form-check-label" for="">Part-Time</label>
+                              </li>
+                              <li class="list-group-item">
+                                <input class="form-check-input me-1" type="checkbox" value="contract" id="contractBtn" name="jobTypeCheckboxes[]">
+                                <label class="form-check-label" for="">Contract</label>
+                              </li>
+                              <li class="list-group-item">
+                                <input class="form-check-input me-1" type="checkbox" value="temporary" id="temporaryBtn" name="jobTypeCheckboxes[]">
+                                <label class="form-check-label" for="">Temporary</label>
+                              </li>
+                              <li class="list-group-item">
+                                <input class="form-check-input me-1" type="checkbox" value="remote" id="remoteBtn" name="jobTypeCheckboxes[]">
+                                <label class="form-check-label" for="">Remote</label>
+                              </li>
+                              <li class="list-group-item">
+                                <input class="form-check-input me-1" type="checkbox" value="freelance" id="freelanceBtn" name="jobTypeCheckboxes[]">
+                                <label class="form-check-label" for="">Freelance</label>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                        <hr class="border border-1 border-primary opacity-25">
+                        <div class="row mb-2">
+                          <div class="col-12">
+                            <legend>Shift</legend>
+                          </div>
+                          <div class="col-12">
+                            <ul class="list-group">
+                              <li class="list-group-item">
+                                <input class="form-check-input me-1" type="radio" name="radioShift" value="1" id="morningRadio">
+                                <label class="form-check-label" for="">Morning</label>
+                              </li>
+                              <li class="list-group-item">
+                                <input class="form-check-input me-1" type="radio" name="radioShift" value="2" id="eveningRadio">
+                                <label class="form-check-label" for="">Evening</label>
+                              </li>
+                              <li class="list-group-item">
+                                <input class="form-check-input me-1" type="radio" name="radioShift" value="3" id="nightRadio">
+                                <label class="form-check-label" for="">Night</label>
+                              </li>
+                              <li class="list-group-item">
+                                <input class="form-check-input me-1" type="radio" name="radioShift" value="4" id="rotatingShift">
+                                <label class="form-check-label" for="">Rotating</label>
+                              </li>
+                              <li class="list-group-item">
+                                <input class="form-check-input me-1" type="radio" name="radioShift" value="5" id="flexibleShit">
+                                <label class="form-check-label" for="">Flexible</label>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                        <hr class="border border-1 border-primary opacity-25">
+                        <div class="row mb-2">
+                          <div class="col-12">
+                            <legend>Education</legend>
+                          </div>
+                          <div class="col-12">
+                            <ul class="list-group">
+                              <li class="list-group-item">
+                                <input class="form-check-input me-1" type="radio" name="radioEducation" value="1" id="highSchoolRadio">
+                                <label class="form-check-label" for="">High School Diploma</label>
+                              </li>
+                              <li class="list-group-item">
+                                <input class="form-check-input me-1" type="radio" name="radioEducation" value="2" id="bachelorRadio">
+                                <label class="form-check-label" for="">Bachelor's Degree</label>
+                              </li>
+                              <li class="list-group-item">
+                                <input class="form-check-input me-1" type="radio" name="radioEducation" value="3" id="masterRadio">
+                                <label class="form-check-label" for="">Master's Degree</label>
+                              </li>
+                              <li class="list-group-item">
+                                <input class="form-check-input me-1" type="radio" name="radioEducation" value="4" id="phdRadio">
+                                <label class="form-check-label" for="">PhD</label>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </form>
                     </div>
                   </div>
                   <div class="col-12 col-lg-9 container ">
                     <div class="container row justify-content-between">
                       <div class="container col-4 m-0">
-                        <h5>XX, XXX Jobs Found</h4>
+                        <h5><?php echo count($dataCount) ?> Jobs Found</h4>
                       </div>
                       <div class="container row col-4 m-0">
                         <h5 class="col">Sort By</h5>
@@ -183,7 +304,8 @@ if (sizeof($data) == 6) {
                       </div>
                     </div>
                     <?php
-                    //var_dump($data);
+                    //var_dump($locationFilters);
+                    var_dump($data);
                     //var_dump($_SESSION['paginationNum']);
                     ?>
                     <?php include "vacanciesCard.php" ?>
@@ -214,6 +336,243 @@ if (sizeof($data) == 6) {
             confirmButtonText: 'OK'
           });
         }
+
+        let regionCheckbox = document.getElementById("regionCheckbox");
+        let provinceCheckbox = document.getElementById("provinceCheckbox");
+        let municipalityCheckbox = document.getElementById("municipalityCheckbox");
+        let barangayCheckbox = document.getElementById("barangayCheckbox");
+
+        let fullTimeBtn = document.getElementById("fullTimeBtn");
+        let partTimeBtn = document.getElementById("partTimeBtn");
+        let contractBtn = document.getElementById("contractBtn");
+        let temporaryBtn = document.getElementById("temporaryBtn");
+        let remoteBtn = document.getElementById("remoteBtn");
+        let freelanceBtn = document.getElementById("freelanceBtn");
+
+
+        regionCheckbox.addEventListener('change', function() {
+          if (regionCheckbox.checked) {
+            document.getElementById('regions').disabled = false;
+
+            document.getElementById('regions').style.display = "block";
+
+          } else {
+            document.getElementById('regions').disabled = true;
+            document.getElementById('provinces').disabled = true;
+            document.getElementById('municipalities').disabled = true;
+            document.getElementById('barangays').disabled = true;
+
+            document.getElementById('regions').style.display = "none";
+            document.getElementById('provinces').style.display = "none";
+            document.getElementById('municipalities').style.display = "none";
+            document.getElementById('barangays').style.display = "none";
+
+            document.getElementById('provinceCheckbox').checked = false;
+            document.getElementById('municipalityCheckbox').checked = false;
+            document.getElementById('barangayCheckbox').checked = false;
+          }
+        })
+
+        provinceCheckbox.addEventListener('change', function() {
+          if (provinceCheckbox.checked) {
+            document.getElementById('provinces').disabled = false;
+            document.getElementById('regions').disabled = false;
+
+            document.getElementById('provinces').style.display = "block";
+            document.getElementById('regions').style.display = "block";
+
+            document.getElementById('regionCheckbox').checked = true;
+          } else {
+            document.getElementById('provinces').disabled = true;
+            document.getElementById('municipalities').disabled = true;
+            document.getElementById('barangays').disabled = true;
+
+            document.getElementById('provinces').style.display = "none";
+            document.getElementById('municipalities').style.display = "none";
+            document.getElementById('barangays').style.display = "none";
+
+            document.getElementById('municipalityCheckbox').checked = false;
+            document.getElementById('barangayCheckbox').checked = false;
+          }
+        })
+
+        municipalityCheckbox.addEventListener('change', function() {
+          if (municipalityCheckbox.checked) {
+            document.getElementById('provinces').disabled = false;
+            document.getElementById('regions').disabled = false;
+            document.getElementById('municipalities').disabled = false;
+
+            document.getElementById('provinces').style.display = "block";
+            document.getElementById('regions').style.display = "block";
+            document.getElementById('municipalities').style.display = "block";
+
+            document.getElementById('regionCheckbox').checked = true;
+            document.getElementById('provinceCheckbox').checked = true;
+          } else {
+            document.getElementById('municipalities').disabled = true;
+            document.getElementById('barangays').disabled = true;
+
+            document.getElementById('municipalities').style.display = "none";
+            document.getElementById('barangays').style.display = "none";
+
+            document.getElementById('barangayCheckbox').checked = false;
+          }
+        })
+
+        barangayCheckbox.addEventListener('change', function() {
+          if (barangayCheckbox.checked) {
+            document.getElementById('provinces').disabled = false;
+            document.getElementById('regions').disabled = false;
+            document.getElementById('municipalities').disabled = false;
+            document.getElementById('barangays').disabled = false;
+
+            document.getElementById('provinces').style.display = "block";
+            document.getElementById('regions').style.display = "block";
+            document.getElementById('municipalities').style.display = "block";
+            document.getElementById('barangays').style.display = "block";
+
+            document.getElementById('regionCheckbox').checked = true;
+            document.getElementById('provinceCheckbox').checked = true;
+            document.getElementById('municipalityCheckbox').checked = true;
+          } else {
+            document.getElementById('barangays').style.display = "none";
+
+            document.getElementById('barangays').disabled = true;
+          }
+        })
+
+        fullTimeBtn.addEventListener('change', function() {
+          if (fullTimeBtn.checked) {
+            partTimeBtn.disabled = true;
+            freelanceBtn.disabled = true;
+            temporaryBtn.disabled = true;
+            contractBtn.disabled = true;
+          } else {
+            partTimeBtn.disabled = false;
+            freelanceBtn.disabled = false;
+            temporaryBtn.disabled = false;
+            contractBtn.disabled = false;
+          }
+        })
+
+        partTimeBtn.addEventListener('change', function() {
+          if (partTimeBtn.checked) {
+            fullTimeBtn.disabled = true;
+            freelanceBtn.disabled = true;
+            temporaryBtn.disabled = true;
+            contractBtn.disabled = true;
+          } else {
+            fullTimeBtn.disabled = false;
+            freelanceBtn.disabled = false;
+            temporaryBtn.disabled = false;
+            contractBtn.disabled = false;
+          }
+        })
+
+        contractBtn.addEventListener('change', function() {
+          if (contractBtn.checked) {
+            fullTimeBtn.disabled = true;
+            partTimeBtn.disabled = true;
+          } else {
+            if (!temporaryBtn.checked && !freelanceBtn.checked) {
+              fullTimeBtn.disabled = false;
+              partTimeBtn.disabled = false;
+            }
+          }
+        })
+
+        temporaryBtn.addEventListener('change', function() {
+          if (temporaryBtn.checked) {
+            fullTimeBtn.disabled = true;
+            partTimeBtn.disabled = true;
+          } else {
+            if (!contractBtn.checked && !freelanceBtn.checked) {
+              fullTimeBtn.disabled = false;
+              partTimeBtn.disabled = false;
+            }
+          }
+        })
+
+        freelanceBtn.addEventListener('change', function() {
+          if (freelanceBtn.checked) {
+            fullTimeBtn.disabled = true;
+            partTimeBtn.disabled = true;
+          } else {
+            if (!contractBtn.checked && !temporaryBtn.checked) {
+              fullTimeBtn.disabled = false;
+              partTimeBtn.disabled = false;
+            }
+          }
+        })
+
+        $(document).ready(function() {
+          $.getJSON("../locations.json", function(result) {
+            $.each(result, function(i, field) {
+              $('#regions').append(`<option value="${i}">
+                                       ${field.region_name}
+                                  </option>`);
+            });
+            //getProvinces($("#regions").val());
+            //getMunicipality($("#regions").val(), $("provinces").val());
+            //getBarangay($("#regions").val(), $("#provinces").val(), $("#municipalities").val());
+          });
+
+          $("#regions").change(function() {
+            $('#provinces').empty();
+            $('#municipalities').empty();
+            $('#barangays').empty();
+            getProvinces($("#regions").val());
+          });
+
+          function getProvinces(region_name) {
+            $.getJSON("../locations.json", function(result) {
+              $.each(result[region_name].province_list, function(key, value) {
+                $('#provinces').append(`<option value="${key}">
+                                       ${key}
+                                  </option>`);
+              });
+              getMunicipality($("#regions").val(), $("#provinces").val());
+            });
+          }
+
+          $("#provinces").change(function() {
+            $('#municipalities').empty();
+            $('#barangays').empty();
+            getMunicipality($("#regions").val(), $("#provinces").val());
+          });
+
+          function getMunicipality(region_name, province_name) {
+            $.getJSON("../locations.json", function(result) {
+              // console.log(result[region_name].province_list[province_name]);
+              $.each(result[region_name].province_list[province_name].municipality_list, function(key, value) {
+                // console.log(key);
+                $('#municipalities').append(`<option value="${key}">
+                                       ${key}
+                                  </option>`);
+              });
+              getBarangay($("#regions").val(), $("#provinces").val(), $("#municipalities").val());
+            });
+          }
+
+          $("#municipalities").change(function() {
+
+            $('#barangays').empty();
+            getBarangay($("#regions").val(), $("#provinces").val(), $("#municipalities").val());
+          });
+
+          function getBarangay(region_name, province_name, municipality_name) {
+            $.getJSON("../locations.json", function(result) {
+              // console.log(result[region_name].province_list[province_name].municipality_list[municipality_name].barangay_list);
+              $.each(result[region_name].province_list[province_name].municipality_list[municipality_name].barangay_list, function(key, value) {
+                // console.log(key);
+                $('#barangays').append(`<option value="${value}">
+                                       ${value}
+                                  </option>`);
+              });
+            });
+          }
+
+        });
       </script>
 
       <script src="../../js/core/libs.min.js"></script>
@@ -226,7 +585,6 @@ if (sizeof($data) == 6) {
       <script src="../../js/plugins/slider-tabs.js"></script>
       <script src="../../js/plugins/form-wizard.js"></script>
       <script src="../../js/hope-ui.js" defer></script>
-      <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.2/dist/sweetalert2.min.js"></script>
 
 

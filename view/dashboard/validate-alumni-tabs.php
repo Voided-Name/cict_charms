@@ -58,7 +58,7 @@ $major0 = '';
 <div class="card-header d-flex justify-content-between">
   <div class="header-title">
     <h4 class="card-title">Validate Alumni Account</h4>
-    <p><?php //var_dump($alumniUnverified) 
+    <p><?php //var_dump($alumniUnverified)
         ?></p>
   </div>
 </div>

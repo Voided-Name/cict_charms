@@ -38,4 +38,5 @@ foreach ($data as $dataInstance) {
     </div>
   </div>
 <?php
+  $index++;
 } ?>

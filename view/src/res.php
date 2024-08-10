@@ -1543,11 +1543,79 @@ class res
     return $list;
   }
 
+  function selectall_join3($table1, $table2, $table3, $ref1, $ref2, $ref3, $ref4)
+  {
+    global $con;
+    $list = array();
+    $sql = "SELECT * FROM {$table1} LEFT JOIN {$table2} ON {$table1}.{$ref1} = {$table2}.{$ref2} LEFT JOIN {$table3} ON {$table2}.{$ref3} = {$table3}.{$ref4}";
+
+
+    $qry = $con->query($sql);
+    while ($row = mysqli_fetch_assoc($qry)) {
+      $list[] = $row;
+    }
+    return $list;
+  }
+
   function selectall_join3_offset_limit($table1, $table2, $table3, $ref1, $ref2, $ref3, $ref4, $offset, $limit)
   {
     global $con;
     $list = array();
     $sql = "SELECT * FROM {$table1} LEFT JOIN {$table2} ON {$table1}.{$ref1} = {$table2}.{$ref2} LEFT JOIN {$table3} ON {$table2}.{$ref3} = {$table3}.{$ref4} LIMIT {$limit} OFFSET {$offset}";
+
+
+    $qry = $con->query($sql);
+    while ($row = mysqli_fetch_assoc($qry)) {
+      $list[] = $row;
+    }
+    return $list;
+  }
+
+  function vacancy_filters($table1, $table2, $table3, $ref1, $ref2, $ref3, $ref4, $offset, $limit, $locationFilters = array())
+  {
+    global $con;
+    $list = array();
+
+    $locationFiltersSql = "";
+
+    $args = 0;
+    if ($locationFilters) {
+      if ($locationFilters[0] != '') {
+        if ($args == 0) {
+          $locationFiltersSql .= " employer_job_posts.job_region = " . $locationFilters[0];
+          $args = 1;
+        } else {
+          $locationFiltersSql .= " AND employer_job_posts.job_region = " . $locationFilters[0];
+        }
+      }
+      if ($locationFilters[1] != '') {
+        if ($args == 0) {
+          $locationFiltersSql .= " employer_job_posts.job_province= '" . $locationFilters[1] . "'";
+          $args = 1;
+        }
+        $locationFiltersSql .= " AND employer_job_posts.job_province= '" . $locationFilters[1] . "'";
+      }
+      if ($locationFilters[2] != '') {
+        if ($args == 0) {
+          $locationFiltersSql .= " employer_job_posts.job_municipality= '" . $locationFilters[2] . "'";
+          $args = 1;
+        } else {
+          $locationFiltersSql .= " AND employer_job_posts.job_municipality = '" . $locationFilters[2] . "'";
+        }
+      }
+      if ($locationFilters[3] != '') {
+        if ($args == 0) {
+          $locationFiltersSql .= " employer_job_posts.job_barangay = '" . $locationFilters[3] . "'";
+          $args = 1;
+        }
+        $locationFiltersSql .= " AND employer_job_posts.job_barangay = '" . $locationFilters[3] . "'";
+      }
+    }
+
+
+    $sql = "SELECT * FROM {$table1} LEFT JOIN {$table2} ON {$table1}.{$ref1} = {$table2}.{$ref2} LEFT JOIN {$table3} ON {$table2}.{$ref3} = {$table3}.{$ref4} WHERE {$locationFiltersSql} LIMIT {$limit} OFFSET {$offset} ";
+
+    return $sql;
 
 
     $qry = $con->query($sql);
