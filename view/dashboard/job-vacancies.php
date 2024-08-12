@@ -15,14 +15,17 @@ $_SESSION['employerPage'] = "jobVacancies";
 if (!$_SESSION['userid']) {
   session_destroy();
   header('location:../../login.php');
+  exit();
 }
+
 if (isset($_POST['editBtnVal'])) {
   $edit = true;
 }
-if (isset($_POST['deleteVacancyBtn'])) {
-  $delete = true;
 
+if (isset($_POST['deleteVacancyBtn'])) {
   $deleteVacancySql = $func->delete('employer_job_posts', array('post_id', '=', $_POST['deleteVacancyBtn']));
+  header("Location: job-vacancies.php?delete=true");
+  exit();
 }
 
 if (isset($_POST['editSaveBtn'])) {
@@ -155,6 +158,8 @@ if (isset($_POST['editSaveBtn'])) {
 				echo "failed";
 			}
 		*/
+  header("Location: job-vacancies.php?save=true");
+  exit();
 }
 
 $regionInformation = array();
@@ -187,6 +192,7 @@ $vacanciesData = $func->selectall_where('employer_job_posts', array('author_id',
   <title>CICT CHARM</title>
 
   <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.2/dist/sweetalert2.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.2/dist/sweetalert2.min.js"></script>
   <link rel="shortcut icon" href="../../img/favicon.ico">
   <link rel="stylesheet" href="../../css/theme_1/core/libs.min.css">
   <link rel="stylesheet" href="../../css/theme_1_vendor/aos/dist/aos.css">
@@ -199,13 +205,13 @@ $vacanciesData = $func->selectall_where('employer_job_posts', array('author_id',
 </head>
 
 <body class="  ">
-<!-- loader Start -->
-<div id="loading">
+  <!-- loader Start -->
+  <div id="loading">
     <div class="loader simple-loader">
       <div class="loader-body"></div>
     </div>
-</div>
-<!-- loader END -->
+  </div>
+  <!-- loader END -->
 
   <!-- Sidebar Menu Start -->
   <?php include 'employerSidebar.php' ?>
@@ -280,7 +286,6 @@ $vacanciesData = $func->selectall_where('employer_job_posts', array('author_id',
                 <?php } else {
                   include 'job-vacancies-edit.php';
                 ?>
-
                 <?php } ?>
               </div>
             </div>
@@ -649,7 +654,6 @@ $vacanciesData = $func->selectall_where('employer_job_posts', array('author_id',
       <script src="../../js/plugins/slider-tabs.js"></script>
       <script src="../../js/plugins/form-wizard.js"></script>
       <script src="../../js/hope-ui.js" defer></script>
-      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.2/dist/sweetalert2.min.js"></script>
 </body>
 
 </html>

@@ -1571,7 +1571,7 @@ class res
     return $list;
   }
 
-  function vacancy_filters($table1, $table2, $table3, $ref1, $ref2, $ref3, $ref4, $offset, $limit, $locationFilters = array())
+  function vacancy_filters($table1, $table2, $table3, $ref1, $ref2, $ref3, $ref4, $offset, $limit, $locationFilters = array(), $jobTypeFilters = array(), $shiftFilter, $educFilter)
   {
     global $con;
     $list = array();
@@ -1579,10 +1579,11 @@ class res
     $locationFiltersSql = "";
 
     $args = 0;
+
     if ($locationFilters) {
       if ($locationFilters[0] != '') {
         if ($args == 0) {
-          $locationFiltersSql .= " employer_job_posts.job_region = " . $locationFilters[0];
+          $locationFiltersSql .= "WHERE employer_job_posts.job_region = " . $locationFilters[0];
           $args = 1;
         } else {
           $locationFiltersSql .= " AND employer_job_posts.job_region = " . $locationFilters[0];
@@ -1590,33 +1591,171 @@ class res
       }
       if ($locationFilters[1] != '') {
         if ($args == 0) {
-          $locationFiltersSql .= " employer_job_posts.job_province= '" . $locationFilters[1] . "'";
+          $locationFiltersSql .= "WHERE employer_job_posts.job_province= '" . $locationFilters[1] . "'";
           $args = 1;
         }
         $locationFiltersSql .= " AND employer_job_posts.job_province= '" . $locationFilters[1] . "'";
       }
       if ($locationFilters[2] != '') {
         if ($args == 0) {
-          $locationFiltersSql .= " employer_job_posts.job_municipality= '" . $locationFilters[2] . "'";
+          $locationFiltersSql .= "WHERE employer_job_posts.job_municipality= '" . $locationFilters[2] . "'";
           $args = 1;
         } else {
-          $locationFiltersSql .= " AND employer_job_posts.job_municipality = '" . $locationFilters[2] . "'";
+          $locationFiltersSql .= "AND employer_job_posts.job_municipality = '" . $locationFilters[2] . "'";
         }
       }
       if ($locationFilters[3] != '') {
         if ($args == 0) {
-          $locationFiltersSql .= " employer_job_posts.job_barangay = '" . $locationFilters[3] . "'";
+          $locationFiltersSql .= "WHERE employer_job_posts.job_barangay = '" . $locationFilters[3] . "'";
           $args = 1;
         }
         $locationFiltersSql .= " AND employer_job_posts.job_barangay = '" . $locationFilters[3] . "'";
       }
     }
 
+    if ($jobTypeFilters) {
+      if (in_array('fullTime', $jobTypeFilters)) {
+        if ($args == 0) {
+          $jobTypeFiltersSql .= "WHERE employer_job_posts.job_type LIKE '" . "1_____'";
+          $args = 1;
+        } else {
+          $jobTypeFiltersSql .= " AND employer_job_posts.job_type LIKE '" . "1_____";
+        }
+      }
+      if (in_array('partTime', $jobTypeFilters)) {
+        if ($args == 0) {
+          $jobTypeFiltersSql .= "WHERE employer_job_posts.job_type LIKE '" . "_1____'";
+          $args = 1;
+        } else {
+          $jobTypeFiltersSql .= " AND employer_job_posts.job_type LIKE '" . "_1____";
+        }
+      }
+      if (in_array('contract', $jobTypeFilters)) {
+        if ($args == 0) {
+          $jobTypeFiltersSql .= "WHERE employer_job_posts.job_type LIKE '" . "__1___'";
+          $args = 1;
+        } else {
+          $jobTypeFiltersSql .= " AND employer_job_posts.job_type LIKE '" . "__1___";
+        }
+      }
+      if (in_array('temporary', $jobTypeFilters)) {
+        if ($args == 0) {
+          $jobTypeFiltersSql .= "WHERE employer_job_posts.job_type LIKE '" . "___1__'";
+          $args = 1;
+        } else {
+          $jobTypeFiltersSql .= " AND employer_job_posts.job_type LIKE '" . "___1__";
+        }
+      }
+      if (in_array('remote', $jobTypeFilters)) {
+        if ($args == 0) {
+          $jobTypeFiltersSql .= "WHERE employer_job_posts.job_type LIKE '" . "____1_'";
+          $args = 1;
+        } else {
+          $jobTypeFiltersSql .= " AND employer_job_posts.job_type LIKE '" . "____1_";
+        }
+      }
+      if (in_array('freelance', $jobTypeFilters)) {
+        if ($args == 0) {
+          $jobTypeFiltersSql .= "WHERE employer_job_posts.job_type LIKE '" . "_____1'";
+          $args = 1;
+        } else {
+          $jobTypeFiltersSql .= " AND employer_job_posts.job_type LIKE '" . "_____1";
+        }
+      }
+    }
 
-    $sql = "SELECT * FROM {$table1} LEFT JOIN {$table2} ON {$table1}.{$ref1} = {$table2}.{$ref2} LEFT JOIN {$table3} ON {$table2}.{$ref3} = {$table3}.{$ref4} WHERE {$locationFiltersSql} LIMIT {$limit} OFFSET {$offset} ";
+    $shiftFilterSql = '';
 
-    return $sql;
+    if ($shiftFilter) {
+      switch ($shiftFilter) {
+        case '1':
+          if ($args == 0) {
+            $shiftFilterSql .= 'WHERE employer_job_posts.job_shift = 1';
+            $args = 1;
+          } else {
+            $shiftFilterSql .= ' AND employer_job_posts.job_shift = 1';
+          }
+          break;
+        case '2':
+          if ($args == 0) {
+            $shiftFilterSql .= 'WHERE employer_job_posts.job_shift = 2';
+            $args = 1;
+          } else {
+            $shiftFilterSql .= ' AND employer_job_posts.job_shift = 2';
+          }
+          break;
+        case '3':
+          if ($args == 0) {
+            $shiftFilterSql .= 'WHERE employer_job_posts.job_shift = 3';
+            $args = 1;
+          } else {
+            $shiftFilterSql .= ' AND employer_job_posts.job_shift = 3';
+          }
+          break;
+        case '4':
+          if ($args == 0) {
+            $shiftFilterSql .= 'WHERE employer_job_posts.job_shift = 4';
+            $args = 1;
+          } else {
+            $shiftFilterSql .= ' AND employer_job_posts.job_shift = 4';
+          }
+          break;
+        case '5':
+          if ($args == 0) {
+            $shiftFilterSql .= 'WHERE employer_job_posts.job_shift = 5';
+            $args = 1;
+          } else {
+            $shiftFilterSql .= ' AND employer_job_posts.job_shift = 5';
+          }
+          break;
+      }
+    }
 
+    $educFilterSql = '';
+
+    if ($educFilter) {
+      switch ($educFilter) {
+        case '1':
+          if ($args == 0) {
+            $educFilterSql .= 'WHERE employer_job_posts.education = 1';
+            $args = 1;
+          } else {
+            $educFilterSql .= ' AND employer_job_posts.education = 1';
+          }
+          break;
+        case '2':
+          if ($args == 0) {
+            $educFilterSql .= 'WHERE employer_job_posts.education = 2';
+            $args = 1;
+          } else {
+            $educFilterSql .= ' AND employer_job_posts.education = 2';
+          }
+          break;
+        case '3':
+          if ($args == 0) {
+            $educFilterSql .= 'WHERE employer_job_posts.education = 3';
+            $args = 1;
+          } else {
+            $educFilterSql .= ' AND employer_job_posts.education = 3';
+          }
+          break;
+        case '4':
+          if ($args == 0) {
+            $educFilterSql .= 'WHERE employer_job_posts.education = 4';
+            $args = 1;
+          } else {
+            $educFilterSql .= ' AND employer_job_posts.education = 4';
+          }
+          break;
+      }
+    }
+
+
+    if ($limit) {
+      $sql = "SELECT * FROM {$table1} LEFT JOIN {$table2} ON {$table1}.{$ref1} = {$table2}.{$ref2} LEFT JOIN {$table3} ON {$table2}.{$ref3} = {$table3}.{$ref4} {$locationFiltersSql} {$jobTypeFiltersSql} {$shiftFilterSql} {$educFilterSql} LIMIT {$limit} OFFSET {$offset} ";
+    } else {
+      $sql = "SELECT * FROM {$table1} LEFT JOIN {$table2} ON {$table1}.{$ref1} = {$table2}.{$ref2} LEFT JOIN {$table3} ON {$table2}.{$ref3} = {$table3}.{$ref4} {$locationFiltersSql} {$jobTypeFiltersSql} {$shiftFilterSql} {$educFilterSql}";
+    }
 
     $qry = $con->query($sql);
     while ($row = mysqli_fetch_assoc($qry)) {
@@ -2402,7 +2541,7 @@ class res
 
         $qry = $con->query($sql);
 
-        return true;
+        return $qry;
       }
     }
     return false;

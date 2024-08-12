@@ -37,9 +37,7 @@ if (isset($_POST['applyFilters'])) {
 
 
   $locationFilters = array('', '', '', '');
-  $jobTypeFilters = array();
-  $shiftFilter = array();
-  $educFilter = array();
+  $jobTypeFilters = $filterData[1];
 
   if ($filterData[0]) {
     if (in_array('regionCheckVal', $filterData[0])) {
@@ -57,10 +55,14 @@ if (isset($_POST['applyFilters'])) {
   }
 
   $_SESSION['locationFilters'] = $locationFilters;
+  $_SESSION['jobTypeFilters'] = $jobTypeFilters;
+  $_SESSION['shiftFilter'] = $filterData[2];
+  $_SESSION['educFilter'] = $filterData[3];
+  header("location: vacancies.php");
 }
 
-$data = $func->vacancy_filters('employer_job_posts', 'employer_users', 'companies', 'author_id', 'user_id', 'company_id', 'id', $_SESSION['paginationNum'] * 5, 6, $_SESSION['locationFilters']);
-$dataCount = $func->selectall('employer_job_posts');
+$data = $func->vacancy_filters('employer_job_posts', 'employer_users', 'companies', 'author_id', 'user_id', 'company_id', 'id', $_SESSION['paginationNum'] * 5, 6, $_SESSION['locationFilters'], $_SESSION['jobTypeFilters'], $_SESSION['shiftFilter'], $_SESSION['educFilter']);
+$dataCount = $func->vacancy_filters('employer_job_posts', 'employer_users', 'companies', 'author_id', 'user_id', 'company_id', 'id', false, false, $_SESSION['locationFilters'], $_SESSION['jobTypeFilters'], $_SESSION['shiftFilter'], $_SESSION['educFilter']);
 
 $_SESSION['alumniPage'] = "vacancies";
 
@@ -238,6 +240,10 @@ if (sizeof($data) == 6) {
                           <div class="col-12">
                             <ul class="list-group">
                               <li class="list-group-item">
+                                <input class="form-check-input me-1" type="radio" name="radioShift" value="0" id="noneRadio" checked>
+                                <label class="form-check-label" for="">No Filter</label>
+                              </li>
+                              <li class="list-group-item">
                                 <input class="form-check-input me-1" type="radio" name="radioShift" value="1" id="morningRadio">
                                 <label class="form-check-label" for="">Morning</label>
                               </li>
@@ -267,6 +273,10 @@ if (sizeof($data) == 6) {
                           </div>
                           <div class="col-12">
                             <ul class="list-group">
+                              <li class="list-group-item">
+                                <input class="form-check-input me-1" type="radio" name="radioEducation" value="0" id="noneRadio" checked>
+                                <label class="form-check-label" for="">No Filter</label>
+                              </li>
                               <li class="list-group-item">
                                 <input class="form-check-input me-1" type="radio" name="radioEducation" value="1" id="highSchoolRadio">
                                 <label class="form-check-label" for="">High School Diploma</label>
@@ -305,12 +315,12 @@ if (sizeof($data) == 6) {
                     </div>
                     <?php
                     //var_dump($locationFilters);
-                    var_dump($data);
+                    //var_dump($data);
                     //var_dump($_SESSION['paginationNum']);
                     ?>
+                    <?php include "vacanciesPagination.php" ?>
                     <?php include "vacanciesCard.php" ?>
                   </div>
-                  <?php include "vacanciesPagination.php" ?>
                 </div>
               </div>
             </div>
@@ -505,6 +515,60 @@ if (sizeof($data) == 6) {
           }
         })
 
+        function getProvinces(region_name) {
+          $.getJSON("../locations.json", function(result) {
+            $.each(result[region_name].province_list, function(key, value) {
+              $('#provinces').append(`<option value="${key}">
+                                       ${key}
+                                  </option>`);
+            });
+            <?php if ($_SESSION['locationFilters'][1]) {
+            ?>
+              document.getElementById('provinces').value = '<?php echo $_SESSION['locationFilters'][1] ?>';
+              document.getElementById('provinces').dispatchEvent(new Event('change'));
+            <?php
+            } ?>
+            getMunicipality($("#regions").val(), $("#provinces").val());
+          });
+        }
+
+        function getMunicipality(region_name, province_name) {
+          $.getJSON("../locations.json", function(result) {
+            // console.log(result[region_name].province_list[province_name]);
+            $.each(result[region_name].province_list[province_name].municipality_list, function(key, value) {
+              // console.log(key);
+              $('#municipalities').append(`<option value="${key}">
+                                       ${key}
+                                  </option>`);
+            });
+            <?php if ($_SESSION['locationFilters'][2]) {
+            ?>
+              document.getElementById('municipalities').value = '<?php echo $_SESSION['locationFilters'][2] ?>';
+              document.getElementById('municipalities').dispatchEvent(new Event('change'));
+            <?php
+            } ?>
+            getBarangay($("#regions").val(), $("#provinces").val(), $("#municipalities").val());
+          });
+        }
+
+        function getBarangay(region_name, province_name, municipality_name) {
+          $.getJSON("../locations.json", function(result) {
+            // console.log(result[region_name].province_list[province_name].municipality_list[municipality_name].barangay_list);
+            $.each(result[region_name].province_list[province_name].municipality_list[municipality_name].barangay_list, function(key, value) {
+              // console.log(key);
+              $('#barangays').append(`<option value="${value}">
+                                       ${value}
+                                  </option>`);
+            });
+            <?php if ($_SESSION['locationFilters'][3]) {
+            ?>
+              document.getElementById('barangays').value = '<?php echo $_SESSION['locationFilters'][3] ?>';
+              document.getElementById('barangays').dispatchEvent(new Event('change'));
+            <?php
+            } ?>
+          });
+        }
+
         $(document).ready(function() {
           $.getJSON("../locations.json", function(result) {
             $.each(result, function(i, field) {
@@ -512,6 +576,12 @@ if (sizeof($data) == 6) {
                                        ${field.region_name}
                                   </option>`);
             });
+            <?php if ($_SESSION['locationFilters'][0]) {
+            ?>
+              document.getElementById('regions').value = '<?php echo $_SESSION['locationFilters'][0] ?>';
+              document.getElementById('regions').dispatchEvent(new Event('change'));
+            <?php
+            } ?>
             //getProvinces($("#regions").val());
             //getMunicipality($("#regions").val(), $("provinces").val());
             //getBarangay($("#regions").val(), $("#provinces").val(), $("#municipalities").val());
@@ -524,16 +594,6 @@ if (sizeof($data) == 6) {
             getProvinces($("#regions").val());
           });
 
-          function getProvinces(region_name) {
-            $.getJSON("../locations.json", function(result) {
-              $.each(result[region_name].province_list, function(key, value) {
-                $('#provinces').append(`<option value="${key}">
-                                       ${key}
-                                  </option>`);
-              });
-              getMunicipality($("#regions").val(), $("#provinces").val());
-            });
-          }
 
           $("#provinces").change(function() {
             $('#municipalities').empty();
@@ -541,38 +601,133 @@ if (sizeof($data) == 6) {
             getMunicipality($("#regions").val(), $("#provinces").val());
           });
 
-          function getMunicipality(region_name, province_name) {
-            $.getJSON("../locations.json", function(result) {
-              // console.log(result[region_name].province_list[province_name]);
-              $.each(result[region_name].province_list[province_name].municipality_list, function(key, value) {
-                // console.log(key);
-                $('#municipalities').append(`<option value="${key}">
-                                       ${key}
-                                  </option>`);
-              });
-              getBarangay($("#regions").val(), $("#provinces").val(), $("#municipalities").val());
-            });
-          }
-
           $("#municipalities").change(function() {
-
             $('#barangays').empty();
             getBarangay($("#regions").val(), $("#provinces").val(), $("#municipalities").val());
           });
-
-          function getBarangay(region_name, province_name, municipality_name) {
-            $.getJSON("../locations.json", function(result) {
-              // console.log(result[region_name].province_list[province_name].municipality_list[municipality_name].barangay_list);
-              $.each(result[region_name].province_list[province_name].municipality_list[municipality_name].barangay_list, function(key, value) {
-                // console.log(key);
-                $('#barangays').append(`<option value="${value}">
-                                       ${value}
-                                  </option>`);
-              });
-            });
-          }
-
         });
+
+        window.onload = function() {
+          <?php
+          if ($_SESSION['locationFilters'][0] != '') {
+          ?>
+            document.getElementById('regionCheckbox').checked = true;
+            document.getElementById('regionCheckbox').dispatchEvent(new Event('change'));
+            document.getElementById('regions').dispatchEvent(new Event('change'));
+          <?php
+          }
+          if ($_SESSION['locationFilters'][1] != '') {
+          ?>
+            document.getElementById('provinceCheckbox').checked = true;
+            document.getElementById('provinceCheckbox').dispatchEvent(new Event('change'));
+            document.getElementById('provinces').dispatchEvent(new Event('change'));
+          <?php
+          }
+          if ($_SESSION['locationFilters'][2] != '') {
+          ?>
+            document.getElementById('municipalityCheckbox').checked = true;
+            document.getElementById('municipalityCheckbox').dispatchEvent(new Event('change'));
+            document.getElementById('municipalities').dispatchEvent(new Event('change'));
+          <?php
+          }
+          if ($_SESSION['locationFilters'][3] != '') {
+          ?>
+            document.getElementById('barangayCheckbox').checked = true;
+            document.getElementById('barangayCheckbox').dispatchEvent(new Event('change'));
+            document.getElementById('barangays').dispatchEvent(new Event('change'));
+          <?php
+          }
+          if (in_array('fullTime', $_SESSION['jobTypeFilters'])) {
+          ?>
+            document.getElementById('fullTimeBtn').checked = true;
+            document.getElementById('fullTimeBtn').dispatchEvent(new Event('change'));
+          <?php
+          }
+          if (in_array('partTime', $_SESSION['jobTypeFilters'])) {
+          ?>
+            document.getElementById('partTimeBtn').checked = true;
+            document.getElementById('partTimeBtn').dispatchEvent(new Event('change'));
+          <?php
+          }
+          if (in_array('contract', $_SESSION['jobTypeFilters'])) {
+          ?>
+            document.getElementById('contractBtn').checked = true;
+            document.getElementById('contractBtn').dispatchEvent(new Event('change'));
+          <?php
+          }
+          if (in_array('temporary', $_SESSION['jobTypeFilters'])) {
+          ?>
+            document.getElementById('temporaryBtn').checked = true;
+            document.getElementById('temporaryBtn').dispatchEvent(new Event('change'));
+          <?php
+          }
+          if (in_array('remote', $_SESSION['jobTypeFilters'])) {
+          ?>
+            document.getElementById('remoteBtn').checked = true;
+            document.getElementById('remoteBtn').dispatchEvent(new Event('change'));
+          <?php
+          }
+          if (in_array('freelance', $_SESSION['jobTypeFilters'])) {
+          ?>
+            document.getElementById('freelanceBtn').checked = true;
+            document.getElementById('freelanceBtn').dispatchEvent(new Event('change'));
+          <?php
+          }
+          if ($_SESSION['shiftFilter'] == 1) {
+          ?>
+            document.getElementById('morningRadio').checked = true;
+            document.getElementById('morningRadio').dispatchEvent(new Event('change'));
+          <?php
+          }
+          if ($_SESSION['shiftFilter'] == 2) {
+          ?>
+            document.getElementById('eveningRadio').checked = true;
+            document.getElementById('eveningRadio').dispatchEvent(new Event('change'));
+          <?php
+          }
+          if ($_SESSION['shiftFilter'] == 3) {
+          ?>
+            document.getElementById('nightRadio').checked = true;
+            document.getElementById('nightRadio').dispatchEvent(new Event('change'));
+          <?php
+          }
+          if ($_SESSION['shiftFilter'] == 4) {
+          ?>
+            document.getElementById('rotatingShift').checked = true;
+            document.getElementById('rotatingShift').dispatchEvent(new Event('change'));
+          <?php
+          }
+          if ($_SESSION['shiftFilter'] == 5) {
+          ?>
+            document.getElementById('flexibleShit').checked = true;
+            document.getElementById('flexibleShit').dispatchEvent(new Event('change'));
+          <?php
+          }
+          if ($_SESSION['educFilter'] == 1) {
+          ?>
+            document.getElementById('highSchoolRadio').checked = true;
+            document.getElementById('highSchoolRadio').dispatchEvent(new Event('change'));
+          <?php
+          }
+          if ($_SESSION['educFilter'] == 2) {
+          ?>
+            document.getElementById('bachelorRadio').checked = true;
+            document.getElementById('bachelorRadio').dispatchEvent(new Event('change'));
+          <?php
+          }
+          if ($_SESSION['educFilter'] == 3) {
+          ?>
+            document.getElementById('masterRadio').checked = true;
+            document.getElementById('masterRadio').dispatchEvent(new Event('change'));
+          <?php
+          }
+          if ($_SESSION['educFilter'] == 4) {
+          ?>
+            document.getElementById('phdRadio').checked = true;
+            document.getElementById('phdRadio').dispatchEvent(new Event('change'));
+          <?php
+          } ?>
+        }
       </script>
 
       <script src="../../js/core/libs.min.js"></script>

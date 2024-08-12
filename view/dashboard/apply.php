@@ -11,12 +11,66 @@ session_start();
 
 include '../src/init.php';
 include "vacanciesDemoDataSet.php";
+
 if (isset($_POST['applyButton'])) {
-  $applyId = $_POST['applyButton'];
+  $_SESSION['applyId'] = $_POST['applyButton'];
+}
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+  if (isset($_POST['submitApp'])) {
+    $test = "hello";
+    // Directory where you want to save the uploaded files
+    $targetDirectory = "../files/";
+
+    $uniqueID = uniqid(); // Generates a unique ID based on the current time in microseconds
+    $targetFile = $targetDirectory . $uniqueID . "_" . basename($_FILES["formFile"]["name"]);
+
+
+    // Flag to check if everything is okay
+    $uploadOk = 1;
+
+    // Get file extension
+    $fileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
+
+    // Check if the file already exists
+    if (file_exists($targetFile)) {
+      //echo "Sorry, file already exists.";
+      $uploadOk = 0;
+    }
+
+    // Check file size (limit set to 5MB)
+    /* if ($_FILES["fileUpload"]["size"] > 5000000) { */
+    /*   echo "Sorry, your file is too large."; */
+    /*   $uploadOk = 0; */
+    /* } */
+    /**/
+
+    // Allow certain file formats (e.g., jpg, png, gif, pdf)
+    $allowedFileTypes = array("pdf");
+    if (!in_array($fileType, $allowedFileTypes)) {
+      //echo "Sorry, only JPG, JPEG, PNG, GIF, & PDF files are allowed." . $fileType;
+      $uploadOk = 0;
+    }
+
+    // Check if $uploadOk is set to 0 by an error
+    if ($uploadOk == 0) {
+      //echo "Sorry, your file was not uploaded." . $targetFile;
+    } else {
+      // Attempt to move the uploaded file to the target directory
+      if (move_uploaded_file($_FILES["formFile"]["tmp_name"], $targetFile)) {
+        //echo "The file " . htmlspecialchars(basename($_FILES["formFile"]["name"])) . " has been uploaded.";
+        $func->insert('applications', array(
+          'file_name' => $targetFile,
+          'application_post_id' => $_POST['submitApp'],
+          'application_alumni_id' => $_SESSION['userid'],
+        ));
+      } else {
+        //echo "Sorry, there was an error uploading your file.";
+      }
+    }
+  }
 }
 
-$dataInstance = $func->selectjoin3_where('employer_job_posts', 'employer_users', 'companies', 'author_id', 'user_id', 'company_id', 'id', 'employer_job_posts', array('post_id', '=', $applyId));
-
+$dataInstance = $func->selectjoin3_where('employer_job_posts', 'employer_users', 'companies', 'author_id', 'user_id', 'company_id', 'id', 'employer_job_posts', array('post_id', '=', $_SESSION['applyId']));
 
 $locationArr = array();
 $regionInformation = array();
@@ -166,7 +220,7 @@ if ($dataInstance[0]['job_type'] == '000000') {
                   <button type="button" class="btn btn-secondary" onclick="goBack()">Back</button>
                   <hr>
                   <?php
-                  //var_dump($dataInstance);
+                  var_dump($test);
                   ?>
                   <h1><?php echo  $dataInstance[0]['position'] ?></h1>
                   <h4><?php echo  $dataInstance[0]['name'] ?></h4>
@@ -240,18 +294,23 @@ if ($dataInstance[0]['job_type'] == '000000') {
                     switch ($dataInstance[0]['job_shift']) {
                       case '1': {
                           $schedule = "Morning Shift";
+                          break;
                         }
                       case '2': {
                           $schedule = "Evening Shift";
+                          break;
                         }
                       case '3': {
                           $schedule = "Night Shift";
+                          break;
                         }
                       case '4': {
                           $schedule = "Rotating Shift";
+                          break;
                         }
                       case '5': {
                           $schedule = "Flexible Shift";
+                          break;
                         }
                     }
                     ?>
@@ -281,13 +340,13 @@ if ($dataInstance[0]['job_type'] == '000000') {
                             <li>Work Experience</li>
                             <li>Soft Skills</li>
                           </ul>
-                          <form>
-                            <label for="formFile" class="form-label">Resume</label>
-                            <input class="form-control" type="file" id="resumeFile" accept=".pdf">
+                          <form method="POST" enctype="multipart/form-data">
+                            <label for=" formFile" class="form-label">Resume</label>
+                            <input class="form-control" type="file" id="resumeFile" name="formFile" accept=".pdf">
                         </div>
                         <div class="modal-footer">
                           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                          <button type="button" class="btn btn-primary" id="submitApp" disabled>Submit Application</button>
+                          <button type="submit" class="btn btn-primary" id="submitApp" name="submitApp" value="<?php echo $dataInstance[0]['post_id'] ?>" disabled>Submit Application</button>
                           </form>
                         </div>
                       </div>

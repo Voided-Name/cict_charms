@@ -38,7 +38,14 @@ foreach ($vacanciesData as $vacancyData) {
             </form>
           </div>
         </a>
-        <a class="btn btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" href="#">
+        <a class="btn btn-sm btn-icon" href="#">
+          <div class="bd-example">
+            <form method="POST" action="viewApps.php">
+              <button type="submit" class="btn btn-primary btn-sm" name="viewBtnVal" value="<?php echo $vacancyData['post_id'] ?>">View</button>
+            </form>
+          </div>
+        </a>
+        <a class="btn btn-sm btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" href="#">
           <span class="btn-inner">
             <div class="bd-example">
               <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteVacancyModal">Delete</button>
@@ -59,7 +66,7 @@ foreach ($vacanciesData as $vacancyData) {
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <form method="POST">
-                      <button type="submit" class="btn btn-danger" name="deleteVacancyBtn" value="<?php echo $vacancyData['id'] ?>">Confirm</button>
+                      <button type="submit" class="btn btn-danger" name="deleteVacancyBtn" value="<?php echo $vacancyData['post_id'] ?>">Confirm</button>
                     </form>
                   </div>
                 </div>
