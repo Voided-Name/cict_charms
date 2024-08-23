@@ -17,6 +17,29 @@ if (isset($_POST['viewBtnVal'])) {
   exit();
 }
 
+if (isset($_POST['employApplicant'])) {
+  $alumniId = $strip->strip($_POST['alumniId']);
+  $postId = $strip->strip($_POST['postId']);
+  $status = $strip->strip($_POST['statusId']);
+
+  $statusId = $func->selectall_where2('alumni_employment_status', array('status_post_id', '=', $postId), array('status_alumni_id', '=', $alumniId));
+
+  $func->update('alumni_employment_status', 'status_id', $statusId[0]['status_id'], array(
+    'status' => 1,
+  ));
+  header("location: viewApps.php");
+} else if (isset($_POST['rejectApplicant'])) {
+  $alumniId = $strip->strip($_POST['alumniId']);
+  $postId = $strip->strip($_POST['postId']);
+  $status = $strip->strip($_POST['statusId']);
+
+  $statusId = $func->selectall_where2('alumni_employment_status', array('status_post_id', '=', $postId), array('status_alumni_id', '=', $alumniId));
+
+  $func->update('alumni_employment_status', 'status_id', $statusId[0]['status_id'], array(
+    'status' => 2,
+  ));
+  header("location: viewApps.php");
+}
 
 if (isset($_SESSION['viewPostID'])) {
   $appsData = $func->selectall_where('applications', array(
@@ -79,7 +102,7 @@ $_SESSION['employerPage'] = "jobVacancies";
                   <h1>Welcome Back!</h1>
                 </div>
                 <div>
-                  <a href="" class="btn btn-link btn-soft-light">
+                  <a href="announcements.php" class="btn btn-link btn-soft-light">
                     <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M11.8251 15.2171H12.1748C14.0987 15.2171 15.731 13.985 16.3054 12.2764C16.3887 12.0276 16.1979 11.7713 15.9334 11.7713H14.8562C14.5133 11.7713 14.2362 11.4977 14.2362 11.16C14.2362 10.8213 14.5133 10.5467 14.8562 10.5467H15.9005C16.2463 10.5467 16.5263 10.2703 16.5263 9.92875C16.5263 9.58722 16.2463 9.31075 15.9005 9.31075H14.8562C14.5133 9.31075 14.2362 9.03619 14.2362 8.69849C14.2362 8.35984 14.5133 8.08528 14.8562 8.08528H15.9005C16.2463 8.08528 16.5263 7.8088 16.5263 7.46728C16.5263 7.12575 16.2463 6.84928 15.9005 6.84928H14.8562C14.5133 6.84928 14.2362 6.57472 14.2362 6.23606C14.2362 5.89837 14.5133 5.62381 14.8562 5.62381H15.9886C16.2483 5.62381 16.4343 5.3789 16.3645 5.13113C15.8501 3.32401 14.1694 2 12.1748 2H11.8251C9.42172 2 7.47363 3.92287 7.47363 6.29729V10.9198C7.47363 13.2933 9.42172 15.2171 11.8251 15.2171Z" fill="currentColor"></path>
                       <path opacity="0.4" d="M19.5313 9.82568C18.9966 9.82568 18.5626 10.2533 18.5626 10.7823C18.5626 14.3554 15.6186 17.2627 12.0005 17.2627C8.38136 17.2627 5.43743 14.3554 5.43743 10.7823C5.43743 10.2533 5.00345 9.82568 4.46872 9.82568C3.93398 9.82568 3.5 10.2533 3.5 10.7823C3.5 15.0873 6.79945 18.6413 11.0318 19.1186V21.0434C11.0318 21.5715 11.4648 22.0001 12.0005 22.0001C12.5352 22.0001 12.9692 21.5715 12.9692 21.0434V19.1186C17.2006 18.6413 20.5 15.0873 20.5 10.7823C20.5 10.2533 20.066 9.82568 19.5313 9.82568Z" fill="currentColor"></path>
@@ -117,6 +140,7 @@ $_SESSION['employerPage'] = "jobVacancies";
                         <th>Name</th>
                         <th>Program</th>
                         <th>Action</th>
+                        <th>Status</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -126,6 +150,7 @@ $_SESSION['employerPage'] = "jobVacancies";
                         $name = $alumniInstance[0]['last_name'] . ', ' . $alumniInstance[0]['first_name'] . ' ' . $alumniInstance[0]['middle_name'];
                         $courseID = $func->select_one('alumni_graduated_course', array('user_id', '=', $appsDataInstance['application_alumni_id']));
                         $course = $func->select_one('courses', array('courseID', '=', $courseID[0]['course_id']));
+                        $statusId = $func->selectall_where2('alumni_employment_status', array('status_post_id', '=', $appsDataInstance['application_post_id']), array('status_alumni_id', '=', $appsDataInstance['application_alumni_id']));
                       ?>
                         <tr>
                           <td><?php echo $name ?></td>
@@ -135,10 +160,54 @@ $_SESSION['employerPage'] = "jobVacancies";
                               <form method="GET" action="viewResume.php" class="me-2">
                                 <button type="submit" class="btn btn-primary" value="<?php echo $appsDataInstance['file_name'] ?>" name="viewResumeBtn">View File</button>
                               </form>
+                              <form method="POST">
+                                <input type="hidden" name="postId" value="<?php echo $appsDataInstance['application_post_id'] ?>">
+                                <input type="hidden" name="alumniId" value="<?php echo $appsDataInstance['application_alumni_id'] ?>">
+                                <button type="submit" class="btn btn-success me-2" value="<?php echo $appsDataInstance['application_alumni_id'] ?>" name="employApplicant">Employ</button>
+                              </form>
+                              <form method="POST">
+                                <input type="hidden" name="postId" value="<?php echo $appsDataInstance['application_post_id'] ?>">
+                                <input type="hidden" name="alumniId" value="<?php echo $appsDataInstance['application_alumni_id'] ?>">
+                                <button type="submit" class="btn btn-danger me-2" value="<?php echo $appsDataInstance['application_alumni_id'] ?>" name="rejectApplicant">Reject</button>
+                              </form>
                               <form method="POST" action="viewProfile.php">
                                 <button type="submit" class="btn btn-info" value="<?php echo $appsDataInstance['application_alumni_id'] ?>" name="viewProfileBtn">View Profile</button>
                               </form>
                             </div>
+                          </td>
+                          <td>
+                            <p class="<?php switch ($statusId[0]['status']) {
+                                        case 0:
+                                          echo "bg-dark";
+                                          break;
+                                        case 1:
+                                          echo "bg-success";
+                                          break;
+                                        case 2:
+                                          echo "bg-danger";
+                                          break;
+
+                                        default:
+                                          echo "bg-dark";
+                                          break;
+                                      } ?> text-white p-1 text-center rounded">
+                              <?php
+                              switch ($statusId[0]['status']) {
+                                case 0:
+                                  echo "Pending";
+                                  break;
+                                case 1:
+                                  echo "Employed";
+                                  break;
+                                case 2:
+                                  echo "Rejected";
+                                  break;
+
+                                default:
+                                  echo "Pending";
+                                  break;
+                              } ?>
+                            </p>
                           </td>
                         </tr>
                       <?php

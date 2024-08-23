@@ -1191,6 +1191,7 @@ class res
       if (in_array($operator, $operators)) {
         $sql = "SELECT * FROM {$table} WHERE {$field} {$operator} '{$value}'";
 
+
         $qry = $con->query($sql);
         $rowcount = mysqli_num_rows($qry);
 
@@ -2105,6 +2106,42 @@ class res
     return null;
   }
 
+  function selectall_where2($table, $where = array(), $where2 = array())
+  {
+    global $con;
+
+    $list = array();
+
+
+    if (count($where) === 3) {
+      $field    = $where[0];
+      $operator   = $where[1];
+      $value   = $where[2];
+    }
+
+    if (count($where2) === 3) {
+      $field2    = $where2[0];
+      $operator2   = $where2[1];
+      $value2   = $where2[2];
+    }
+
+    $sql = "SELECT * FROM {$table} WHERE {$field} {$operator} {$value} AND {$field2} {$operator2} {$value2}";
+
+    $qry = $con->query($sql);
+
+    $rowcount = mysqli_num_rows($qry);
+
+
+    if ($rowcount != 0) {
+      for ($x = 1; $x <= $rowcount; $x++) {
+        $row = mysqli_fetch_assoc($qry);
+        $list[] = $row;
+      }
+      return $list;
+    }
+    return null;
+  }
+
   function selectall_where_orderby($table, $where = array(), $ref, $sortorder)
   {
     global $con;
@@ -2435,11 +2472,15 @@ class res
     global $con;
 
     $list = array();
+
     $sql = "SELECT * FROM {$table} ORDER BY {$col} {$sortorder}";
+
     $qry = $con->query($sql);
+
     while ($row = mysqli_fetch_assoc($qry)) {
       $list[] = $row;
     }
+
     return $list;
   }
 
@@ -2608,7 +2649,6 @@ class res
     }
 
     $sql = "UPDATE {$table} SET {$set} WHERE {$param} = {$param_value}";
-
 
     //echo $sql;
     $qry = $con->query($sql);

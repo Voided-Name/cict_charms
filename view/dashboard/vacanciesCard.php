@@ -31,7 +31,9 @@ foreach ($data as $dataInstance) {
       </div>
       <div class="col-lg-2 h-100">
         <form action="apply.php" method="POST">
-          <button type="submit" class="btn btn-dark mb-3" name="applyButton" value="<?php echo $dataInstance['post_id'] ?>">Apply</button>
+          <button type="submit" class="btn btn-dark mb-3" name="applyButton" value="<?php echo $dataInstance['post_id'] ?>" <?php if ($_SESSION['role'] != 1) {
+                                                                                                                              echo "disabled";
+                                                                                                                            } ?>>Apply</button>
         </form>
         <h6 class="text-secondary"><?php echo $dataInstance['created_at'] ?></h6>
       </div>

@@ -29,9 +29,98 @@
       background-size: cover;
     }
 
+    #slide1 {
+      background-image: url("img/teamwork.jpg");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+      font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    }
+
+    #slide2 {
+      background-image: url("img/alumnis.jpg");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+      font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    }
+
+    #slide3 {
+      background-image: url("img/community.jpg");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+      font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    }
+
     .hero-text {
       font-size: 70px;
       color: white;
+    }
+
+    .slider-wrapper {
+      margin: 1rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .slides-container {
+      height: calc(50vh - 2rem);
+      width: 100%;
+      display: flex;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      overflow: scroll;
+      scroll-behavior: smooth;
+    }
+
+    .slide {
+      width: 100%;
+      height: 100%;
+      flex: 1 0 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 3rem;
+    }
+
+    .slide-arrow {
+      position: absolute;
+      display: flex;
+      justify-items: center;
+      align-items: center;
+      top: 0;
+      bottom: 0;
+      margin: auto;
+      height: 4rem;
+      background-color: white;
+      border: none;
+      width: 2rem;
+      font-size: 3rem;
+      padding: 0;
+      cursor: pointer;
+      opacity: 0.5;
+      transition: opacity 100ms;
+    }
+
+    .slide-arrow:hover,
+    .slide-arrow:focus {
+      opacity: 0.9;
+    }
+
+    #slide-arrow-prev {
+      left: 0;
+      padding-left: 0.25rem;
+      outline: none;
+    }
+
+    #slide-arrow-next {
+      right: 0;
+      padding-left: 0.75rem;
+      outline: none;
     }
   </style>
 </head>
@@ -43,7 +132,7 @@
       <div class="preloader-inner position-relative">
         <div class="preloader-circle"></div>
         <div class="preloader-img pere-text">
-          <img src="view/assets/img/logo/logo.png" alt="">
+          <img src="img/logoCharms.png" alt="">
         </div>
       </div>
     </div>
@@ -67,8 +156,8 @@
                 <div class="main-menu">
                   <nav class="d-none d-lg-block">
                     <ul id="navigation">
-                      <li><a href="index.php">Home</a></li>
-                      <li><a href="view/job_listing.html">Find a Job </a></li>
+                      <li><a href="index.php" style="font-weight: bold;">Home</a></li>
+                      <!--<li><a href="view/job_listing.html">Find a Job </a></li>-->
                       <li><a href="view/about.html">About</a></li>
                       <li><a href="view/contact.html">Contact</a></li>
                     </ul>
@@ -94,259 +183,83 @@
   </header>
   <main>
 
-    <div class="row">
-      <div class="col-lg-12 d-flex align-items-center justify-content-center hero-bg">
-        <h2 class="hero-text">Find Your Dream Job Here!</h2>
+    <div class="slider-area ">
+      <div class="single-slider section-overly slider-height2 d-flex align-items-center"
+        data-background="img/businessman.jpg">
+        <div class="container">
+          <div class="row">
+            <div class="col-xl-12">
+              <div class="hero-cap text-center">
+                <h2>Find Your Dream Job Here</h2>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
+    </div>
+
+    <hr>
+    <div class="container">
+      <div class="section-tittle section-tittle2">
+        <span>What We Do</span>
+        <h2>Where talent meets opportunity.</h2>
+      </div>
+      <div class="support-caption">
+        <p class="pera-top">Our platform is designed to streamline the job search and
+          hiring process, making it easier than ever to discover and secure the
+          perfect match.</p>
+        <p>Whether you're an employer looking to attract top talent or a jobseeker
+          ready to take the next step in your career, CHARMS is here to
+          support your journey. Join our community today and discover the difference
+          a dedicated and innovative job platform can make.</p>
+        <a href="view/about.html" class="btn post-btn text-center">About Us</a>
+      </div>
+    </div>
+
+    <div class="container" style="margin-top: 20px;">
+      <div class="section-tittle section-tittle2 text-center">
+        <h2>Key Objectives</h2>
+      </div>
+      <div class="container">
+        <section class="slider-wrapper">
+          <button class="slide-arrow" id="slide-arrow-prev">
+            &#8249;
+          </button>
+
+          <button class="slide-arrow" id="slide-arrow-next">
+            &#8250;
+          </button>
+
+          <ul class="slides-container" id="slides-container">
+            <li id="slide1" class="slide">Enhance Alumni-Employer Connections</li>
+            <li id="slide2" class="slide">Strengthen Alumni Relations</li>
+            <li id="slide3" class="slide">Foster a Productive Community</li>
+          </ul>
+        </section>
+      </div>
+
+    </div>
+
+    <div class="container" style="margin-top: 80px;">
+      <div class="section-tittle section-tittle2" style="text-align: right;">
+        <h2 style="text-align: left;">"</h2>
+        <h2>Talent is everywhere, it only needs opportunity</h2>
+        <h2>"</h2>
+        <p>- Kathrine Switzer</p>
+      </div>
+    </div>
+    <div class="container text-center">
+      <a href="view/register.php" class="btn post-btn text-center" style="width: 70%">Join Us</a>
     </div>
     <hr>
 
-
-    <div class="row">
-      <div class="col-lg-12">
-        <div class="section-tittle text-center py-5">
-          <h1>Featured Jobs</h1>
-        </div>
-      </div>
-    </div>
-    <div class="row justify-content-center">
-      <div class="col-xl-10">
-        <!-- single-job-content -->
-        <div class="single-job-items mb-30">
-          <div class="job-items">
-            <div class="company-img">
-              <a href="view/job_details.html"><img src="view/assets/img/icon/job-list1.png" alt=""></a>
-            </div>
-            <div class="job-tittle">
-              <a href="view/job_details.html">
-                <h4>UI/UX Designer</h4>
-              </a>
-              <ul>
-                <li>Creative Agency</li>
-                <li><i class="fas fa-map-marker-alt"></i>Cabanatuan City</li>
-                <li>20,000-30,000</li>
-              </ul>
-            </div>
-          </div>
-          <div class="items-link f-right">
-            <a href="view/job_details.html">Apply Now</a>
-            <span>7 hours ago</span>
-          </div>
-        </div>
-        <!-- single-job-content -->
-        <div class="single-job-items mb-30">
-          <div class="job-items">
-            <div class="company-img">
-              <a href="view/job_details.html"><img src="view/assets/img/icon/job-list2.png" alt=""></a>
-            </div>
-            <div class="job-tittle">
-              <a href="view/job_details.html">
-                <h4>IT Staff</h4>
-              </a>
-              <ul>
-                <li>Creative Agency</li>
-                <li><i class="fas fa-map-marker-alt"></i>Cabanatuan City</li>
-                <li>20,000-30,000</li>
-              </ul>
-            </div>
-          </div>
-          <div class="items-link f-right">
-            <a href="view/job_details.html">Apply Now</a>
-            <span>7 hours ago</span>
-          </div>
-        </div>
-        <!-- single-job-content -->
-        <div class="single-job-items mb-30">
-          <div class="job-items">
-            <div class="company-img">
-              <a href="view/job_details.html"><img src="view/assets/img/icon/job-list3.png" alt=""></a>
-            </div>
-            <div class="job-tittle">
-              <a href="view/job_details.html">
-                <h4>Mobile App Developer</h4>
-              </a>
-              <ul>
-                <li>Creative Agency</li>
-                <li><i class="fas fa-map-marker-alt"></i>Cabanatuan City</li>
-                <li>20,000-30,000</li>
-              </ul>
-            </div>
-          </div>
-          <div class="items-link f-right">
-            <a href="view/job_details.html">Apply now</a>
-            <span>7 hours ago</span>
-          </div>
-        </div>
-        <!-- single-job-content -->
-        <div class="single-job-items mb-30">
-          <div class="job-items">
-            <div class="company-img">
-              <a href="view/job_details.html"><img src="view/assets/img/icon/job-list4.png" alt=""></a>
-            </div>
-            <div class="job-tittle">
-              <a href="view/job_details.html">
-                <h4>Web Developer</h4>
-              </a>
-              <ul>
-                <li>Creative Agency</li>
-                <li><i class="fas fa-map-marker-alt"></i>Cabanatuan City</li>
-                <li>20,000-30,000</li>
-              </ul>
-            </div>
-          </div>
-          <div class="items-link f-right">
-            <a href="view/job_details.html">Apply now</a>
-            <span>7 hours ago</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Featured_job_end -->
-    <!-- Support Company Start-->
-    <div class="support-company-area support-padding fix">
-      <div class="container">
-        <div class="row align-items-center">
-          <div class="col-xl-6 col-lg-6">
-            <div class="right-caption">
-              <!-- Section Tittle -->
-              <div class="section-tittle section-tittle2">
-                <span>What We Do</span>
-                <h2>Where talent meets opportunity.</h2>
-              </div>
-              <div class="support-caption">
-                <p class="pera-top">Our platform is designed to streamline the job search and
-                  hiring process, making it easier than ever to discover and secure the
-                  perfect match.</p>
-                <p>Whether you're an employer looking to attract top talent or a jobseeker
-                  ready to take the next step in your career, CHARMS is here to
-                  support your journey. Join our community today and discover the difference
-                  a dedicated and innovative job platform can make.</p>
-                <a href="view/login.php" class="btn post-btn">Post a job</a>
-              </div>
-            </div>
-          </div>
-          <div class="col-xl-6 col-lg-6">
-            <div class="support-location-img">
-              <img src="view/assets/img/gallery/support-img.jpg" alt="">
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
     <!-- Support Company End-->
-    <!-- Our Services Start -->
-    <div class="our-services section-pad-t30">
-      <div class="container">
-        <!-- Section Tittle -->
-        <div class="row">
-          <div class="col-lg-12">
-            <div class="section-tittle text-center">
-              <h2>Browse Top Categories </h2>
-            </div>
-          </div>
-        </div>
-        <div class="row d-flex justify-contnet-center">
-          <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-            <div class="single-services text-center mb-30">
-              <div class="services-ion">
-                <span class="flaticon-tour"></span>
-              </div>
-              <div class="services-cap">
-                <h5><a href="view/job_listing.html">Design &amp; Creative</a></h5>
-              </div>
-            </div>
-          </div>
-          <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-            <div class="single-services text-center mb-30">
-              <div class="services-ion">
-                <span class="flaticon-cms"></span>
-              </div>
-              <div class="services-cap">
-                <h5><a href="view/job_listing.html">Design &amp; Development</a></h5>
-              </div>
-            </div>
-          </div>
-          <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-            <div class="single-services text-center mb-30">
-              <div class="services-ion">
-                <span class="flaticon-app"></span>
-              </div>
-              <div class="services-cap">
-                <h5><a href="view/job_listing.html">Mobile Application</a></h5>
-              </div>
-            </div>
-          </div>
-          <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-            <div class="single-services text-center mb-30">
-              <div class="services-ion">
-                <span class="flaticon-high-tech"></span>
-              </div>
-              <div class="services-cap">
-                <h5><a href="view/job_listing.html">Information Technology</a></h5>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
   </main>
   <footer>
-    <!-- Footer Start-->
-    <div class="footer-area footer-bg footer-padding">
-      <div class="container">
-        <div class="row d-flex justify-content-between">
-          <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-            <div class="single-footer-caption mb-50">
-              <div class="single-footer-caption mb-30">
-                <div class="footer-tittle">
-                  <h4>About Us</h4>
-                  <div class="footer-pera">
-                    <p>We connect employers and jobseekers through a user-friendly
-                      platform that simplifies the job search and hiring process,
-                      creating opportunities for success and growth.
-                  </div>
-                </div>
-              </div>
-
-            </div>
-          </div>
-          <div class="col-xl-3 col-lg-3 col-md-4 col-sm-5">
-            <div class="single-footer-caption mb-50">
-              <div class="footer-tittle">
-                <h4>Contact Info</h4>
-                <ul>
-                  <li>
-                    <p>Address: Cabanatuan City</p>
-                  </li>
-                  <li><a href="#">Phone : +8880 44338899</a></li>
-                  <li><a href="#">Email : info@gmail.com</a></li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          <div class="col-xl-3 col-lg-3 col-md-4 col-sm-5">
-            <div class="single-footer-caption mb-50">
-              <div class="footer-tittle">
-                <h4>Important Link</h4>
-                <ul>
-                  <li><a href="#"> View Project</a></li>
-                  <li><a href="#">Contact Us</a></li>
-                  <li><a href="#">Support</a></li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!--  -->
-        <div class="row footer-wejed justify-content-between">
-          <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-            <!-- logo -->
-            <div class="footer-logo mb-20">
-              <a href="index.php"><img src="view/assets/img/logo/logo2_footer.png" alt=""></a>
-            </div>
-          </div>
-        </div>
+    <div class="footer-bg" style="padding:20px">
+      <!-- Footer Start-->
+      <div class="container text-center">
+        <img src="img/logoCharmsWhite.png" style="width: 50px">
       </div>
     </div>
   </footer>
@@ -381,6 +294,20 @@
   <!-- Jquery Plugins, main Jquery -->
   <script src="js/plugins.js"></script>
   <script src="js/main.js"></script>
+  <script>
+    const slidesContainer = document.getElementById("slides-container");
+    const slide = document.querySelector(".slide");
+    const prevButton = document.getElementById("slide-arrow-prev");
+    const nextButton = document.getElementById("slide-arrow-next");
+    nextButton.addEventListener("click", () => {
+      const slideWidth = slide.clientWidth;
+      slidesContainer.scrollLeft += slideWidth;
+    });
+    prevButton.addEventListener("click", () => {
+      const slideWidth = slide.clientWidth;
+      slidesContainer.scrollLeft -= slideWidth;
+    });
+  </script>
 
 </body>
 

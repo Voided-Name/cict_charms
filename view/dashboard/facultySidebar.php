@@ -39,13 +39,13 @@ if ($_SESSION['facultyPage'] == "dashboard") {
               </a>
             </li>
 
-            <li class="nav-item">
+            <!-- <li class="nav-item">
               <a class="nav-link
                <?php
-                if ($_SESSION['facultyPage'] == "manageAlumni") {
-                  echo "active";
-                }
-                ?> 
+                /* if ($_SESSION['facultyPage'] == "manageAlumni") { */
+                /* echo "active"; */
+                /* } */
+                ?>
                 " href="manage-alumni.php" role="page" aria-expanded="false" aria-controls="horizontal-menu">
                 <i class="icon">
                   <svg width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon-20">
@@ -57,7 +57,7 @@ if ($_SESSION['facultyPage'] == "dashboard") {
                 </i>
                 <span class="item-name">Manage Alumni</span>
               </a>
-            </li>
+            </li> -->
 
 
 

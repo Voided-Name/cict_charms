@@ -159,6 +159,7 @@ if ($_SESSION['adminPage'] == "genReport") {
     </ul>
   </li>
 -->
+        <!--
         <li class="nav-item">
           <a class="nav-link" data-bs-toggle="collapse" href="#sidebar-user" role="button" aria-expanded="false" aria-controls="sidebar-user">
             <i class="icon">
@@ -184,9 +185,9 @@ if ($_SESSION['adminPage'] == "genReport") {
               <a class="nav-link
 
 <?php
-if ($_SESSION['adminPage'] == "userProfile") {
-  echo "active";
-}
+//if ($_SESSION['adminPage'] == "userProfile") {
+// echo "active";
+//}
 ?>
 
 " href="user-profile.php">
@@ -203,9 +204,9 @@ if ($_SESSION['adminPage'] == "userProfile") {
               <a class="nav-link 
 
 <?php
-if ($_SESSION['adminPage'] == "manageAcc") {
-  echo "active";
-}
+//if ($_SESSION['adminPage'] == "manageAcc") {
+//echo "active";
+//}
 ?>
 
 " href="manage-acc.php">
@@ -218,7 +219,7 @@ if ($_SESSION['adminPage'] == "manageAcc") {
               </a>
             </li>
           </ul>
-        </li>
+        </li>-->
         <script>
           if (sessionStorage.getItem('sidebarState') == 'mini') {
             const sideBar = document.getElementById('sidebar');

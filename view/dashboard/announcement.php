@@ -1,6 +1,21 @@
 <?php
 session_start();
+include '../src/init.php';
 $_SESSION['facultyPage'] = "announcement";
+
+$dataTesting = $func->selectallorderby('announcements', 'announcement_date', 'DESC');
+
+if (isset($_POST['editAnnouncementBtn'])) {
+  $title = $strip->strip($_POST['announcement-title']);
+  $body = $strip->strip($_POST['announcement-details']);
+
+  $updateAnnouncement = $func->update('announcements', 'announcement_id', $_POST['editAnnouncementBtn'], array(
+    'announcement_title' => $title,
+    'announcement_body' => $body,
+  ));
+
+  header("location: announcement.php");
+}
 ?>
 <!doctype html>
 <html lang="en" dir="ltr">
@@ -23,13 +38,13 @@ $_SESSION['facultyPage'] = "announcement";
 </head>
 
 <body class="  ">
-<!-- loader Start -->
-<div id="loading">
+  <!-- loader Start -->
+  <div id="loading">
     <div class="loader simple-loader">
       <div class="loader-body"></div>
     </div>
-</div>
-<!-- loader END -->
+  </div>
+  <!-- loader END -->
   <!-- Sidebar Menu Start -->
   <?php include "facultySidebar.php" ?>
   </div>
@@ -57,77 +72,65 @@ $_SESSION['facultyPage'] = "announcement";
                     <tr class="ligth">
                       <th>Title</th>
                       <th>Author</th>
-
                       <th style="min-width: 100px">Action</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>Midterm Examination</td>
-
-                      <td>Arnold Dela Cruz</td>
-                      <td>
-                        <div class="flex align-items-center list-user-action">
-                          <!-- Edit Button -->
-                          <a class="btn btn-sm btn-icon" data-bs-toggle="modal" data-bs-target="#myModal" data-bs-placement="top" title="Add" href="#">
-                            <div class="bd-example">
-                              <button type="button" class="btn btn-primary btn-sm">View</button>
-                            </div>
-                          </a>
-                          <a class="btn btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" href="#">
-                            <span class="btn-inner">
-                              <div class="bd-example">
-                                <button type="button" class="btn btn-danger btn-sm">Delete</button>
+                    <?php
+                    $x = 0;
+                    foreach ($dataTesting as $dataTestingInstance) {
+                      $authorData = $func->select_one('userdetails', array('user_id', '=', $dataTestingInstance['announcement_author']));
+                      $author = $authorData[0]['first_name'] . " " . $authorData[0]['last_name'];
+                    ?>
+                      <tr>
+                        <td><?php echo $dataTestingInstance['announcement_title'] ?></td>
+                        <td><?php echo $author ?></td>
+                        <td>
+                          <div class="flex align-items-center list-user-action">
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal<?php echo $x ?>">
+                              Edit
+                            </button>
+                            <!-- Modal -->
+                            <div class="modal fade" id="modal<?php echo $x ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                              <div class="modal-dialog">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Edit</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                  </div>
+                                  <div class="modal-body">
+                                    <form method="POST" class="glassmorphism-form">
+                                      <div class="mb-3">
+                                        <label for="announcement-title" class="form-label">Announcement Title</label>
+                                        <input type="text" class="form-control" id="announcement-title" name="announcement-title" value="<?php echo $dataTestingInstance['announcement_title'] ?>" required>
+                                      </div>
+                                      <div class="mb-3">
+                                        <label for="announcement-details" class="form-label">Details</label>
+                                        <textarea class="form-control" id="announcement-details" name="announcement-details" required rows="10"><?php echo $dataTestingInstance['announcement_body'] ?></textarea>
+                                      </div>
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary" name="editAnnouncementBtn" value="<?php echo $dataTestingInstance['announcement_id'] ?>">Save changes</button>
+                                    </form>
+                                  </div>
+                                </div>
                               </div>
-                            </span>
-                          </a>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>ALAY SA FIRST YEAR</td>
-
-                      <td>Arnold Dela Cruz</td>
-                      <td>
-                        <div class="flex align-items-center list-user-action">
-                          <!-- Edit Button -->
-                          <a class="btn btn-sm btn-icon" data-bs-toggle="modal" data-bs-target="#myModal" data-bs-placement="top" title="Add" href="#">
-                            <div class="bd-example">
-                              <button type="button" class="btn btn-primary btn-sm">View</button>
                             </div>
-                          </a>
-                          <a class="btn btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" href="#">
-                            <span class="btn-inner">
-                              <div class="bd-example">
-                                <button type="button" class="btn btn-danger btn-sm">Delete</button>
-                              </div>
-                            </span>
-                          </a>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>Publication of gym</td>
-
-                      <td>Arnold Dela Cruz</td>
-                      <td>
-                        <div class="flex align-items-center list-user-action">
-                          <!-- Edit Button -->
-                          <a class="btn btn-sm btn-icon" data-bs-toggle="modal" data-bs-target="#myModal" data-bs-placement="top" title="Add" href="#">
-                            <div class="bd-example">
-                              <button type="button" class="btn btn-primary btn-sm">View</button>
-                            </div>
-                          </a>
-                          <a class="btn btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" href="#">
-                            <span class="btn-inner">
-                              <div class="bd-example">
-                                <button type="button" class="btn btn-danger btn-sm">Delete</button>
-                              </div>
-                            </span>
-                          </a>
-                        </div>
-                      </td>
-                    </tr>
+                            <a class="btn btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" href="#">
+                              <span class="btn-inner">
+                                <div class="bd-example">
+                                  <button type="button" class="btn btn-danger btn-sm">Delete</button>
+                                </div>
+                              </span>
+                            </a>
+                          </div>
+                        </td>
+                      </tr>
+                    <?php
+                      $x++;
+                    } ?>
                   </tbody>
                 </table>
               </div>
@@ -136,7 +139,10 @@ $_SESSION['facultyPage'] = "announcement";
         </div>
       </div>
     </div>
-
+    </div>
+    </div>
+    </div>
+    </div>
 
 
     <script src="../../js/core/libs.min.js"></script>

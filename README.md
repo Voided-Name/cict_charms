@@ -1,11 +1,6 @@
 # TODO
-- [ ] manage work experience functionalities 
+- [ ] profile view
 - [ ] back end of user settings
-- [ ] Alumni applicant form 
-- [ ] Employer view, view applicants
-- [ ] Dynamic dashboard/index.php (add UI)
-  - default to user profile with alumnis and employers?
-- [ ] Faculty functionalities
 
 # Wish List
 - [ ] chat capabilities
@@ -16,6 +11,9 @@
 
 
 # Done
+- [x] Employer view, view applicants
+- [x] Faculty functionalities
+- [x] manage work experience functionalities 
 - [x] alumni add award
 - [x] alumni edit award
 - [x] alumni delete award
